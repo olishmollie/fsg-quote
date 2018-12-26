@@ -22,10 +22,12 @@ class NumberInput {
     });
 
     this.input = jsml.input({
+      className: "form-control form-control-sm text-center",
       type: "number",
       value: this.value,
       min: this.min,
       max: this.max,
+      // style: "-webkit-appearance: none; margin: 0;",
       onchange: event => {
         let el = event.target;
         this.value = el.value;
@@ -71,10 +73,15 @@ class NumberInput {
 
   render() {
     return jsml.div(
-      { className: "quantity-input" },
-      this.decrementButton,
+      { className: "input-group" },
+      jsml.div({ className: "input-group-prepend" }, this.decrementButton),
       this.input,
-      this.incrementButton
+      jsml.div(
+        {
+          className: "input-group-append"
+        },
+        this.incrementButton
+      )
     );
   }
 }

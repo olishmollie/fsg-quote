@@ -26,6 +26,10 @@ class ProductView {
       }
     });
 
+    this.frontColorCountLabel = new Label({
+      text: this.colorLabel("front")
+    });
+
     this.frontColorCountDropdown = new Dropdown({
       className: "form-control col-sm-2 m-auto",
       style: "display: inline; border: 0;",
@@ -33,9 +37,14 @@ class ProductView {
       selected: this.frontColorCount,
       onchange: selection => {
         this.frontColorCount = selection;
+        this.frontColorCountLabel.text = this.colorLabel("front");
         this.quantityInput.min = this.minQuantity();
         this.pricePerShirt = this.calcAmountPerShirt();
       }
+    });
+
+    this.backColorCountLabel = new Label({
+      text: this.colorLabel("back")
     });
 
     this.backColorCountDropdown = new Dropdown({
@@ -45,6 +54,7 @@ class ProductView {
       selected: this.backColorCount,
       onchange: selection => {
         this.backColorCount = selection;
+        this.backColorCountLabel.text = this.colorLabel("back");
         this.quantityInput.min = this.minQuantity();
         this.pricePerShirt = this.calcAmountPerShirt();
       }
@@ -180,26 +190,32 @@ class ProductView {
     return result;
   }
 
+  colorLabel(side) {
+    if (side != "front" && side != "back") {
+      throw "invalid side for color label";
+    }
+    let count = side === "front" ? this.frontColorCount : this.backColorCount;
+    return side + (count === 1 ? " color" : " colors");
+  }
+
   render() {
     return jsml.div(
       {
-        className: "main"
+        className: "product-view text-center"
       },
       jsml.h1({
-        innerText: this.shirt.name,
-        className: "text-center"
+        innerText: this.shirt.name
       }),
       jsml.div(
-        {
-          className: "text-center"
-        },
+        {},
         jsml.p({
           innerText: this.shirt.description
         }),
         jsml.div(
           {
-            id: "product-view",
-            className: "text-center m-auto p-1"
+            className: "text-center m-auto p-3",
+            style:
+              "border: 1px solid black; box-shadow: 8px 10px rgba(0,0,0,0.05);"
           },
           jsml.div(
             { className: "form-group mt-3" },
@@ -213,7 +229,9 @@ class ProductView {
           jsml.div(
             { className: "form-group" },
             this.frontColorCountDropdown.render(),
-            this.backColorCountDropdown.render()
+            this.frontColorCountLabel.render(),
+            this.backColorCountDropdown.render(),
+            this.backColorCountLabel.render()
           ),
           jsml.div({ className: "form-group" }, this.submitButton)
         )
