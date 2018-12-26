@@ -12,11 +12,6 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-app.get("/:shirtId", (req, res) => {
-  let shirtId = req.params.shirtId;
-  res.render("product", { shirtId: shirtId });
-});
-
 app.listen(3000, () => {
   console.log("EXPRESS");
 });

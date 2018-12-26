@@ -1,14 +1,15 @@
-function Shirt(opts) {
-  this.name = opts.name;
-  this.price = opts.price;
-  this.imageUrl = opts.imageUrl;
-  this.description = opts.description;
-  this.availableSizes = opts.availableSizes;
+class Shirt {
+  constructor(opts) {
+    this.name = opts.name;
+    this.price = opts.price;
+    this.imageUrl = opts.imageUrl;
+    this.description = opts.description;
+    this.availableSizes = opts.availableSizes;
+  }
 }
 
 const shirts = [
   new Shirt({
-    name: "One",
     price: 5,
     tier: "middle",
     name: "Unisex Jersey Short Sleeve",
@@ -18,7 +19,6 @@ const shirts = [
     availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
   }),
   new Shirt({
-    name: "Two",
     price: 7,
     tier: "top",
     name: "Tri-Blend Crew",
@@ -28,7 +28,6 @@ const shirts = [
     availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
   }),
   new Shirt({
-    name: "Three",
     price: 4,
     tier: "bottom",
     name: "Classic Short Sleeve",

@@ -31,7 +31,7 @@ class ProductView {
     });
 
     this.frontColorCountDropdown = new Dropdown({
-      className: "form-control col-sm-2 m-auto",
+      className: "form-control col-sm-1 m-auto",
       style: "display: inline; border: 0;",
       selections: this.dropdownSelections(),
       selected: this.frontColorCount,
@@ -48,7 +48,7 @@ class ProductView {
     });
 
     this.backColorCountDropdown = new Dropdown({
-      className: "form-control col-sm-2 m-auto",
+      className: "form-control col-sm-1 m-auto",
       style: "display: inline; border: 0;",
       selections: this.dropdownSelections(),
       selected: this.backColorCount,
