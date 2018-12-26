@@ -1,0 +1,27 @@
+<div class="form-box">
+    <div class="form-group mt-3">
+      <strong id="quote">{{pricePerShirt | currency:'USD':true:'1.2'}}/shirt</strong><br />
+    <pricing-modal></pricing-modal>
+    </div>
+    <div class="form-group">
+      <quantityInput (onUpdate)="onUpdate($event)" [quantity]="product.quantity" [minQuantity]="minQuantity"></quantityInput>
+    </div>
+    <div class="form-group">
+      <color-count-dropdown [shirtSide]="'front'"
+                          [count]="frontColorCount"
+                          [counts]="counts"
+                          (onUpdate)="updateFrontColorCount($event)"
+                          (onUpdate)="updateMinQuantity()">
+      </color-count-dropdown>
+      <color-count-dropdown [shirtSide]="'back'"
+                          [count]="backColorCount"
+                          [counts]="counts"
+                          (onUpdate)="updateBackColorCount($event)"
+                          (onUpdate)="updateMinQuantity()">
+      </color-count-dropdown>
+    </div>
+    <div class="form-group">
+      <button id="addToQuote" (click)="addToQuote()" class="btn btn-primary">Add To Quote &rarr;</button>
+    </div>
+  </div>
+

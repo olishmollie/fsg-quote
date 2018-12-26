@@ -4,5 +4,3 @@ function Product(opts) {
   this.frontColorCount = opts.frontColorCount;
   this.backColorCount = opts.backColorCount;
 }
-
-module.exports = Product;
