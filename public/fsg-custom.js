@@ -162,6 +162,31 @@ class NumberInput {
     );
   }
 }
+class PickAShirt {
+  constructor(opts) {
+    this.shirts = opts.shirts;
+    this.shirtViews = this.shirts.map(shirt => {
+      return new ShirtView({
+        shirt: shirt
+      });
+    });
+  }
+
+  // <div class="d-flex justify-content-md-between justify-content-sm-center text-center">
+  //     <div *ngFor="let shirt of shirts">
+  //       <cut [shirt]="shirt"></cut>
+  //     </div>
+  //   </div>
+
+  render() {
+    return jsml.div(
+      {
+        className: "pick-a-shirt d-flex justify-content-center text-center"
+      },
+      jsml.div({}, ...this.shirtViews.map(x => x.render()))
+    );
+  }
+}
 const DEFAULT_QUANTITY = 50;
 
 class ProductView {
@@ -403,6 +428,33 @@ class ProductView {
     );
   }
 }
+class ShirtView {
+  constructor(opts) {
+    this.shirt = opts.shirt;
+  }
+
+  render() {
+    return jsml.div(
+      {
+        className: "card"
+      },
+      jsml.figure(
+        {
+          className: "figure"
+        },
+        jsml.img({
+          className: "figure-img img-fluid rounded",
+          src: this.shirt.imageUrl,
+          alt: this.shirt.name
+        }),
+        jsml.figcaption({
+          className: "figure-caption text-center",
+          innerText: this.shirt.name
+        })
+      )
+    );
+  }
+}
 class Component {
   constructor(tag, attributes, ...args) {
     this.element = document.createElement(tag);
@@ -501,6 +553,15 @@ var jsml = (function() {
     span: (attributes, ...children) => {
       return makeElement("span", attributes, ...children);
     },
+    figure: (attributes, ...children) => {
+      return makeElement("figure", attributes, ...children);
+    },
+    figcaption: attributes => {
+      return makeElement("figcaption", attributes);
+    },
+    img: attributes => {
+      return makeElement("img", attributes);
+    },
     button: attributes => {
       return makeElement("button", attributes);
     },
@@ -535,17 +596,18 @@ class Product {
     this.backColorCount = opts.backColorCount;
   }
 }
-function Shirt(opts) {
-  this.name = opts.name;
-  this.price = opts.price;
-  this.imageUrl = opts.imageUrl;
-  this.description = opts.description;
-  this.availableSizes = opts.availableSizes;
+class Shirt {
+  constructor(opts) {
+    this.name = opts.name;
+    this.price = opts.price;
+    this.imageUrl = opts.imageUrl;
+    this.description = opts.description;
+    this.availableSizes = opts.availableSizes;
+  }
 }
 
 const shirts = [
   new Shirt({
-    name: "One",
     price: 5,
     tier: "middle",
     name: "Unisex Jersey Short Sleeve",
@@ -555,7 +617,6 @@ const shirts = [
     availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
   }),
   new Shirt({
-    name: "Two",
     price: 7,
     tier: "top",
     name: "Tri-Blend Crew",
@@ -565,7 +626,6 @@ const shirts = [
     availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
   }),
   new Shirt({
-    name: "Three",
     price: 4,
     tier: "bottom",
     name: "Classic Short Sleeve",

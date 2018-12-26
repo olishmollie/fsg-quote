@@ -7,17 +7,22 @@
     </head>
     <body>
         <div id="app">
-            <div class="container col-md-5">
+            <div class="container">
                 <!-- generated html goes here -->
             </div>
         </div>
         <script src="fsg-custom.js"></script>
         <script>
-            let pc = new ProductView({
-                shirtId: 0
-            });
-            let container = document.getElementsByClassName("container")[0];
-            container.appendChild(pc.render());
+            //let pc = new ProductView({
+            //    shirtId: 0
+            //});
+            window.onload = function() {
+                let pas = new PickAShirt({
+                    shirts: shirts
+                });
+                let container = document.getElementsByClassName("container")[0];
+                container.appendChild(pas.render());
+            }
         </script>
     </body>
 </html>

@@ -44,6 +44,15 @@ var jsml = (function() {
     span: (attributes, ...children) => {
       return makeElement("span", attributes, ...children);
     },
+    figure: (attributes, ...children) => {
+      return makeElement("figure", attributes, ...children);
+    },
+    figcaption: attributes => {
+      return makeElement("figcaption", attributes);
+    },
+    img: attributes => {
+      return makeElement("img", attributes);
+    },
     button: attributes => {
       return makeElement("button", attributes);
     },
