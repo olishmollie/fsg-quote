@@ -13,15 +13,15 @@
         </div>
         <script src="fsg-custom.js"></script>
         <script>
-            //let pc = new ProductView({
-            //    shirtId: 0
-            //});
             window.onload = function() {
-                let pas = new PickAShirt({
-                    shirts: shirts
+                let pc = new ProductView({
+                    shirt: shirts[0],
+                    onsubmit: (product) => {
+                        console.log(product);
+                    }
                 });
                 let container = document.getElementsByClassName("container")[0];
-                container.appendChild(pas.render());
+                container.appendChild(pc.render());
             }
         </script>
     </body>

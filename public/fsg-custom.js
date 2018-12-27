@@ -172,12 +172,6 @@ class PickAShirt {
     });
   }
 
-  // <div class="d-flex justify-content-md-between justify-content-sm-center text-center">
-  //     <div *ngFor="let shirt of shirts">
-  //       <cut [shirt]="shirt"></cut>
-  //     </div>
-  //   </div>
-
   render() {
     return jsml.div(
       {
@@ -187,16 +181,23 @@ class PickAShirt {
     );
   }
 }
+class ProductDetail {
+  constructor(opts) {
+    this.product = opts.product;
+  }
+}
 const DEFAULT_QUANTITY = 50;
 
 class ProductView {
   constructor(opts) {
     this.product = new Product({
-      shirt: shirts[opts.shirtId],
+      shirt: opts.shirt,
       quantity: DEFAULT_QUANTITY,
       frontColorCount: 1,
       backColorCount: 1
     });
+
+    this.onsubmit = opts.onsubmit;
 
     this.pricePerShirtLabel = new Label({
       text: this.pricePerShirt,
@@ -253,7 +254,7 @@ class ProductView {
       className: "btn btn-primary",
       innerText: "Submit",
       onclick: () => {
-        console.log(this.product);
+        this.onsubmit(this.product);
       }
     });
   }
@@ -428,6 +429,45 @@ class ProductView {
     );
   }
 }
+class QuantityInputs {
+  constructor(opts) {
+    this.product = opts.product;
+    this.quantities = this.product.quantities;
+
+    this.inputs = this.shirt.availableSizes.map((size, i) => {
+      return jsml.div(
+        {
+          className: "quantity-input"
+        },
+        jsml.label({
+          innerText: size
+        }),
+        jsml.input({
+          className: "form-control col-1",
+          value: this.quantities[i]
+        })
+      );
+    });
+  }
+
+  get shirt() {
+    return this.product.shirt;
+  }
+
+  render() {
+    jsml.div(
+      {
+        className: "quantity-inputs form-group"
+      },
+      ...this.inputs.map(x => x.render())
+    );
+  }
+}
+class QuoteView {
+  constructor(opts) {
+    this.quote = opts.quote;
+  }
+}
 class ShirtView {
   constructor(opts) {
     this.shirt = opts.shirt;
@@ -565,6 +605,9 @@ var jsml = (function() {
     button: attributes => {
       return makeElement("button", attributes);
     },
+    label: (attributes, ...children) => {
+      return makeElement("label", attributes, ...children);
+    },
     input: attributes => {
       return makeElement("input", attributes);
     },
@@ -594,6 +637,50 @@ class Product {
     this.quantity = opts.quantity;
     this.frontColorCount = opts.frontColorCount;
     this.backColorCount = opts.backColorCount;
+    this.quantities = new Array(this.shirt.availableSizes.length).fill(0);
+  }
+
+  distributeSizes() {
+    var sizes = {};
+    var total = 0;
+    const divisor = 7;
+
+    var multiplier = this.quantity / divisor;
+
+    for (var i = 0, len = this.shirt.availableSizes.length; i < len; i++) {
+      const size = this.shirt.availableSizes[i];
+      sizes[size] = Math.floor(multiplier * ratios[size]);
+      total += sizes[size];
+    }
+
+    if (total < this.quantity) {
+      for (i = 0; i < this.quantity - total; i++) {
+        i % 2 == 0 ? sizes["M"]++ : sizes["L"]++;
+      }
+    }
+
+    return sizes;
+  }
+}
+class Quote {
+  constructor(opts) {
+    this.products = opts.products || [];
+  }
+
+  add(product) {
+    this.products.push(product);
+  }
+
+  remove(product) {
+    this.products.splice(this.products.indexOf(product), 1);
+  }
+
+  get subtotal() {
+    return 100;
+  }
+
+  get total() {
+    return 110;
   }
 }
 class Shirt {

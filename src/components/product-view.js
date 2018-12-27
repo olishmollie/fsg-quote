@@ -3,11 +3,13 @@ const DEFAULT_QUANTITY = 50;
 class ProductView {
   constructor(opts) {
     this.product = new Product({
-      shirt: shirts[opts.shirtId],
+      shirt: opts.shirt,
       quantity: DEFAULT_QUANTITY,
       frontColorCount: 1,
       backColorCount: 1
     });
+
+    this.onsubmit = opts.onsubmit;
 
     this.pricePerShirtLabel = new Label({
       text: this.pricePerShirt,
@@ -64,7 +66,7 @@ class ProductView {
       className: "btn btn-primary",
       innerText: "Submit",
       onclick: () => {
-        console.log(this.product);
+        this.onsubmit(this.product);
       }
     });
   }

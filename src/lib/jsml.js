@@ -56,6 +56,9 @@ var jsml = (function() {
     button: attributes => {
       return makeElement("button", attributes);
     },
+    label: (attributes, ...children) => {
+      return makeElement("label", attributes, ...children);
+    },
     input: attributes => {
       return makeElement("input", attributes);
     },
