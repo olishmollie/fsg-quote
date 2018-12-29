@@ -1,6 +1,6 @@
 class Router {
-  constructor(app, opts = {}) {
-    this.app = app;
+  constructor(opts = {}) {
+    this.container = opts.container;
     this.routes = opts.routes || [];
     this.history = [];
   }
@@ -22,8 +22,8 @@ class Router {
     window.location.href = currentUrl.replace(/#.*$/, "") + "#" + href;
 
     // load the view
-    this.app.innerHTML = "";
-    this.app.appendChild(route.resolve(href).render());
+    this.container.innerHTML = "";
+    this.container.appendChild(route.resolve(href).render());
   }
 
   back() {

@@ -1,5 +1,6 @@
 class PickAShirt {
   constructor() {
+    // TODO: figure out how to pass this while playing nice with router
     this.shirts = shirts;
     this.shirtViews = this.shirts.map(shirt => {
       return new ShirtView({

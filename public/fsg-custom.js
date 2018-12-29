@@ -164,6 +164,7 @@ class NumberInput {
 }
 class PickAShirt {
   constructor() {
+    // TODO: figure out how to pass this while playing nice with router
     this.shirts = shirts;
     this.shirtViews = this.shirts.map(shirt => {
       return new ShirtView({
@@ -463,6 +464,7 @@ class QuantityInputs {
 }
 class QuoteView {
   constructor() {
+    // TODO: figure out how to pass this while playing nice with router
     this.quote = quote;
   }
 
@@ -766,8 +768,8 @@ class Route {
   }
 }
 class Router {
-  constructor(app, opts = {}) {
-    this.app = app;
+  constructor(opts = {}) {
+    this.container = opts.container;
     this.routes = opts.routes || [];
     this.history = [];
   }
@@ -789,8 +791,8 @@ class Router {
     window.location.href = currentUrl.replace(/#.*$/, "") + "#" + href;
 
     // load the view
-    this.app.innerHTML = "";
-    this.app.appendChild(route.resolve(href).render());
+    this.container.innerHTML = "";
+    this.container.appendChild(route.resolve(href).render());
   }
 
   back() {
@@ -807,14 +809,16 @@ class Router {
   }
 }
 window.onload = function() {
-  let routes = [
-    new Route({ href: "/", component: PickAShirt }),
-    new Route({ href: "/shirts/:shirtId", component: ProductView }),
-    new Route({ href: "/quote", component: QuoteView })
-  ];
+  let app = {
+    router: new Router({
+      container: document.getElementById("app"),
+      routes: [
+        new Route({ href: "/", component: PickAShirt }),
+        new Route({ href: "/shirts/:shirtId", component: ProductView }),
+        new Route({ href: "/quote", component: QuoteView })
+      ]
+    })
+  };
 
-  let app = document.getElementById("app");
-  var router = new Router(app, { routes });
-
-  window.router = router;
+  window.app = app;
 };
