@@ -9,6 +9,15 @@ class ProductView {
       backColorCount: 1
     });
 
+    this.colorPicker = new ColorPicker({
+      color: "black",
+      colors: ["black", "white", "red", "green", "blue"],
+      onchange: color => {
+        this.product.color = color;
+        console.log(color + " clicked.");
+      }
+    });
+
     this.pricePerShirtLabel = new Label({
       text: this.pricePerShirt,
       style: "font-size: 1.3em"
@@ -212,6 +221,7 @@ class ProductView {
         jsml.p({
           innerText: this.shirt.description
         }),
+        this.colorPicker.render(),
         jsml.div(
           {
             className: "text-center m-auto p-3",

@@ -1,3 +1,28 @@
+class ColorPicker {
+  constructor(opts) {
+    this.color = opts.color;
+    this.colors = opts.colors;
+    this.onchange = opts.onchange;
+    this.shirtColors = this.colors.map(color => {
+      return new ShirtColor({
+        color: color,
+        onclick: color => {
+          this.onchange(color);
+          this.color = color;
+        }
+      });
+    });
+  }
+
+  render() {
+    return jsml.div(
+      {
+        className: "color-picker"
+      },
+      ...this.shirtColors.map(x => x.render())
+    );
+  }
+}
 class Dropdown {
   constructor(opts) {
     this._selections = opts.selections.map(x => x.toString());
@@ -194,6 +219,15 @@ class ProductView {
       quantity: DEFAULT_QUANTITY,
       frontColorCount: 1,
       backColorCount: 1
+    });
+
+    this.colorPicker = new ColorPicker({
+      color: "black",
+      colors: ["black", "white", "red", "green", "blue"],
+      onchange: color => {
+        this.product.color = color;
+        console.log(color + " clicked.");
+      }
     });
 
     this.pricePerShirtLabel = new Label({
@@ -399,6 +433,7 @@ class ProductView {
         jsml.p({
           innerText: this.shirt.description
         }),
+        this.colorPicker.render(),
         jsml.div(
           {
             className: "text-center m-auto p-3",
@@ -476,6 +511,22 @@ class QuoteView {
         innerText: "This is the quote view."
       })
     );
+  }
+}
+class ShirtColor {
+  constructor(opts) {
+    this.color = opts.color;
+    this.onclick = opts.onclick;
+  }
+
+  render() {
+    return jsml.div({
+      className: "shirt-color col-sm",
+      style: "display: inline; background-color: " + this.color,
+      onclick: () => {
+        this.onclick(this.color);
+      }
+    });
   }
 }
 class ShirtView {
@@ -655,6 +706,7 @@ var jsml = (function() {
 class Product {
   constructor(opts) {
     this.shirt = opts.shirt;
+    this.color = opts.color;
     this.quantity = opts.quantity;
     this.frontColorCount = opts.frontColorCount;
     this.backColorCount = opts.backColorCount;
@@ -762,6 +814,7 @@ class Router {
     this.container = opts.container;
     this.routes = opts.routes || [];
     this.history = [];
+    // TODO: listen for changes in window location
   }
 
   dispatch(href) {
