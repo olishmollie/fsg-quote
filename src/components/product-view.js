@@ -3,7 +3,7 @@ const DEFAULT_QUANTITY = 50;
 class ProductView {
   constructor(opts) {
     this.product = new Product({
-      shirt: shirts[opts.shirtId],
+      shirt: app.shirts[opts.shirtId],
       quantity: DEFAULT_QUANTITY,
       frontColorCount: 1,
       backColorCount: 1
@@ -64,6 +64,7 @@ class ProductView {
       className: "btn btn-primary",
       innerText: "Submit",
       onclick: () => {
+        this.product.distributeSizes();
         console.log(this.product);
       }
     });

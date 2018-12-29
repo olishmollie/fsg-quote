@@ -4,10 +4,19 @@ class Product {
     this.quantity = opts.quantity;
     this.frontColorCount = opts.frontColorCount;
     this.backColorCount = opts.backColorCount;
-    this.quantities = new Array(this.shirt.availableSizes.length).fill(0);
+    this.quantities = {};
   }
 
   distributeSizes() {
+    const ratios = {
+      XS: 0.5,
+      S: 1,
+      M: 2.5,
+      L: 2,
+      XL: 0.75,
+      "2XL": 0.25
+    };
+
     var sizes = {};
     var total = 0;
     const divisor = 7;
@@ -26,6 +35,6 @@ class Product {
       }
     }
 
-    return sizes;
+    this.quantities = sizes;
   }
 }

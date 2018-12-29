@@ -32,6 +32,9 @@ var jsml = (function() {
     h6: (attributes, ...children) => {
       return makeElement("h6", attributes, ...children);
     },
+    a: (attributes, ...children) => {
+      return makeElement("a", attributes, ...children);
+    },
     div: (attributes, ...children) => {
       return makeElement("div", attributes, ...children);
     },

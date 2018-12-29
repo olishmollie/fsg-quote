@@ -164,37 +164,7 @@ class NumberInput {
 }
 class PickAShirt {
   constructor() {
-    // TODO: figure out how to pass this while playing nice with router
-    this.shirts = [
-      new Shirt({
-        price: 5,
-        tier: "middle",
-        name: "Unisex Jersey Short Sleeve",
-        imageUrl: "assets/3001_06_1.jpg",
-        description:
-          "This updated unisex essential fits like a well-loved favorite, featuring a crew neck, short sleeves and designed with superior combed and ring-spun cotton that acts as the best blank canvas for printing. Offered in a variety of solid and heather cvc colors.",
-        availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
-      }),
-      new Shirt({
-        price: 7,
-        tier: "top",
-        name: "Tri-Blend Crew",
-        imageUrl: "assets/mn1_000032.jpg",
-        description:
-          "Top quality tri-blend crew cut. Superior design for a great feel and a perfect fit.",
-        availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
-      }),
-      new Shirt({
-        price: 4,
-        tier: "bottom",
-        name: "Classic Short Sleeve",
-        imageUrl: "assets/G2000-095-SM.png",
-        description:
-          "Classic tee that'll never go out of style. Great shirt at a great price.",
-        availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
-      })
-    ];
-    this.shirtViews = this.shirts.map(shirt => {
+    this.shirtViews = app.shirts.map(shirt => {
       return new ShirtView({
         shirt: shirt
       });
@@ -220,7 +190,7 @@ const DEFAULT_QUANTITY = 50;
 class ProductView {
   constructor(opts) {
     this.product = new Product({
-      shirt: shirts[opts.shirtId],
+      shirt: app.shirts[opts.shirtId],
       quantity: DEFAULT_QUANTITY,
       frontColorCount: 1,
       backColorCount: 1
@@ -281,6 +251,7 @@ class ProductView {
       className: "btn btn-primary",
       innerText: "Submit",
       onclick: () => {
+        this.product.distributeSizes();
         console.log(this.product);
       }
     });
@@ -521,15 +492,23 @@ class ShirtView {
         {
           className: "figure"
         },
-        jsml.img({
-          className: "figure-img img-fluid rounded",
-          src: this.shirt.imageUrl,
-          alt: this.shirt.name
-        }),
-        jsml.figcaption({
-          className: "figure-caption text-center",
-          innerText: this.shirt.name
-        })
+        jsml.a(
+          {
+            href: "#/shirts/" + this.shirt.id,
+            onclick: () => {
+              window.app.router.location = "/shirts/" + this.shirt.id;
+            }
+          },
+          jsml.img({
+            className: "figure-img img-fluid rounded",
+            src: this.shirt.imageUrl,
+            alt: this.shirt.name
+          }),
+          jsml.figcaption({
+            className: "figure-caption text-center",
+            innerText: this.shirt.name
+          })
+        )
       )
     );
   }
@@ -620,6 +599,9 @@ var jsml = (function() {
     h6: (attributes, ...children) => {
       return makeElement("h6", attributes, ...children);
     },
+    a: (attributes, ...children) => {
+      return makeElement("a", attributes, ...children);
+    },
     div: (attributes, ...children) => {
       return makeElement("div", attributes, ...children);
     },
@@ -676,10 +658,19 @@ class Product {
     this.quantity = opts.quantity;
     this.frontColorCount = opts.frontColorCount;
     this.backColorCount = opts.backColorCount;
-    this.quantities = new Array(this.shirt.availableSizes.length).fill(0);
+    this.quantities = {};
   }
 
   distributeSizes() {
+    const ratios = {
+      XS: 0.5,
+      S: 1,
+      M: 2.5,
+      L: 2,
+      XL: 0.75,
+      "2XL": 0.25
+    };
+
     var sizes = {};
     var total = 0;
     const divisor = 7;
@@ -698,7 +689,7 @@ class Product {
       }
     }
 
-    return sizes;
+    this.quantities = sizes;
   }
 }
 class Quote {
@@ -724,6 +715,7 @@ class Quote {
 }
 class Shirt {
   constructor(opts) {
+    this.id = opts.id;
     this.name = opts.name;
     this.price = opts.price;
     this.imageUrl = opts.imageUrl;
@@ -796,6 +788,7 @@ class Router {
   back() {
     let prevUrl = this.history.pop();
     this.dispatch(prevUrl);
+    return prevUrl;
   }
 
   get location() {
@@ -807,9 +800,43 @@ class Router {
   }
 }
 window.onload = function() {
+  let shirts = [
+    new Shirt({
+      id: 0,
+      price: 5,
+      tier: "middle",
+      name: "Unisex Jersey Short Sleeve",
+      imageUrl: "assets/3001_06_1.jpg",
+      description:
+        "This updated unisex essential fits like a well-loved favorite, featuring a crew neck, short sleeves and designed with superior combed and ring-spun cotton that acts as the best blank canvas for printing. Offered in a variety of solid and heather cvc colors.",
+      availableSizes: ["XS", "S", "M", "L", "XL"]
+    }),
+    new Shirt({
+      id: 1,
+      price: 7,
+      tier: "top",
+      name: "Tri-Blend Crew",
+      imageUrl: "assets/mn1_000032.jpg",
+      description:
+        "Top quality tri-blend crew cut. Superior design for a great feel and a perfect fit.",
+      availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
+    }),
+    new Shirt({
+      id: 2,
+      price: 4,
+      tier: "bottom",
+      name: "Classic Short Sleeve",
+      imageUrl: "assets/G2000-095-SM.png",
+      description:
+        "Classic tee that'll never go out of style. Great shirt at a great price.",
+      availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
+    })
+  ];
+
   let app = {
+    quote: new Quote(),
+    shirts: shirts,
     router: new Router({
-      quote: new Quote(),
       container: document.getElementById("app"),
       routes: [
         new Route({ href: "/", component: PickAShirt }),

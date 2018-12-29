@@ -3,6 +3,7 @@ class Router {
     this.container = opts.container;
     this.routes = opts.routes || [];
     this.history = [];
+    // TODO: listen for changes in window location
   }
 
   dispatch(href) {
@@ -29,6 +30,7 @@ class Router {
   back() {
     let prevUrl = this.history.pop();
     this.dispatch(prevUrl);
+    return prevUrl;
   }
 
   get location() {
