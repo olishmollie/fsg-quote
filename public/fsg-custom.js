@@ -163,8 +163,8 @@ class NumberInput {
   }
 }
 class PickAShirt {
-  constructor(opts) {
-    this.shirts = opts.shirts;
+  constructor() {
+    this.shirts = shirts;
     this.shirtViews = this.shirts.map(shirt => {
       return new ShirtView({
         shirt: shirt
@@ -191,13 +191,11 @@ const DEFAULT_QUANTITY = 50;
 class ProductView {
   constructor(opts) {
     this.product = new Product({
-      shirt: opts.shirt,
+      shirt: shirts[opts.shirtId],
       quantity: DEFAULT_QUANTITY,
       frontColorCount: 1,
       backColorCount: 1
     });
-
-    this.onsubmit = opts.onsubmit;
 
     this.pricePerShirtLabel = new Label({
       text: this.pricePerShirt,
@@ -254,7 +252,7 @@ class ProductView {
       className: "btn btn-primary",
       innerText: "Submit",
       onclick: () => {
-        this.onsubmit(this.product);
+        console.log(this.product);
       }
     });
   }
@@ -464,8 +462,19 @@ class QuantityInputs {
   }
 }
 class QuoteView {
-  constructor(opts) {
-    this.quote = opts.quote;
+  constructor() {
+    this.quote = quote;
+  }
+
+  render() {
+    return jsml.div(
+      {
+        className: "quote-view"
+      },
+      jsml.p({
+        innerText: "This is the quote view."
+      })
+    );
   }
 }
 class ShirtView {
@@ -663,8 +672,8 @@ class Product {
   }
 }
 class Quote {
-  constructor(opts) {
-    this.products = opts.products || [];
+  constructor(products) {
+    this.products = products || [];
   }
 
   add(product) {
@@ -722,3 +731,90 @@ const shirts = [
     availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
   })
 ];
+class Route {
+  constructor(opts) {
+    this.href = opts.href;
+    this.path = this.href
+      .replace(":", "")
+      .split("/")
+      .slice(1);
+    this.variables = [];
+    this.regex = this.parse(this.href);
+    this.component = opts.component;
+  }
+
+  parse(href) {
+    return new RegExp(
+      href.replace(/:(\w+)/g, (_, name) => {
+        this.variables.push(name);
+        return "([^/]+)";
+      }) + "(?:/|$)"
+    );
+  }
+
+  resolve(path) {
+    let match = path.match(this.regex);
+    if (match) {
+      let params = {};
+      match = match.slice(1); // get rid of matched string
+      for (let i = 0; i < this.variables.length; i++) {
+        params[this.variables[i]] = match[i];
+      }
+      return new this.component(params);
+    }
+    throw "could not resolve path: " + path;
+  }
+}
+class Router {
+  constructor(app, opts = {}) {
+    this.app = app;
+    this.routes = opts.routes || [];
+    this.history = [];
+  }
+
+  dispatch(href) {
+    let route = this.routes.find(route => {
+      return route.regex.exec(href);
+    });
+
+    if (!route) {
+      throw "unregistered route: " + href;
+    }
+
+    // add current url to history
+    this.history.push(this.location);
+
+    // update url in nav bar
+    let currentUrl = window.location.href;
+    window.location.href = currentUrl.replace(/#.*$/, "") + "#" + href;
+
+    // load the view
+    this.app.innerHTML = "";
+    this.app.appendChild(route.resolve(href).render());
+  }
+
+  back() {
+    let prevUrl = this.history.pop();
+    this.dispatch(prevUrl);
+  }
+
+  get location() {
+    return window.location.pathname.replace(/#/, "");
+  }
+
+  set location(path) {
+    this.dispatch(path);
+  }
+}
+window.onload = function() {
+  let routes = [
+    new Route({ href: "/", component: PickAShirt }),
+    new Route({ href: "/shirts/:shirtId", component: ProductView }),
+    new Route({ href: "/quote", component: QuoteView })
+  ];
+
+  let app = document.getElementById("app");
+  var router = new Router(app, { routes });
+
+  window.router = router;
+};

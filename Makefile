@@ -1,2 +1,2 @@
-public/fsg-custom.js: src/**/*.js
+public/fsg-custom.js: src/**/*.js src/*.js
 	cat $^ > $@

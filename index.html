@@ -6,23 +6,9 @@
         <link rel="stylesheet" href="styles/app.css">
     </head>
     <body>
-        <div id="app">
-            <div class="container">
-                <!-- generated html goes here -->
-            </div>
+        <div id="app" class="container">
+            <!-- generated html goes here -->
         </div>
         <script src="fsg-custom.js"></script>
-        <script>
-            window.onload = function() {
-                let pc = new ProductView({
-                    shirt: shirts[0],
-                    onsubmit: (product) => {
-                        console.log(product);
-                    }
-                });
-                let container = document.getElementsByClassName("container")[0];
-                container.appendChild(pc.render());
-            }
-        </script>
     </body>
 </html>
