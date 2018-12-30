@@ -1,7 +1,6 @@
-(function() {
-  let Navbar = function() {};
-
-  Navbar.prototype.render = function() {
+class Navbar {
+  constructor() {}
+  render() {
     return jsml.nav(
       {
         className: "navbar navbar-light bg-light"
@@ -37,8 +36,5 @@
         )
       )
     );
-  };
-
-  window.Navbar = Navbar;
-  return Navbar;
-})();
+  }
+}

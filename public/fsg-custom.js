@@ -324,10 +324,9 @@ let SHIRTS = [
     availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
   })
 ];
-(function() {
-  let Root = function() {};
-
-  Root.prototype.render = function() {
+class Root {
+  constructor() {}
+  render() {
     return jsml.div(
       {},
       new Navbar().render(),
@@ -336,11 +335,8 @@ let SHIRTS = [
         className: "container"
       })
     );
-  };
-
-  window.Root = Root;
-  return Root;
-})();
+  }
+}
 class ColorPicker {
   constructor(opts) {
     this.color = opts.color;
@@ -443,10 +439,9 @@ class Label {
     return this.span;
   }
 }
-(function() {
-  let Navbar = function() {};
-
-  Navbar.prototype.render = function() {
+class Navbar {
+  constructor() {}
+  render() {
     return jsml.nav(
       {
         className: "navbar navbar-light bg-light"
@@ -482,11 +477,8 @@ class Label {
         )
       )
     );
-  };
-
-  window.Navbar = Navbar;
-  return Navbar;
-})();
+  }
+}
 class NumberInput {
   constructor(opts) {
     this._value = opts.value || 50;

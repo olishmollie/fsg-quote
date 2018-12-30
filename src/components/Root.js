@@ -1,7 +1,6 @@
-(function() {
-  let Root = function() {};
-
-  Root.prototype.render = function() {
+class Root {
+  constructor() {}
+  render() {
     return jsml.div(
       {},
       new Navbar().render(),
@@ -10,8 +9,5 @@
         className: "container"
       })
     );
-  };
-
-  window.Root = Root;
-  return Root;
-})();
+  }
+}
