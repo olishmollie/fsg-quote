@@ -132,9 +132,8 @@ class Router {
   constructor(opts) {
     this.container = opts.container;
     this.routes = opts.routes || [];
-    // TODO: fix history api
-    this.history = [];
-    // TODO: listen for changes in window location?
+    this.location = null;
+    this.listen();
   }
 
   load(href) {
@@ -146,24 +145,23 @@ class Router {
       throw "unregistered route: " + href;
     }
 
-    // add current url to history
-    // this.history.push(this.location);
-
-    // update url in nav bar
-    let currentUrl = window.location.href;
-    window.location.href = currentUrl.replace(/#.*$/, "") + "#" + href;
+    // update location
+    this.location = window.location.hash;
 
     // load the view
     this.container.innerHTML = "";
     this.container.appendChild(route.resolve(href).render());
   }
 
-  // TODO: fix history api
-  // back() {
-  //   let prevUrl = this.history.pop();
-  //   this.dispatch(prevUrl);
-  //   return prevUrl;
-  // }
+  listen() {
+    setTimeout(() => {
+      if (window.location.hash != this.location) {
+        console.log("detected change in window location");
+        this.load(window.location.hash);
+      }
+      this.listen();
+    });
+  }
 }
 class Product {
   constructor(opts) {
@@ -548,7 +546,7 @@ class Navbar {
       },
       jsml.a({
         className: "navbar-brand",
-        href: "#",
+        href: "#/",
         innerText: "FSG"
       }),
       jsml.ul(
@@ -561,7 +559,7 @@ class Navbar {
           },
           jsml.a({
             className: "nav-link",
-            href: "#",
+            href: "#/",
             innerText: "Shirts"
           })
         ),
@@ -1020,11 +1018,24 @@ class QuoteView {
     this.quote = APP.quote;
   }
 
+  get size() {
+    return this.products.length;
+  }
+
   get products() {
     return this.quote.products;
   }
 
-  get productDetailViews() {
+  get productDetails() {
+    if (this.size == 0) {
+      // TODO: conditional rendering?
+      return [
+        jsml.p({
+          innerText: "This quote has no items yet."
+        })
+      ];
+    }
+
     return this.products.map((product, i) => {
       return new ProductDetailView({
         id: i,
@@ -1037,7 +1048,7 @@ class QuoteView {
             APP.router.load("/quote");
           }
         }
-      });
+      }).render();
     });
   }
 
@@ -1046,7 +1057,7 @@ class QuoteView {
       {
         className: "quote-view"
       },
-      ...this.productDetailViews.map(x => x.render())
+      ...this.productDetails
     );
   }
 }
@@ -1082,10 +1093,10 @@ class ShirtView {
         },
         jsml.a(
           {
-            href: "#/shirts/" + this.shirt.id,
-            onclick: () => {
-              APP.router.load("/shirts/" + this.shirt.id);
-            }
+            href: "#/shirts/" + this.shirt.id
+            // onclick: () => {
+            //   APP.router.load("/shirts/" + this.shirt.id);
+            // }
           },
           jsml.img({
             className: "figure-img img-fluid rounded",
