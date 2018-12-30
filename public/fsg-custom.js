@@ -321,6 +321,23 @@ let SHIRTS = [
     availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
   })
 ];
+(function() {
+  let Root = function() {};
+
+  Root.prototype.render = function() {
+    return jsml.div(
+      {},
+      new Navbar().render(),
+      jsml.div({
+        id: "app",
+        className: "container"
+      })
+    );
+  };
+
+  window.Root = Root;
+  return Root;
+})();
 class ColorPicker {
   constructor(opts) {
     this.color = opts.color;
@@ -423,6 +440,50 @@ class Label {
     return this.span;
   }
 }
+(function() {
+  let Navbar = function() {};
+
+  Navbar.prototype.render = function() {
+    return jsml.nav(
+      {
+        className: "navbar navbar-light bg-light"
+      },
+      jsml.a({
+        className: "navbar-brand",
+        href: "#",
+        innerText: "FSG"
+      }),
+      jsml.ul(
+        {
+          className: "navbar-nav list-inline"
+        },
+        jsml.li(
+          {
+            className: "nav-item list-inline-item"
+          },
+          jsml.a({
+            className: "nav-link",
+            href: "#",
+            innerText: "Shirts"
+          })
+        ),
+        jsml.li(
+          {
+            className: "nav-item list-inline-item"
+          },
+          jsml.a({
+            className: "nav-link",
+            href: "#/quote",
+            innerText: "Quote"
+          })
+        )
+      )
+    );
+  };
+
+  window.Navbar = Navbar;
+  return Navbar;
+})();
 class NumberInput {
   constructor(opts) {
     this._value = opts.value || 50;
@@ -946,6 +1007,9 @@ class ShirtView {
   }
 }
 window.onload = function() {
+  // mount root component
+  document.getElementsByTagName("body")[0].appendChild(new Root().render());
+
   let APP = {
     root: "/",
     quote: new Quote(),
@@ -953,9 +1017,9 @@ window.onload = function() {
     router: new Router({
       container: document.getElementById("app"),
       routes: [
-        new Route({ href: "/", component: PickAShirt }),
-        new Route({ href: "/shirts/:shirtId", component: ProductView }),
-        new Route({ href: "/quote", component: QuoteView })
+        new Route({ href: "/", component: "PickAShirt" }),
+        new Route({ href: "/shirts/:shirtId", component: "ProductView" }),
+        new Route({ href: "/quote", component: "QuoteView" })
       ]
     })
   };
@@ -963,6 +1027,6 @@ window.onload = function() {
   // make app a global variable
   window.APP = APP;
 
-  //load root
+  //load root page
   APP.router.load("/");
 };
