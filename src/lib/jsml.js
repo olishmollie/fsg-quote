@@ -65,6 +65,12 @@ var jsml = (function() {
     input: attributes => {
       return makeElement("input", attributes);
     },
+    ul: (attributes, ...children) => {
+      return makeElement("ul", attributes, ...children);
+    },
+    li: (attributes, ...children) => {
+      return makeElement("li", attributes, ...children);
+    },
     text: text => {
       return document.createTextNode(text);
     },

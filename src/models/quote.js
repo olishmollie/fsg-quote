@@ -11,6 +11,10 @@ class Quote {
     this.products.splice(this.products.indexOf(product), 1);
   }
 
+  get size() {
+    return this.products.length;
+  }
+
   get subtotal() {
     return 100;
   }

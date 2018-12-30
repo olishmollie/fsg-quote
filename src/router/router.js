@@ -1,9 +1,10 @@
 class Router {
-  constructor(opts = {}) {
+  constructor(opts) {
     this.container = opts.container;
     this.routes = opts.routes || [];
+    // TODO: fix history api
     this.history = [];
-    // TODO: listen for changes in window location
+    // TODO: listen for changes in window location?
   }
 
   dispatch(href) {
@@ -16,7 +17,7 @@ class Router {
     }
 
     // add current url to history
-    this.history.push(this.location);
+    // this.history.push(this.location);
 
     // update url in nav bar
     let currentUrl = window.location.href;
@@ -27,14 +28,15 @@ class Router {
     this.container.appendChild(route.resolve(href).render());
   }
 
-  back() {
-    let prevUrl = this.history.pop();
-    this.dispatch(prevUrl);
-    return prevUrl;
-  }
+  // TODO: fix history api
+  // back() {
+  //   let prevUrl = this.history.pop();
+  //   this.dispatch(prevUrl);
+  //   return prevUrl;
+  // }
 
   get location() {
-    return window.location.pathname.replace(/#/, "");
+    return window.location.href.replace(/#/, "");
   }
 
   set location(path) {

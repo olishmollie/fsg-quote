@@ -205,9 +205,49 @@ class PickAShirt {
     );
   }
 }
-class ProductDetail {
+class ProductDetailView {
   constructor(opts) {
+    this.id = opts.id;
     this.product = opts.product;
+    this.onchange = opts.onchange;
+
+    this.quantityInputView = new QuantityInputView({
+      product: this.product
+    });
+  }
+
+  render() {
+    return jsml.div(
+      {
+        className: "product-detail media",
+        style: "border: 1px solid black"
+      },
+      jsml.div(
+        {
+          className: "media-body"
+        },
+        jsml.h5(
+          {
+            className: "product-detail-title"
+          },
+          jsml.strong({
+            className: "product-detail-number mr-2",
+            innerText: this.id + 1 + "."
+          }),
+          jsml.text(this.product.shirt.name),
+          jsml.button({
+            className: "trash-button float-right btn btn-danger",
+            innerText: "TRASH",
+            onclick: () => {
+              // DEBT: implicit dependency on app
+              app.quote.remove(this.product);
+              this.onchange();
+            }
+          })
+        ),
+        this.quantityInputView.render()
+      )
+    );
   }
 }
 const DEFAULT_QUANTITY = 50;
@@ -287,6 +327,8 @@ class ProductView {
       onclick: () => {
         this.product.distributeSizes();
         console.log(this.product);
+        app.quote.add(this.product);
+        app.router.location = "/quote";
       }
     });
   }
@@ -462,22 +504,21 @@ class ProductView {
     );
   }
 }
-class QuantityInputs {
+class QuantityInputView {
   constructor(opts) {
     this.product = opts.product;
-    this.quantities = this.product.quantities;
 
     this.inputs = this.shirt.availableSizes.map((size, i) => {
-      return jsml.div(
+      return jsml.li(
         {
-          className: "quantity-input"
+          className: "list-inline-item"
         },
         jsml.label({
           innerText: size
         }),
         jsml.input({
-          className: "form-control col-1",
-          value: this.quantities[i]
+          className: "form-control",
+          value: this.product.quantities[this.shirt.availableSizes[i]]
         })
       );
     });
@@ -488,18 +529,39 @@ class QuantityInputs {
   }
 
   render() {
-    jsml.div(
+    return jsml.ul(
       {
-        className: "quantity-inputs form-group"
+        className: "list-inline"
       },
-      ...this.inputs.map(x => x.render())
+      ...this.inputs
     );
   }
 }
 class QuoteView {
   constructor() {
     // TODO: figure out how to pass this while playing nice with router
-    this.quote = quote;
+    this.quote = app.quote;
+  }
+
+  get products() {
+    return this.quote.products;
+  }
+
+  get productDetailViews() {
+    return this.products.map((product, i) => {
+      return new ProductDetailView({
+        id: i,
+        product: product,
+        onchange: () => {
+          if (this.quote.size == 0) {
+            app.router.location = app.root;
+          } else {
+            // HACK: fix this shite
+            app.router.location = "/quote";
+          }
+        }
+      });
+    });
   }
 
   render() {
@@ -507,9 +569,7 @@ class QuoteView {
       {
         className: "quote-view"
       },
-      jsml.p({
-        innerText: "This is the quote view."
-      })
+      ...this.productDetailViews.map(x => x.render())
     );
   }
 }
@@ -683,6 +743,12 @@ var jsml = (function() {
     input: attributes => {
       return makeElement("input", attributes);
     },
+    ul: (attributes, ...children) => {
+      return makeElement("ul", attributes, ...children);
+    },
+    li: (attributes, ...children) => {
+      return makeElement("li", attributes, ...children);
+    },
     text: text => {
       return document.createTextNode(text);
     },
@@ -757,6 +823,10 @@ class Quote {
     this.products.splice(this.products.indexOf(product), 1);
   }
 
+  get size() {
+    return this.products.length;
+  }
+
   get subtotal() {
     return 100;
   }
@@ -810,11 +880,12 @@ class Route {
   }
 }
 class Router {
-  constructor(opts = {}) {
+  constructor(opts) {
     this.container = opts.container;
     this.routes = opts.routes || [];
+    // TODO: fix history api
     this.history = [];
-    // TODO: listen for changes in window location
+    // TODO: listen for changes in window location?
   }
 
   dispatch(href) {
@@ -827,7 +898,7 @@ class Router {
     }
 
     // add current url to history
-    this.history.push(this.location);
+    // this.history.push(this.location);
 
     // update url in nav bar
     let currentUrl = window.location.href;
@@ -838,14 +909,15 @@ class Router {
     this.container.appendChild(route.resolve(href).render());
   }
 
-  back() {
-    let prevUrl = this.history.pop();
-    this.dispatch(prevUrl);
-    return prevUrl;
-  }
+  // TODO: fix history api
+  // back() {
+  //   let prevUrl = this.history.pop();
+  //   this.dispatch(prevUrl);
+  //   return prevUrl;
+  // }
 
   get location() {
-    return window.location.pathname.replace(/#/, "");
+    return window.location.href.replace(/#/, "");
   }
 
   set location(path) {
@@ -859,7 +931,7 @@ window.onload = function() {
       price: 5,
       tier: "middle",
       name: "Unisex Jersey Short Sleeve",
-      imageUrl: "assets/3001_06_1.jpg",
+      imageUrl: "public/assets/3001_06_1.jpg",
       description:
         "This updated unisex essential fits like a well-loved favorite, featuring a crew neck, short sleeves and designed with superior combed and ring-spun cotton that acts as the best blank canvas for printing. Offered in a variety of solid and heather cvc colors.",
       availableSizes: ["XS", "S", "M", "L", "XL"]
@@ -869,7 +941,7 @@ window.onload = function() {
       price: 7,
       tier: "top",
       name: "Tri-Blend Crew",
-      imageUrl: "assets/mn1_000032.jpg",
+      imageUrl: "public/assets/mn1_000032.jpg",
       description:
         "Top quality tri-blend crew cut. Superior design for a great feel and a perfect fit.",
       availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
@@ -879,25 +951,30 @@ window.onload = function() {
       price: 4,
       tier: "bottom",
       name: "Classic Short Sleeve",
-      imageUrl: "assets/G2000-095-SM.png",
+      imageUrl: "public/assets/G2000-095-SM.png",
       description:
         "Classic tee that'll never go out of style. Great shirt at a great price.",
       availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
     })
   ];
 
-  let app = {
-    quote: new Quote(),
-    shirts: shirts,
-    router: new Router({
-      container: document.getElementById("app"),
-      routes: [
-        new Route({ href: "/", component: PickAShirt }),
-        new Route({ href: "/shirts/:shirtId", component: ProductView }),
-        new Route({ href: "/quote", component: QuoteView })
-      ]
-    })
-  };
+  let app = (function() {
+    let container = document.getElementById("app");
+    return {
+      root: "/",
+      container: container,
+      quote: new Quote(),
+      shirts: shirts,
+      router: new Router({
+        container: container,
+        routes: [
+          new Route({ href: "/", component: PickAShirt }),
+          new Route({ href: "/shirts/:shirtId", component: ProductView }),
+          new Route({ href: "/quote", component: QuoteView })
+        ]
+      })
+    };
+  })();
 
   window.app = app;
 

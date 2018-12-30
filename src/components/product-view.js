@@ -75,6 +75,8 @@ class ProductView {
       onclick: () => {
         this.product.distributeSizes();
         console.log(this.product);
+        app.quote.add(this.product);
+        app.router.location = "/quote";
       }
     });
   }

@@ -1,19 +1,18 @@
-class QuantityInputs {
+class QuantityInputView {
   constructor(opts) {
     this.product = opts.product;
-    this.quantities = this.product.quantities;
 
     this.inputs = this.shirt.availableSizes.map((size, i) => {
-      return jsml.div(
+      return jsml.li(
         {
-          className: "quantity-input"
+          className: "list-inline-item"
         },
         jsml.label({
           innerText: size
         }),
         jsml.input({
-          className: "form-control col-1",
-          value: this.quantities[i]
+          className: "form-control",
+          value: this.product.quantities[this.shirt.availableSizes[i]]
         })
       );
     });
@@ -24,11 +23,11 @@ class QuantityInputs {
   }
 
   render() {
-    jsml.div(
+    return jsml.ul(
       {
-        className: "quantity-inputs form-group"
+        className: "list-inline"
       },
-      ...this.inputs.map(x => x.render())
+      ...this.inputs
     );
   }
 }
