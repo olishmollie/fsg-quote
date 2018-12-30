@@ -6,5 +6,6 @@ class Shirt {
     this.imageUrl = opts.imageUrl;
     this.description = opts.description;
     this.availableSizes = opts.availableSizes;
+    this.availableColors = opts.availableColors;
   }
 }

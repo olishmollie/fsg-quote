@@ -11,10 +11,10 @@ class ProductView {
 
     this.colorPicker = new ColorPicker({
       color: "black",
-      colors: ["black", "white", "red", "green", "blue"],
+      colors: this.shirt.availableColors,
       onchange: color => {
         this.product.color = color;
-        console.log(color + " clicked.");
+        console.log(color.name + " clicked.");
       }
     });
 
