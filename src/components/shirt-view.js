@@ -16,7 +16,7 @@ class ShirtView {
           {
             href: "#/shirts/" + this.shirt.id,
             onclick: () => {
-              window.app.router.location = "/shirts/" + this.shirt.id;
+              app.router.load("/shirts/" + this.shirt.id);
             }
           },
           jsml.img({

@@ -328,7 +328,7 @@ class ProductView {
         this.product.distributeSizes();
         console.log(this.product);
         app.quote.add(this.product);
-        app.router.location = "/quote";
+        app.router.load("/quote");
       }
     });
   }
@@ -539,7 +539,6 @@ class QuantityInputView {
 }
 class QuoteView {
   constructor() {
-    // TODO: figure out how to pass this while playing nice with router
     this.quote = app.quote;
   }
 
@@ -554,10 +553,10 @@ class QuoteView {
         product: product,
         onchange: () => {
           if (this.quote.size == 0) {
-            app.router.location = app.root;
+            app.router.load(app.root);
           } else {
             // HACK: fix this shite
-            app.router.location = "/quote";
+            app.router.load("/quote");
           }
         }
       });
@@ -607,7 +606,7 @@ class ShirtView {
           {
             href: "#/shirts/" + this.shirt.id,
             onclick: () => {
-              window.app.router.location = "/shirts/" + this.shirt.id;
+              app.router.load("/shirts/" + this.shirt.id);
             }
           },
           jsml.img({
@@ -888,7 +887,7 @@ class Router {
     // TODO: listen for changes in window location?
   }
 
-  dispatch(href) {
+  load(href) {
     let route = this.routes.find(route => {
       return route.regex.exec(href);
     });
@@ -915,14 +914,6 @@ class Router {
   //   this.dispatch(prevUrl);
   //   return prevUrl;
   // }
-
-  get location() {
-    return window.location.href.replace(/#/, "");
-  }
-
-  set location(path) {
-    this.dispatch(path);
-  }
 }
 window.onload = function() {
   let shirts = [
@@ -958,26 +949,23 @@ window.onload = function() {
     })
   ];
 
-  let app = (function() {
-    let container = document.getElementById("app");
-    return {
-      root: "/",
-      container: container,
-      quote: new Quote(),
-      shirts: shirts,
-      router: new Router({
-        container: container,
-        routes: [
-          new Route({ href: "/", component: PickAShirt }),
-          new Route({ href: "/shirts/:shirtId", component: ProductView }),
-          new Route({ href: "/quote", component: QuoteView })
-        ]
-      })
-    };
-  })();
+  let app = {
+    root: "/",
+    quote: new Quote(),
+    shirts: shirts,
+    router: new Router({
+      container: document.getElementById("app"),
+      routes: [
+        new Route({ href: "/", component: PickAShirt }),
+        new Route({ href: "/shirts/:shirtId", component: ProductView }),
+        new Route({ href: "/quote", component: QuoteView })
+      ]
+    })
+  };
 
+  // make app a global variable
   window.app = app;
 
   //load root
-  app.router.location = "/";
+  app.router.load("/");
 };

@@ -32,26 +32,23 @@ window.onload = function() {
     })
   ];
 
-  let app = (function() {
-    let container = document.getElementById("app");
-    return {
-      root: "/",
-      container: container,
-      quote: new Quote(),
-      shirts: shirts,
-      router: new Router({
-        container: container,
-        routes: [
-          new Route({ href: "/", component: PickAShirt }),
-          new Route({ href: "/shirts/:shirtId", component: ProductView }),
-          new Route({ href: "/quote", component: QuoteView })
-        ]
-      })
-    };
-  })();
+  let app = {
+    root: "/",
+    quote: new Quote(),
+    shirts: shirts,
+    router: new Router({
+      container: document.getElementById("app"),
+      routes: [
+        new Route({ href: "/", component: PickAShirt }),
+        new Route({ href: "/shirts/:shirtId", component: ProductView }),
+        new Route({ href: "/quote", component: QuoteView })
+      ]
+    })
+  };
 
+  // make app a global variable
   window.app = app;
 
   //load root
-  app.router.location = "/";
+  app.router.load("/");
 };

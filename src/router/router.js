@@ -7,7 +7,7 @@ class Router {
     // TODO: listen for changes in window location?
   }
 
-  dispatch(href) {
+  load(href) {
     let route = this.routes.find(route => {
       return route.regex.exec(href);
     });
@@ -34,12 +34,4 @@ class Router {
   //   this.dispatch(prevUrl);
   //   return prevUrl;
   // }
-
-  get location() {
-    return window.location.href.replace(/#/, "");
-  }
-
-  set location(path) {
-    this.dispatch(path);
-  }
 }

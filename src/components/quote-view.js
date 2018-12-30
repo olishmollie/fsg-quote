@@ -1,6 +1,5 @@
 class QuoteView {
   constructor() {
-    // TODO: figure out how to pass this while playing nice with router
     this.quote = app.quote;
   }
 
@@ -15,10 +14,10 @@ class QuoteView {
         product: product,
         onchange: () => {
           if (this.quote.size == 0) {
-            app.router.location = app.root;
+            app.router.load(app.root);
           } else {
             // HACK: fix this shite
-            app.router.location = "/quote";
+            app.router.load("/quote");
           }
         }
       });
