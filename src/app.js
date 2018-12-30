@@ -1,4 +1,7 @@
 window.onload = function() {
+  // mount root component
+  document.getElementsByTagName("body")[0].appendChild(new Root().render());
+
   let APP = {
     root: "/",
     quote: new Quote(),
@@ -16,6 +19,6 @@ window.onload = function() {
   // make app a global variable
   window.APP = APP;
 
-  //load root
+  //load root page
   APP.router.load("/");
 };
