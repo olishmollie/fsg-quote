@@ -1,6 +1,6 @@
 class PickAShirt {
   constructor() {
-    this.shirtViews = app.shirts.map(shirt => {
+    this.shirtViews = APP.shirts.map(shirt => {
       return new ShirtView({
         shirt: shirt
       });

@@ -32,8 +32,7 @@ class ProductDetailView {
             className: "trash-button float-right btn btn-danger",
             innerText: "TRASH",
             onclick: () => {
-              // DEBT: implicit dependency on app
-              app.quote.remove(this.product);
+              APP.quote.remove(this.product);
               this.onchange();
             }
           })

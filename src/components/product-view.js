@@ -3,7 +3,7 @@ const DEFAULT_QUANTITY = 50;
 class ProductView {
   constructor(opts) {
     this.product = new Product({
-      shirt: app.shirts[opts.shirtId],
+      shirt: APP.shirts[opts.shirtId],
       quantity: DEFAULT_QUANTITY,
       frontColorCount: 1,
       backColorCount: 1
@@ -75,8 +75,8 @@ class ProductView {
       onclick: () => {
         this.product.distributeSizes();
         console.log(this.product);
-        app.quote.add(this.product);
-        app.router.load("/quote");
+        APP.quote.add(this.product);
+        APP.router.load("/quote");
       }
     });
   }

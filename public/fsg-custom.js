@@ -189,7 +189,7 @@ class NumberInput {
 }
 class PickAShirt {
   constructor() {
-    this.shirtViews = app.shirts.map(shirt => {
+    this.shirtViews = APP.shirts.map(shirt => {
       return new ShirtView({
         shirt: shirt
       });
@@ -239,8 +239,7 @@ class ProductDetailView {
             className: "trash-button float-right btn btn-danger",
             innerText: "TRASH",
             onclick: () => {
-              // DEBT: implicit dependency on app
-              app.quote.remove(this.product);
+              APP.quote.remove(this.product);
               this.onchange();
             }
           })
@@ -255,7 +254,7 @@ const DEFAULT_QUANTITY = 50;
 class ProductView {
   constructor(opts) {
     this.product = new Product({
-      shirt: app.shirts[opts.shirtId],
+      shirt: APP.shirts[opts.shirtId],
       quantity: DEFAULT_QUANTITY,
       frontColorCount: 1,
       backColorCount: 1
@@ -327,8 +326,8 @@ class ProductView {
       onclick: () => {
         this.product.distributeSizes();
         console.log(this.product);
-        app.quote.add(this.product);
-        app.router.load("/quote");
+        APP.quote.add(this.product);
+        APP.router.load("/quote");
       }
     });
   }
@@ -539,7 +538,7 @@ class QuantityInputView {
 }
 class QuoteView {
   constructor() {
-    this.quote = app.quote;
+    this.quote = APP.quote;
   }
 
   get products() {
@@ -553,10 +552,10 @@ class QuoteView {
         product: product,
         onchange: () => {
           if (this.quote.size == 0) {
-            app.router.load(app.root);
+            APP.router.load(APP.root);
           } else {
             // HACK: fix this shite
-            app.router.load("/quote");
+            APP.router.load("/quote");
           }
         }
       });
@@ -606,7 +605,7 @@ class ShirtView {
           {
             href: "#/shirts/" + this.shirt.id,
             onclick: () => {
-              app.router.load("/shirts/" + this.shirt.id);
+              APP.router.load("/shirts/" + this.shirt.id);
             }
           },
           jsml.img({
@@ -916,7 +915,7 @@ class Router {
   // }
 }
 window.onload = function() {
-  let shirts = [
+  let SHIRTS = [
     new Shirt({
       id: 0,
       price: 5,
@@ -949,10 +948,10 @@ window.onload = function() {
     })
   ];
 
-  let app = {
+  let APP = {
     root: "/",
     quote: new Quote(),
-    shirts: shirts,
+    shirts: SHIRTS,
     router: new Router({
       container: document.getElementById("app"),
       routes: [
@@ -964,8 +963,8 @@ window.onload = function() {
   };
 
   // make app a global variable
-  window.app = app;
+  window.APP = APP;
 
   //load root
-  app.router.load("/");
+  APP.router.load("/");
 };

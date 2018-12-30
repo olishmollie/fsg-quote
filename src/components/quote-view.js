@@ -1,6 +1,6 @@
 class QuoteView {
   constructor() {
-    this.quote = app.quote;
+    this.quote = APP.quote;
   }
 
   get products() {
@@ -14,10 +14,10 @@ class QuoteView {
         product: product,
         onchange: () => {
           if (this.quote.size == 0) {
-            app.router.load(app.root);
+            APP.router.load(APP.root);
           } else {
             // HACK: fix this shite
-            app.router.load("/quote");
+            APP.router.load("/quote");
           }
         }
       });

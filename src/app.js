@@ -1,5 +1,5 @@
 window.onload = function() {
-  let shirts = [
+  let SHIRTS = [
     new Shirt({
       id: 0,
       price: 5,
@@ -32,10 +32,10 @@ window.onload = function() {
     })
   ];
 
-  let app = {
+  let APP = {
     root: "/",
     quote: new Quote(),
-    shirts: shirts,
+    shirts: SHIRTS,
     router: new Router({
       container: document.getElementById("app"),
       routes: [
@@ -47,8 +47,8 @@ window.onload = function() {
   };
 
   // make app a global variable
-  window.app = app;
+  window.APP = APP;
 
   //load root
-  app.router.load("/");
+  APP.router.load("/");
 };
