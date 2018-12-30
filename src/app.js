@@ -9,9 +9,9 @@ window.onload = function() {
     router: new Router({
       container: document.getElementById("app"),
       routes: [
-        new Route({ href: "/", component: "PickAShirt" }),
-        new Route({ href: "/shirts/:shirtId", component: "ProductView" }),
-        new Route({ href: "/quote", component: "QuoteView" })
+        new Route({ href: "/", component: PickAShirt }),
+        new Route({ href: "/shirts/:shirtId", component: ProductView }),
+        new Route({ href: "/quote", component: QuoteView })
       ]
     })
   };

@@ -38,6 +38,9 @@ var jsml = (function() {
     div: (attributes, ...children) => {
       return makeElement("div", attributes, ...children);
     },
+    nav: (attributes, ...children) => {
+      return makeElement("nav", attributes, ...children);
+    },
     p: (attributes, ...children) => {
       return makeElement("p", attributes, ...children);
     },
@@ -1017,9 +1020,9 @@ window.onload = function() {
     router: new Router({
       container: document.getElementById("app"),
       routes: [
-        new Route({ href: "/", component: "PickAShirt" }),
-        new Route({ href: "/shirts/:shirtId", component: "ProductView" }),
-        new Route({ href: "/quote", component: "QuoteView" })
+        new Route({ href: "/", component: PickAShirt }),
+        new Route({ href: "/shirts/:shirtId", component: ProductView }),
+        new Route({ href: "/quote", component: QuoteView })
       ]
     })
   };
