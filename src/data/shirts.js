@@ -67,7 +67,57 @@ let SHIRTS = [
     imageUrl: "public/assets/mn1_000032.jpg",
     description:
       "Top quality tri-blend crew cut. Superior design for a great feel and a perfect fit.",
-    availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
+    availableSizes: ["XS", "S", "M", "L", "XL", "2XL"],
+    availableColors: [
+      {
+        name: "Black",
+        hex: "#000000"
+      },
+      {
+        name: "Vintage Black",
+        hex: "#000000"
+      },
+      {
+        name: "White",
+        hex: "#ffffff"
+      },
+      {
+        name: "Aqua",
+        hex: "#50B3CF"
+      },
+      {
+        name: "Army",
+        hex: "#4D493B"
+      },
+      {
+        name: "Ash",
+        hex: "#F3F4F6"
+      },
+      {
+        name: "Asphalt",
+        hex: "#5F6062"
+      },
+      {
+        name: "Athletic Heather",
+        hex: "#9A9A9B"
+      },
+      {
+        name: "Brown",
+        hex: "#5B4F4B"
+      },
+      {
+        name: "Burnt Orange",
+        hex: "#D46F34"
+      },
+      {
+        name: "Cardinal",
+        hex: "#7D252D"
+      },
+      {
+        name: "Coral",
+        hex: "#F85561"
+      }
+    ]
   }),
   new Shirt({
     id: 2,
@@ -77,6 +127,56 @@ let SHIRTS = [
     imageUrl: "public/assets/G2000-095-SM.png",
     description:
       "Classic tee that'll never go out of style. Great shirt at a great price.",
-    availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
+    availableSizes: ["XS", "S", "M", "L", "XL", "2XL"],
+    availableColors: [
+      {
+        name: "Black",
+        hex: "#000000"
+      },
+      {
+        name: "Vintage Black",
+        hex: "#000000"
+      },
+      {
+        name: "White",
+        hex: "#ffffff"
+      },
+      {
+        name: "Aqua",
+        hex: "#50B3CF"
+      },
+      {
+        name: "Army",
+        hex: "#4D493B"
+      },
+      {
+        name: "Ash",
+        hex: "#F3F4F6"
+      },
+      {
+        name: "Asphalt",
+        hex: "#5F6062"
+      },
+      {
+        name: "Athletic Heather",
+        hex: "#9A9A9B"
+      },
+      {
+        name: "Brown",
+        hex: "#5B4F4B"
+      },
+      {
+        name: "Burnt Orange",
+        hex: "#D46F34"
+      },
+      {
+        name: "Cardinal",
+        hex: "#7D252D"
+      },
+      {
+        name: "Coral",
+        hex: "#F85561"
+      }
+    ]
   })
 ];
