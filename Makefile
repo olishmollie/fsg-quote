@@ -1,4 +1,4 @@
-public/fsg-custom.js: src/**/*.js src/*.js
+public/fsg-custom.js: src/lib/* src/models/* src/data/* src/components/* src/app.js
 	cat $^ > $@
 
 clean:

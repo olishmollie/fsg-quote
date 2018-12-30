@@ -1,3 +1,275 @@
+var jsml = (function() {
+  function makeElement(tag, attributes, ...children) {
+    let element = document.createElement(tag);
+
+    for (let attr in attributes) {
+      element[attr] = attributes[attr];
+    }
+
+    for (let i = 0; i < children.length; i++) {
+      element.appendChild(children[i]);
+    }
+
+    return element;
+  }
+
+  return {
+    h1: (attributes, ...children) => {
+      return makeElement("h1", attributes, ...children);
+    },
+    h2: (attributes, ...children) => {
+      return makeElement("h2", attributes, ...children);
+    },
+    h3: (attributes, ...children) => {
+      return makeElement("h3", attributes, ...children);
+    },
+    h4: (attributes, ...children) => {
+      return makeElement("h4", attributes, ...children);
+    },
+    h5: (attributes, ...children) => {
+      return makeElement("h5", attributes, ...children);
+    },
+    h6: (attributes, ...children) => {
+      return makeElement("h6", attributes, ...children);
+    },
+    a: (attributes, ...children) => {
+      return makeElement("a", attributes, ...children);
+    },
+    div: (attributes, ...children) => {
+      return makeElement("div", attributes, ...children);
+    },
+    p: (attributes, ...children) => {
+      return makeElement("p", attributes, ...children);
+    },
+    strong: (attributes, ...children) => {
+      return makeElement("strong", attributes, ...children);
+    },
+    span: (attributes, ...children) => {
+      return makeElement("span", attributes, ...children);
+    },
+    figure: (attributes, ...children) => {
+      return makeElement("figure", attributes, ...children);
+    },
+    figcaption: attributes => {
+      return makeElement("figcaption", attributes);
+    },
+    img: attributes => {
+      return makeElement("img", attributes);
+    },
+    button: attributes => {
+      return makeElement("button", attributes);
+    },
+    label: (attributes, ...children) => {
+      return makeElement("label", attributes, ...children);
+    },
+    input: attributes => {
+      return makeElement("input", attributes);
+    },
+    ul: (attributes, ...children) => {
+      return makeElement("ul", attributes, ...children);
+    },
+    li: (attributes, ...children) => {
+      return makeElement("li", attributes, ...children);
+    },
+    text: text => {
+      return document.createTextNode(text);
+    },
+    select: (selections, selected, attributes, ...children) => {
+      let select = makeElement("select", attributes, ...children);
+      for (let i = 0; i < selections.length; i++) {
+        let option = jsml.option({
+          innerText: selections[i],
+          value: selections[i],
+          selected: i === selected
+        });
+        select.appendChild(option);
+      }
+      return select;
+    },
+    option: (attributes, ...children) => {
+      return makeElement("option", attributes, ...children);
+    }
+  };
+})();
+class Route {
+  constructor(opts) {
+    this.href = opts.href;
+    this.path = this.href
+      .replace(":", "")
+      .split("/")
+      .slice(1);
+    this.variables = [];
+    this.regex = this.parse(this.href);
+    this.component = opts.component;
+  }
+
+  parse(href) {
+    return new RegExp(
+      href.replace(/:(\w+)/g, (_, name) => {
+        this.variables.push(name);
+        return "([^/]+)";
+      }) + "(?:/|$)"
+    );
+  }
+
+  resolve(path) {
+    let match = path.match(this.regex);
+    if (match) {
+      let params = {};
+      match = match.slice(1); // get rid of matched string
+      for (let i = 0; i < this.variables.length; i++) {
+        params[this.variables[i]] = match[i];
+      }
+      return new this.component(params);
+    }
+    throw "could not resolve path: " + path;
+  }
+}
+class Router {
+  constructor(opts) {
+    this.container = opts.container;
+    this.routes = opts.routes || [];
+    // TODO: fix history api
+    this.history = [];
+    // TODO: listen for changes in window location?
+  }
+
+  load(href) {
+    let route = this.routes.find(route => {
+      return route.regex.exec(href);
+    });
+
+    if (!route) {
+      throw "unregistered route: " + href;
+    }
+
+    // add current url to history
+    // this.history.push(this.location);
+
+    // update url in nav bar
+    let currentUrl = window.location.href;
+    window.location.href = currentUrl.replace(/#.*$/, "") + "#" + href;
+
+    // load the view
+    this.container.innerHTML = "";
+    this.container.appendChild(route.resolve(href).render());
+  }
+
+  // TODO: fix history api
+  // back() {
+  //   let prevUrl = this.history.pop();
+  //   this.dispatch(prevUrl);
+  //   return prevUrl;
+  // }
+}
+class Product {
+  constructor(opts) {
+    this.shirt = opts.shirt;
+    this.color = opts.color;
+    this.quantity = opts.quantity;
+    this.frontColorCount = opts.frontColorCount;
+    this.backColorCount = opts.backColorCount;
+    this.quantities = {};
+  }
+
+  distributeSizes() {
+    const ratios = {
+      XS: 0.5,
+      S: 1,
+      M: 2.5,
+      L: 2,
+      XL: 0.75,
+      "2XL": 0.25
+    };
+
+    var sizes = {};
+    var total = 0;
+    const divisor = 7;
+
+    var multiplier = this.quantity / divisor;
+
+    for (var i = 0, len = this.shirt.availableSizes.length; i < len; i++) {
+      const size = this.shirt.availableSizes[i];
+      sizes[size] = Math.floor(multiplier * ratios[size]);
+      total += sizes[size];
+    }
+
+    if (total < this.quantity) {
+      for (i = 0; i < this.quantity - total; i++) {
+        i % 2 == 0 ? sizes["M"]++ : sizes["L"]++;
+      }
+    }
+
+    this.quantities = sizes;
+  }
+}
+class Quote {
+  constructor(products) {
+    this.products = products || [];
+  }
+
+  add(product) {
+    this.products.push(product);
+  }
+
+  remove(product) {
+    this.products.splice(this.products.indexOf(product), 1);
+  }
+
+  get size() {
+    return this.products.length;
+  }
+
+  get subtotal() {
+    return 100;
+  }
+
+  get total() {
+    return 110;
+  }
+}
+class Shirt {
+  constructor(opts) {
+    this.id = opts.id;
+    this.name = opts.name;
+    this.price = opts.price;
+    this.imageUrl = opts.imageUrl;
+    this.description = opts.description;
+    this.availableSizes = opts.availableSizes;
+  }
+}
+let SHIRTS = [
+  new Shirt({
+    id: 0,
+    price: 5,
+    tier: "middle",
+    name: "Unisex Jersey Short Sleeve",
+    imageUrl: "public/assets/3001_06_1.jpg",
+    description:
+      "This updated unisex essential fits like a well-loved favorite, featuring a crew neck, short sleeves and designed with superior combed and ring-spun cotton that acts as the best blank canvas for printing. Offered in a variety of solid and heather cvc colors.",
+    availableSizes: ["XS", "S", "M", "L", "XL"]
+  }),
+  new Shirt({
+    id: 1,
+    price: 7,
+    tier: "top",
+    name: "Tri-Blend Crew",
+    imageUrl: "public/assets/mn1_000032.jpg",
+    description:
+      "Top quality tri-blend crew cut. Superior design for a great feel and a perfect fit.",
+    availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
+  }),
+  new Shirt({
+    id: 2,
+    price: 4,
+    tier: "bottom",
+    name: "Classic Short Sleeve",
+    imageUrl: "public/assets/G2000-095-SM.png",
+    description:
+      "Classic tee that'll never go out of style. Great shirt at a great price.",
+    availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
+  })
+];
 class ColorPicker {
   constructor(opts) {
     this.color = opts.color;
@@ -622,332 +894,7 @@ class ShirtView {
     );
   }
 }
-class Component {
-  constructor(tag, attributes, ...args) {
-    this.element = document.createElement(tag);
-    for (let attr in attributes) {
-      this.element[attr] = attributes[attr];
-    }
-    for (let i = 0; i < args.length; i++) {
-      if (args[i] instanceof Component) {
-        this.element.appendChild(args[i].element);
-      } else if (args[i] instanceof HTMLElement) {
-        this.element.appendChild(args[i]);
-      }
-    }
-  }
-
-  render(base) {
-    base.appendChild(this.element);
-  }
-
-  get style() {
-    return this.element.style;
-  }
-
-  static span(opts) {
-    return new Component("span", opts);
-  }
-
-  static button(opts) {
-    return new Component("button", opts);
-  }
-
-  static input(opts) {
-    return new Component("input", opts);
-  }
-
-  static select(selections, selected, opts) {
-    let select = new Component("select", opts);
-    for (let i = 0; i < selections.length; i++) {
-      let option = new Component("option", {
-        innerText: selections[i],
-        value: selections[i],
-        selected: i === selected
-      });
-      select.element.appendChild(option.element);
-    }
-    return select;
-  }
-
-  static mount(component, mountPoint) {
-    mountPoint.appendChild(component.render());
-  }
-}
-var jsml = (function() {
-  function makeElement(tag, attributes, ...children) {
-    let element = document.createElement(tag);
-
-    for (let attr in attributes) {
-      element[attr] = attributes[attr];
-    }
-
-    for (let i = 0; i < children.length; i++) {
-      element.appendChild(children[i]);
-    }
-
-    return element;
-  }
-
-  return {
-    h1: (attributes, ...children) => {
-      return makeElement("h1", attributes, ...children);
-    },
-    h2: (attributes, ...children) => {
-      return makeElement("h2", attributes, ...children);
-    },
-    h3: (attributes, ...children) => {
-      return makeElement("h3", attributes, ...children);
-    },
-    h4: (attributes, ...children) => {
-      return makeElement("h4", attributes, ...children);
-    },
-    h5: (attributes, ...children) => {
-      return makeElement("h5", attributes, ...children);
-    },
-    h6: (attributes, ...children) => {
-      return makeElement("h6", attributes, ...children);
-    },
-    a: (attributes, ...children) => {
-      return makeElement("a", attributes, ...children);
-    },
-    div: (attributes, ...children) => {
-      return makeElement("div", attributes, ...children);
-    },
-    p: (attributes, ...children) => {
-      return makeElement("p", attributes, ...children);
-    },
-    strong: (attributes, ...children) => {
-      return makeElement("strong", attributes, ...children);
-    },
-    span: (attributes, ...children) => {
-      return makeElement("span", attributes, ...children);
-    },
-    figure: (attributes, ...children) => {
-      return makeElement("figure", attributes, ...children);
-    },
-    figcaption: attributes => {
-      return makeElement("figcaption", attributes);
-    },
-    img: attributes => {
-      return makeElement("img", attributes);
-    },
-    button: attributes => {
-      return makeElement("button", attributes);
-    },
-    label: (attributes, ...children) => {
-      return makeElement("label", attributes, ...children);
-    },
-    input: attributes => {
-      return makeElement("input", attributes);
-    },
-    ul: (attributes, ...children) => {
-      return makeElement("ul", attributes, ...children);
-    },
-    li: (attributes, ...children) => {
-      return makeElement("li", attributes, ...children);
-    },
-    text: text => {
-      return document.createTextNode(text);
-    },
-    select: (selections, selected, attributes, ...children) => {
-      let select = makeElement("select", attributes, ...children);
-      for (let i = 0; i < selections.length; i++) {
-        let option = jsml.option({
-          innerText: selections[i],
-          value: selections[i],
-          selected: i === selected
-        });
-        select.appendChild(option);
-      }
-      return select;
-    },
-    option: (attributes, ...children) => {
-      return makeElement("option", attributes, ...children);
-    }
-  };
-})();
-class Product {
-  constructor(opts) {
-    this.shirt = opts.shirt;
-    this.color = opts.color;
-    this.quantity = opts.quantity;
-    this.frontColorCount = opts.frontColorCount;
-    this.backColorCount = opts.backColorCount;
-    this.quantities = {};
-  }
-
-  distributeSizes() {
-    const ratios = {
-      XS: 0.5,
-      S: 1,
-      M: 2.5,
-      L: 2,
-      XL: 0.75,
-      "2XL": 0.25
-    };
-
-    var sizes = {};
-    var total = 0;
-    const divisor = 7;
-
-    var multiplier = this.quantity / divisor;
-
-    for (var i = 0, len = this.shirt.availableSizes.length; i < len; i++) {
-      const size = this.shirt.availableSizes[i];
-      sizes[size] = Math.floor(multiplier * ratios[size]);
-      total += sizes[size];
-    }
-
-    if (total < this.quantity) {
-      for (i = 0; i < this.quantity - total; i++) {
-        i % 2 == 0 ? sizes["M"]++ : sizes["L"]++;
-      }
-    }
-
-    this.quantities = sizes;
-  }
-}
-class Quote {
-  constructor(products) {
-    this.products = products || [];
-  }
-
-  add(product) {
-    this.products.push(product);
-  }
-
-  remove(product) {
-    this.products.splice(this.products.indexOf(product), 1);
-  }
-
-  get size() {
-    return this.products.length;
-  }
-
-  get subtotal() {
-    return 100;
-  }
-
-  get total() {
-    return 110;
-  }
-}
-class Shirt {
-  constructor(opts) {
-    this.id = opts.id;
-    this.name = opts.name;
-    this.price = opts.price;
-    this.imageUrl = opts.imageUrl;
-    this.description = opts.description;
-    this.availableSizes = opts.availableSizes;
-  }
-}
-class Route {
-  constructor(opts) {
-    this.href = opts.href;
-    this.path = this.href
-      .replace(":", "")
-      .split("/")
-      .slice(1);
-    this.variables = [];
-    this.regex = this.parse(this.href);
-    this.component = opts.component;
-  }
-
-  parse(href) {
-    return new RegExp(
-      href.replace(/:(\w+)/g, (_, name) => {
-        this.variables.push(name);
-        return "([^/]+)";
-      }) + "(?:/|$)"
-    );
-  }
-
-  resolve(path) {
-    let match = path.match(this.regex);
-    if (match) {
-      let params = {};
-      match = match.slice(1); // get rid of matched string
-      for (let i = 0; i < this.variables.length; i++) {
-        params[this.variables[i]] = match[i];
-      }
-      return new this.component(params);
-    }
-    throw "could not resolve path: " + path;
-  }
-}
-class Router {
-  constructor(opts) {
-    this.container = opts.container;
-    this.routes = opts.routes || [];
-    // TODO: fix history api
-    this.history = [];
-    // TODO: listen for changes in window location?
-  }
-
-  load(href) {
-    let route = this.routes.find(route => {
-      return route.regex.exec(href);
-    });
-
-    if (!route) {
-      throw "unregistered route: " + href;
-    }
-
-    // add current url to history
-    // this.history.push(this.location);
-
-    // update url in nav bar
-    let currentUrl = window.location.href;
-    window.location.href = currentUrl.replace(/#.*$/, "") + "#" + href;
-
-    // load the view
-    this.container.innerHTML = "";
-    this.container.appendChild(route.resolve(href).render());
-  }
-
-  // TODO: fix history api
-  // back() {
-  //   let prevUrl = this.history.pop();
-  //   this.dispatch(prevUrl);
-  //   return prevUrl;
-  // }
-}
 window.onload = function() {
-  let SHIRTS = [
-    new Shirt({
-      id: 0,
-      price: 5,
-      tier: "middle",
-      name: "Unisex Jersey Short Sleeve",
-      imageUrl: "public/assets/3001_06_1.jpg",
-      description:
-        "This updated unisex essential fits like a well-loved favorite, featuring a crew neck, short sleeves and designed with superior combed and ring-spun cotton that acts as the best blank canvas for printing. Offered in a variety of solid and heather cvc colors.",
-      availableSizes: ["XS", "S", "M", "L", "XL"]
-    }),
-    new Shirt({
-      id: 1,
-      price: 7,
-      tier: "top",
-      name: "Tri-Blend Crew",
-      imageUrl: "public/assets/mn1_000032.jpg",
-      description:
-        "Top quality tri-blend crew cut. Superior design for a great feel and a perfect fit.",
-      availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
-    }),
-    new Shirt({
-      id: 2,
-      price: 4,
-      tier: "bottom",
-      name: "Classic Short Sleeve",
-      imageUrl: "public/assets/G2000-095-SM.png",
-      description:
-        "Classic tee that'll never go out of style. Great shirt at a great price.",
-      availableSizes: ["XS", "S", "M", "L", "XL", "2XL"]
-    })
-  ];
-
   let APP = {
     root: "/",
     quote: new Quote(),
