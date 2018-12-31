@@ -11,7 +11,8 @@ class App {
 }
 class Component {
   constructor() {
-    this.id = util.idName(this);
+    this.id = this.className = util.camelToDashed(this.constructor.name);
+    this.id += "_" + util.randomString(5);
     this.container = jsml.div({
       id: this.id
     });
@@ -27,7 +28,15 @@ class Component {
   }
 
   render(tag, attributes, ...children) {
-    let id = { id: util.idName(this) };
+    let id = { id: this.id };
+
+    // combine class names
+    if (attributes.className) {
+      attributes.className += " " + this.className;
+    } else {
+      attributes.className = this.className;
+    }
+
     return jsml.makeElement(tag, Object.assign(attributes, id), ...children);
   }
 }
@@ -201,9 +210,10 @@ class Router {
   }
 }
 let util = (function() {
-  function idName(component) {
+  // takes a camel cased string and returns dashed equivalent
+  // e.g. ClassName -> class-name
+  function camelToDashed(name) {
     var result = [];
-    var name = component.constructor.name;
     var i = 0;
     while (i < name.length) {
       if (isUpper(name[i])) {
@@ -221,8 +231,20 @@ let util = (function() {
     return c === c.toUpperCase();
   }
 
+  function randomString(length) {
+    var result = "";
+    var alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    for (var i = 0; i < length; i++) {
+      result += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+    }
+
+    return result;
+  }
+
   return {
-    idName
+    camelToDashed,
+    randomString
   };
 })();
 class Product {

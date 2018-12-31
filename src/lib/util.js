@@ -1,7 +1,8 @@
 let util = (function() {
-  function idName(component) {
+  // takes a camel cased string and returns dashed equivalent
+  // e.g. ClassName -> class-name
+  function camelToDashed(name) {
     var result = [];
-    var name = component.constructor.name;
     var i = 0;
     while (i < name.length) {
       if (isUpper(name[i])) {
@@ -19,7 +20,19 @@ let util = (function() {
     return c === c.toUpperCase();
   }
 
+  function randomString(length) {
+    var result = "";
+    var alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    for (var i = 0; i < length; i++) {
+      result += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+    }
+
+    return result;
+  }
+
   return {
-    idName
+    camelToDashed,
+    randomString
   };
 })();

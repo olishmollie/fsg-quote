@@ -1,6 +1,7 @@
 class Component {
   constructor() {
-    this.id = util.idName(this);
+    this.id = this.className = util.camelToDashed(this.constructor.name);
+    this.id += "_" + util.randomString(5);
     this.container = jsml.div({
       id: this.id
     });
@@ -16,7 +17,15 @@ class Component {
   }
 
   render(tag, attributes, ...children) {
-    let id = { id: util.idName(this) };
+    let id = { id: this.id };
+
+    // combine class names
+    if (attributes.className) {
+      attributes.className += " " + this.className;
+    } else {
+      attributes.className = this.className;
+    }
+
     return jsml.makeElement(tag, Object.assign(attributes, id), ...children);
   }
 }
