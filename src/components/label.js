@@ -19,6 +19,6 @@ class Label extends Component {
   }
 
   render() {
-    return super.container("span", {}, this.span);
+    return super.render("span", {}, this.span);
   }
 }

@@ -20,6 +20,7 @@ class QuoteItems extends Component {
         product: product,
         onchange: () => {
           console.log("changed a quote item.");
+          this.onchange();
         },
         ondelete: index => {
           this.node.innerHTML = "";
@@ -34,6 +35,6 @@ class QuoteItems extends Component {
   }
 
   render() {
-    return super.container("div", {}, ...this.quoteItems);
+    return super.render("div", {}, ...this.quoteItems);
   }
 }

@@ -26,7 +26,7 @@ class Component {
     return this._node;
   }
 
-  container(tag, attributes, ...children) {
+  render(tag, attributes, ...children) {
     let id = { id: util.idName(this) };
     return jsml.makeElement(tag, Object.assign(attributes, id), ...children);
   }
@@ -502,7 +502,7 @@ class ColorPicker extends Component {
   }
 
   render() {
-    return super.container("div", {}, ...this.shirtColors.map(x => x.render()));
+    return super.render("div", {}, ...this.shirtColors.map(x => x.render()));
   }
 }
 class Dropdown extends Component {
@@ -557,7 +557,7 @@ class Dropdown extends Component {
   }
 
   render() {
-    return super.container("div", {}, this.select);
+    return super.render("div", {}, this.select);
   }
 }
 class Label extends Component {
@@ -581,7 +581,7 @@ class Label extends Component {
   }
 
   render() {
-    return super.container("span", {}, this.span);
+    return super.render("span", {}, this.span);
   }
 }
 class Navbar extends Component {
@@ -590,7 +590,7 @@ class Navbar extends Component {
   }
 
   render() {
-    return super.container(
+    return super.render(
       "nav",
       {
         className: "navbar navbar-light bg-light"
@@ -702,7 +702,7 @@ class NumberInput extends Component {
   }
 
   render() {
-    return super.container(
+    return super.render(
       "div",
       { className: "input-group" },
       jsml.div({ className: "input-group-prepend" }, this.decrementButton),
@@ -727,7 +727,7 @@ class PickAShirt extends Component {
   }
 
   render() {
-    return super.container(
+    return super.render(
       "div",
       {
         className: "d-flex justify-content-center text-center"
@@ -948,7 +948,7 @@ class ProductView extends Component {
   }
 
   render() {
-    return super.container(
+    return super.render(
       "div",
       {
         className: "text-center"
@@ -994,6 +994,7 @@ class QuantityInputs extends Component {
   constructor(opts) {
     super();
     this.product = opts.product;
+    this.onchange = opts.onchange;
 
     this.inputs = this.shirt.availableSizes.map((size, i) => {
       return jsml.li(
@@ -1005,7 +1006,11 @@ class QuantityInputs extends Component {
         }),
         jsml.input({
           className: "form-control",
-          value: this.product.quantities[this.shirt.availableSizes[i]]
+          value: this.product.quantities[this.shirt.availableSizes[i]],
+          onchange: event => {
+            console.log(event.target.value);
+            this.onchange();
+          }
         })
       );
     });
@@ -1016,7 +1021,7 @@ class QuantityInputs extends Component {
   }
 
   render() {
-    return super.container(
+    return super.render(
       "ul",
       {
         className: "list-inline"
@@ -1036,7 +1041,7 @@ class QuoteItem extends Component {
   }
 
   render() {
-    return super.container(
+    return super.render(
       "div",
       {
         className: "media"
@@ -1064,7 +1069,8 @@ class QuoteItem extends Component {
           })
         ),
         new QuantityInputs({
-          product: this.product
+          product: this.product,
+          onchange: this.onchange
         }).render()
       )
     );
@@ -1092,6 +1098,7 @@ class QuoteItems extends Component {
         product: product,
         onchange: () => {
           console.log("changed a quote item.");
+          this.onchange();
         },
         ondelete: index => {
           this.node.innerHTML = "";
@@ -1106,7 +1113,7 @@ class QuoteItems extends Component {
   }
 
   render() {
-    return super.container("div", {}, ...this.quoteItems);
+    return super.render("div", {}, ...this.quoteItems);
   }
 }
 class QuoteView extends Component {
@@ -1116,7 +1123,7 @@ class QuoteView extends Component {
   }
 
   render() {
-    return super.container(
+    return super.render(
       "div",
       {},
       new QuoteItems({
@@ -1155,7 +1162,7 @@ class ShirtColor extends Component {
   }
 
   render() {
-    return super.container("div", {
+    return super.render("div", {
       className: "col-sm",
       style: "display: inline; background-color: " + this.color.hex,
       onclick: () => {
@@ -1171,7 +1178,7 @@ class ShirtView extends Component {
   }
 
   render() {
-    return super.container(
+    return super.render(
       "div",
       {
         className: "card"

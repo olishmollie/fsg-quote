@@ -72,7 +72,7 @@ class NumberInput extends Component {
   }
 
   render() {
-    return super.container(
+    return super.render(
       "div",
       { className: "input-group" },
       jsml.div({ className: "input-group-prepend" }, this.decrementButton),

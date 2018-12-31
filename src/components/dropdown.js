@@ -50,6 +50,6 @@ class Dropdown extends Component {
   }
 
   render() {
-    return super.container("div", {}, this.select);
+    return super.render("div", {}, this.select);
   }
 }

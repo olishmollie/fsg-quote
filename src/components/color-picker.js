@@ -16,6 +16,6 @@ class ColorPicker extends Component {
   }
 
   render() {
-    return super.container("div", {}, ...this.shirtColors.map(x => x.render()));
+    return super.render("div", {}, ...this.shirtColors.map(x => x.render()));
   }
 }

@@ -9,7 +9,7 @@ class QuoteItem extends Component {
   }
 
   render() {
-    return super.container(
+    return super.render(
       "div",
       {
         className: "media"
@@ -37,7 +37,8 @@ class QuoteItem extends Component {
           })
         ),
         new QuantityInputs({
-          product: this.product
+          product: this.product,
+          onchange: this.onchange
         }).render()
       )
     );

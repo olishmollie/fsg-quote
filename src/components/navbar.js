@@ -4,7 +4,7 @@ class Navbar extends Component {
   }
 
   render() {
-    return super.container(
+    return super.render(
       "nav",
       {
         className: "navbar navbar-light bg-light"

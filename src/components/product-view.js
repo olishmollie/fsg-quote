@@ -210,7 +210,7 @@ class ProductView extends Component {
   }
 
   render() {
-    return super.container(
+    return super.render(
       "div",
       {
         className: "text-center"

@@ -5,7 +5,7 @@ class QuoteView extends Component {
   }
 
   render() {
-    return super.container(
+    return super.render(
       "div",
       {},
       new QuoteItems({

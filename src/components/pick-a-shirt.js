@@ -9,7 +9,7 @@ class PickAShirt extends Component {
   }
 
   render() {
-    return super.container(
+    return super.render(
       "div",
       {
         className: "d-flex justify-content-center text-center"

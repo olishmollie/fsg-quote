@@ -6,7 +6,7 @@ class ShirtColor extends Component {
   }
 
   render() {
-    return super.container("div", {
+    return super.render("div", {
       className: "col-sm",
       style: "display: inline; background-color: " + this.color.hex,
       onclick: () => {

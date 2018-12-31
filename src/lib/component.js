@@ -15,7 +15,7 @@ class Component {
     return this._node;
   }
 
-  container(tag, attributes, ...children) {
+  render(tag, attributes, ...children) {
     let id = { id: util.idName(this) };
     return jsml.makeElement(tag, Object.assign(attributes, id), ...children);
   }

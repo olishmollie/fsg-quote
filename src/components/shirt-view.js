@@ -5,7 +5,7 @@ class ShirtView extends Component {
   }
 
   render() {
-    return super.container(
+    return super.render(
       "div",
       {
         className: "card"
