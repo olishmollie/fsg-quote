@@ -17,8 +17,8 @@ var jsml = (function() {
   // renders a component or a custom made node
   function component(component, attributes, ...children) {
     if (component instanceof Component) {
-      // TODO
-      return component.node;
+      component = Object.assign(component, attributes);
+      return component.render();
     } else {
       for (let attr in attributes) {
         component[attr] = attributes[attr];
