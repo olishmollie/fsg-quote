@@ -20,7 +20,7 @@ class Router {
 
     // load the view
     this.container.innerHTML = "";
-    this.container.appendChild(route.resolve(href).render());
+    this.container.appendChild(route.resolve(href).node());
   }
 
   listen() {

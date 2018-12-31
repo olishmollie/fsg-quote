@@ -1,9 +1,9 @@
 class Root {
   constructor() {}
-  render() {
+  node() {
     return jsml.div(
       {},
-      new Navbar().render(),
+      new Navbar().node(),
       jsml.div({
         id: "app",
         className: "container"

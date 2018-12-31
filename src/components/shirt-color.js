@@ -4,7 +4,7 @@ class ShirtColor {
     this.onclick = opts.onclick;
   }
 
-  render() {
+  node() {
     return jsml.div({
       className: "shirt-color col-sm",
       style: "display: inline; background-color: " + this.color.hex,

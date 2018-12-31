@@ -1,6 +1,6 @@
 window.onload = function() {
   // mount root component
-  document.getElementsByTagName("body")[0].appendChild(new Root().render());
+  document.getElementsByTagName("body")[0].appendChild(new Root().node());
 
   let APP = {
     root: "/",

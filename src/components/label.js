@@ -17,7 +17,7 @@ class Label {
     this.span.innerText = this._text;
   }
 
-  render() {
+  node() {
     return this.span;
   }
 }

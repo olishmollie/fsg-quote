@@ -1,4 +1,4 @@
-class QuantityInputView {
+class QuantityInputs {
   constructor(opts) {
     this.product = opts.product;
 
@@ -22,7 +22,7 @@ class QuantityInputView {
     return this.product.shirt;
   }
 
-  render() {
+  node() {
     return jsml.ul(
       {
         className: "list-inline"

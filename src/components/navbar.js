@@ -1,6 +1,6 @@
 class Navbar {
   constructor() {}
-  render() {
+  node() {
     return jsml.nav(
       {
         className: "navbar navbar-light bg-light"

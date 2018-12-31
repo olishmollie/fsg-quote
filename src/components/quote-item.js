@@ -1,18 +1,14 @@
-class ProductDetailView {
+class QuoteItem {
   constructor(opts) {
-    this.id = opts.id;
+    this.index = opts.index;
     this.product = opts.product;
     this.onchange = opts.onchange;
-
-    this.quantityInputView = new QuantityInputView({
-      product: this.product
-    });
   }
 
-  render() {
+  node() {
     return jsml.div(
       {
-        className: "product-detail media",
+        className: "quote-item media",
         style: "border: 1px solid black"
       },
       jsml.div(
@@ -21,11 +17,11 @@ class ProductDetailView {
         },
         jsml.h5(
           {
-            className: "product-detail-title"
+            className: "quote-item-title"
           },
           jsml.strong({
-            className: "product-detail-number mr-2",
-            innerText: this.id + 1 + "."
+            className: "quote-item-index mr-2",
+            innerText: this.index + 1 + "."
           }),
           jsml.text(this.product.shirt.name),
           jsml.button({
@@ -37,7 +33,9 @@ class ProductDetailView {
             }
           })
         ),
-        this.quantityInputView.render()
+        new QuantityInputs({
+          product: this.product
+        }).node()
       )
     );
   }

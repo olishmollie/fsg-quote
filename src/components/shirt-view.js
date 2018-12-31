@@ -3,7 +3,7 @@ class ShirtView {
     this.shirt = opts.shirt;
   }
 
-  render() {
+  node() {
     return jsml.div(
       {
         className: "card"

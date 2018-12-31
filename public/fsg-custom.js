@@ -150,7 +150,7 @@ class Router {
 
     // load the view
     this.container.innerHTML = "";
-    this.container.appendChild(route.resolve(href).render());
+    this.container.appendChild(route.resolve(href).node());
   }
 
   listen() {
@@ -424,10 +424,10 @@ let SHIRTS = [
 ];
 class Root {
   constructor() {}
-  render() {
+  node() {
     return jsml.div(
       {},
-      new Navbar().render(),
+      new Navbar().node(),
       jsml.div({
         id: "app",
         className: "container"
@@ -451,12 +451,12 @@ class ColorPicker {
     });
   }
 
-  render() {
+  node() {
     return jsml.div(
       {
         className: "color-picker"
       },
-      ...this.shirtColors.map(x => x.render())
+      ...this.shirtColors.map(x => x.node())
     );
   }
 }
@@ -510,7 +510,7 @@ class Dropdown {
     this.selections[this._selected].selected = true;
   }
 
-  render() {
+  node() {
     return this.select;
   }
 }
@@ -533,13 +533,13 @@ class Label {
     this.span.innerText = this._text;
   }
 
-  render() {
+  node() {
     return this.span;
   }
 }
 class Navbar {
   constructor() {}
-  render() {
+  node() {
     return jsml.nav(
       {
         className: "navbar navbar-light bg-light"
@@ -650,7 +650,7 @@ class NumberInput {
     }
   }
 
-  render() {
+  node() {
     return jsml.div(
       { className: "input-group" },
       jsml.div({ className: "input-group-prepend" }, this.decrementButton),
@@ -673,56 +673,12 @@ class PickAShirt {
     });
   }
 
-  render() {
+  node() {
     return jsml.div(
       {
         className: "pick-a-shirt d-flex justify-content-center text-center"
       },
-      jsml.div({}, ...this.shirtViews.map(x => x.render()))
-    );
-  }
-}
-class ProductDetailView {
-  constructor(opts) {
-    this.id = opts.id;
-    this.product = opts.product;
-    this.onchange = opts.onchange;
-
-    this.quantityInputView = new QuantityInputView({
-      product: this.product
-    });
-  }
-
-  render() {
-    return jsml.div(
-      {
-        className: "product-detail media",
-        style: "border: 1px solid black"
-      },
-      jsml.div(
-        {
-          className: "media-body"
-        },
-        jsml.h5(
-          {
-            className: "product-detail-title"
-          },
-          jsml.strong({
-            className: "product-detail-number mr-2",
-            innerText: this.id + 1 + "."
-          }),
-          jsml.text(this.product.shirt.name),
-          jsml.button({
-            className: "trash-button float-right btn btn-danger",
-            innerText: "TRASH",
-            onclick: () => {
-              APP.quote.remove(this.product);
-              this.onchange();
-            }
-          })
-        ),
-        this.quantityInputView.render()
-      )
+      jsml.div({}, ...this.shirtViews.map(x => x.node()))
     );
   }
 }
@@ -938,7 +894,7 @@ class ProductView {
     return side + (count === 1 ? " color" : " colors");
   }
 
-  render() {
+  node() {
     return jsml.div(
       {
         className: "product-view text-center"
@@ -951,7 +907,7 @@ class ProductView {
         jsml.p({
           innerText: this.shirt.description
         }),
-        this.colorPicker.render(),
+        this.colorPicker.node(),
         jsml.div(
           {
             className: "text-center m-auto p-3",
@@ -962,17 +918,17 @@ class ProductView {
             { className: "form-group mt-3" },
             jsml.strong(
               { id: "amount-per-shirt" },
-              this.pricePerShirtLabel.render(),
+              this.pricePerShirtLabel.node(),
               jsml.text("/shirt")
             )
           ),
-          jsml.div({ className: "form-group" }, this.quantityInput.render()),
+          jsml.div({ className: "form-group" }, this.quantityInput.node()),
           jsml.div(
             { className: "form-group" },
-            this.frontColorCountDropdown.render(),
-            this.frontColorCountLabel.render(),
-            this.backColorCountDropdown.render(),
-            this.backColorCountLabel.render()
+            this.frontColorCountDropdown.node(),
+            this.frontColorCountLabel.node(),
+            this.backColorCountDropdown.node(),
+            this.backColorCountLabel.node()
           ),
           jsml.div({ className: "form-group" }, this.submitButton)
         )
@@ -980,7 +936,7 @@ class ProductView {
     );
   }
 }
-class QuantityInputView {
+class QuantityInputs {
   constructor(opts) {
     this.product = opts.product;
 
@@ -1004,7 +960,7 @@ class QuantityInputView {
     return this.product.shirt;
   }
 
-  render() {
+  node() {
     return jsml.ul(
       {
         className: "list-inline"
@@ -1013,51 +969,97 @@ class QuantityInputView {
     );
   }
 }
+class QuoteItem {
+  constructor(opts) {
+    this.index = opts.index;
+    this.product = opts.product;
+    this.onchange = opts.onchange;
+  }
+
+  node() {
+    return jsml.div(
+      {
+        className: "quote-item media",
+        style: "border: 1px solid black"
+      },
+      jsml.div(
+        {
+          className: "media-body"
+        },
+        jsml.h5(
+          {
+            className: "quote-item-title"
+          },
+          jsml.strong({
+            className: "quote-item-index mr-2",
+            innerText: this.index + 1 + "."
+          }),
+          jsml.text(this.product.shirt.name),
+          jsml.button({
+            className: "trash-button float-right btn btn-danger",
+            innerText: "TRASH",
+            onclick: () => {
+              APP.quote.remove(this.product);
+              this.onchange();
+            }
+          })
+        ),
+        new QuantityInputs({
+          product: this.product
+        }).node()
+      )
+    );
+  }
+}
+class QuoteItems {
+  constructor(opts) {
+    this.quote = opts.quote;
+    this.onchange = opts.onchange;
+  }
+
+  node() {
+    return jsml.div(
+      {
+        className: "quote-items"
+      },
+      ...this.quote.products.map((product, index) => {
+        return new QuoteItem({
+          index: index,
+          product: product,
+          onchange: () => {
+            this.onchange();
+          }
+        }).node();
+      })
+    );
+  }
+}
 class QuoteView {
   constructor() {
     this.quote = APP.quote;
   }
 
-  get size() {
-    return this.products.length;
-  }
-
-  get products() {
-    return this.quote.products;
-  }
-
-  get productDetails() {
-    if (this.size == 0) {
+  get quoteItems() {
+    if (this.quote.size == 0) {
       // TODO: conditional rendering?
-      return [
-        jsml.p({
-          innerText: "This quote has no items yet."
-        })
-      ];
+      return jsml.p({
+        innerText: "This quote has no items yet."
+      });
     }
-
-    return this.products.map((product, i) => {
-      return new ProductDetailView({
-        id: i,
-        product: product,
-        onchange: () => {
-          if (this.quote.size == 0) {
-            APP.router.load(APP.root);
-          } else {
-            // HACK: fix this shite
-            APP.router.load("/quote");
-          }
-        }
-      }).render();
-    });
+    return new QuoteItems({
+      quote: this.quote,
+      onchange: () => {
+        console.log("something changed");
+      }
+    }).node();
   }
 
-  render() {
+  node() {
     return jsml.div(
       {
         className: "quote-view"
       },
-      ...this.productDetails
+      this.quoteItems
     );
   }
 }
@@ -1067,7 +1069,7 @@ class ShirtColor {
     this.onclick = opts.onclick;
   }
 
-  render() {
+  node() {
     return jsml.div({
       className: "shirt-color col-sm",
       style: "display: inline; background-color: " + this.color.hex,
@@ -1082,7 +1084,7 @@ class ShirtView {
     this.shirt = opts.shirt;
   }
 
-  render() {
+  node() {
     return jsml.div(
       {
         className: "card"
@@ -1114,7 +1116,7 @@ class ShirtView {
 }
 window.onload = function() {
   // mount root component
-  document.getElementsByTagName("body")[0].appendChild(new Root().render());
+  document.getElementsByTagName("body")[0].appendChild(new Root().node());
 
   let APP = {
     root: "/",

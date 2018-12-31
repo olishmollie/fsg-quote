@@ -14,12 +14,12 @@ class ColorPicker {
     });
   }
 
-  render() {
+  node() {
     return jsml.div(
       {
         className: "color-picker"
       },
-      ...this.shirtColors.map(x => x.render())
+      ...this.shirtColors.map(x => x.node())
     );
   }
 }
