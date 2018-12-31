@@ -14,6 +14,7 @@ var jsml = (function() {
   }
 
   return {
+    makeElement: makeElement,
     h1: (attributes, ...children) => {
       return makeElement("h1", attributes, ...children);
     },

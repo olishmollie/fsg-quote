@@ -1,32 +1,35 @@
 class Router {
   constructor(opts) {
-    this.container = opts.container;
     this.routes = opts.routes || [];
     this.location = null;
     this.listen();
   }
 
-  load(href) {
+  load(hash) {
     let route = this.routes.find(route => {
-      return route.regex.exec(href);
+      return route.regex.exec(hash);
     });
 
+    // load base route if not found
     if (!route) {
-      throw "unregistered route: " + href;
+      this.load("/");
+      return;
     }
 
     // update location
-    this.location = window.location.hash;
+    this.location = hash;
+
+    //replace url in browser
+    window.location.hash = hash;
 
     // load the view
-    this.container.innerHTML = "";
-    this.container.appendChild(route.resolve(href).render());
+    let component = route.resolve(hash);
+    APP.root.mount(component);
   }
 
   listen() {
     setTimeout(() => {
       if (window.location.hash != this.location) {
-        console.log("detected change in window location");
         this.load(window.location.hash);
       }
       this.listen();

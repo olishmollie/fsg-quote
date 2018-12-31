@@ -1,6 +1,8 @@
-class QuantityInputView {
+class QuantityInputs extends Component {
   constructor(opts) {
+    super();
     this.product = opts.product;
+    this.onchange = opts.onchange;
 
     this.inputs = this.shirt.availableSizes.map((size, i) => {
       return jsml.li(
@@ -12,7 +14,11 @@ class QuantityInputView {
         }),
         jsml.input({
           className: "form-control",
-          value: this.product.quantities[this.shirt.availableSizes[i]]
+          value: this.product.quantities[this.shirt.availableSizes[i]],
+          onchange: event => {
+            console.log(event.target.value);
+            this.onchange();
+          }
         })
       );
     });
@@ -23,7 +29,8 @@ class QuantityInputView {
   }
 
   render() {
-    return jsml.ul(
+    return super.render(
+      "ul",
       {
         className: "list-inline"
       },

@@ -1,5 +1,6 @@
-class PickAShirt {
+class PickAShirt extends Component {
   constructor() {
+    super();
     this.shirtViews = APP.shirts.map(shirt => {
       return new ShirtView({
         shirt: shirt
@@ -8,9 +9,10 @@ class PickAShirt {
   }
 
   render() {
-    return jsml.div(
+    return super.render(
+      "div",
       {
-        className: "pick-a-shirt d-flex justify-content-center text-center"
+        className: "d-flex justify-content-center text-center"
       },
       jsml.div({}, ...this.shirtViews.map(x => x.render()))
     );

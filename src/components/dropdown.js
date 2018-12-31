@@ -1,5 +1,6 @@
-class Dropdown {
+class Dropdown extends Component {
   constructor(opts) {
+    super();
     this._selections = opts.selections.map(x => x.toString());
     this._selected = opts.selected;
     this.onchange = opts.onchange;
@@ -49,6 +50,6 @@ class Dropdown {
   }
 
   render() {
-    return this.select;
+    return super.render("div", {}, this.select);
   }
 }

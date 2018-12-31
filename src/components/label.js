@@ -1,5 +1,6 @@
-class Label {
+class Label extends Component {
   constructor(opts) {
+    super();
     this._text = opts.text;
 
     this.span = jsml.span({
@@ -18,6 +19,6 @@ class Label {
   }
 
   render() {
-    return this.span;
+    return super.render("span", {}, this.span);
   }
 }

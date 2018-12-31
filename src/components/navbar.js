@@ -1,7 +1,11 @@
-class Navbar {
-  constructor() {}
+class Navbar extends Component {
+  constructor() {
+    super();
+  }
+
   render() {
-    return jsml.nav(
+    return super.render(
+      "nav",
       {
         className: "navbar navbar-light bg-light"
       },

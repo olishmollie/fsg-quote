@@ -1,3 +1,45 @@
+class App {
+  constructor(opts) {
+    this.root = opts.root;
+    this.quote = opts.quote;
+    this.shirts = opts.shirts;
+    this.router = opts.router;
+
+    window.APP = this;
+    this.router.load(window.location.hash);
+  }
+}
+class Component {
+  constructor() {
+    this.id = this.className = util.camelToDashed(this.constructor.name);
+    this.id += "_" + util.randomString(5);
+    this.container = jsml.div({
+      id: this.id
+    });
+    this._node = null;
+  }
+
+  get node() {
+    if (this._node) {
+      return this._node;
+    }
+    this._node = document.getElementById(this.id);
+    return this._node;
+  }
+
+  render(tag, attributes, ...children) {
+    let id = { id: this.id };
+
+    // combine class names
+    if (attributes.className) {
+      attributes.className += " " + this.className;
+    } else {
+      attributes.className = this.className;
+    }
+
+    return jsml.makeElement(tag, Object.assign(attributes, id), ...children);
+  }
+}
 var jsml = (function() {
   function makeElement(tag, attributes, ...children) {
     let element = document.createElement(tag);
@@ -14,6 +56,7 @@ var jsml = (function() {
   }
 
   return {
+    makeElement: makeElement,
     h1: (attributes, ...children) => {
       return makeElement("h1", attributes, ...children);
     },
@@ -130,39 +173,80 @@ class Route {
 }
 class Router {
   constructor(opts) {
-    this.container = opts.container;
     this.routes = opts.routes || [];
     this.location = null;
     this.listen();
   }
 
-  load(href) {
+  load(hash) {
     let route = this.routes.find(route => {
-      return route.regex.exec(href);
+      return route.regex.exec(hash);
     });
 
+    // load base route if not found
     if (!route) {
-      throw "unregistered route: " + href;
+      this.load("/");
+      return;
     }
 
     // update location
-    this.location = window.location.hash;
+    this.location = hash;
+
+    //replace url in browser
+    window.location.hash = hash;
 
     // load the view
-    this.container.innerHTML = "";
-    this.container.appendChild(route.resolve(href).render());
+    let component = route.resolve(hash);
+    APP.root.mount(component);
   }
 
   listen() {
     setTimeout(() => {
       if (window.location.hash != this.location) {
-        console.log("detected change in window location");
         this.load(window.location.hash);
       }
       this.listen();
     });
   }
 }
+let util = (function() {
+  // takes a camel cased string and returns dashed equivalent
+  // e.g. ClassName -> class-name
+  function camelToDashed(name) {
+    var result = [];
+    var i = 0;
+    while (i < name.length) {
+      if (isUpper(name[i])) {
+        result.push(name[i++].toLowerCase());
+        while (i < name.length && !isUpper(name[i])) {
+          result.push(name[i++]);
+        }
+        if (i < name.length) result.push("-");
+      }
+    }
+    return result.join("");
+  }
+
+  function isUpper(c) {
+    return c === c.toUpperCase();
+  }
+
+  function randomString(length) {
+    var result = "";
+    var alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    for (var i = 0; i < length; i++) {
+      result += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+    }
+
+    return result;
+  }
+
+  return {
+    camelToDashed,
+    randomString
+  };
+})();
 class Product {
   constructor(opts) {
     this.shirt = opts.shirt;
@@ -422,21 +506,9 @@ let SHIRTS = [
     ]
   })
 ];
-class Root {
-  constructor() {}
-  render() {
-    return jsml.div(
-      {},
-      new Navbar().render(),
-      jsml.div({
-        id: "app",
-        className: "container"
-      })
-    );
-  }
-}
-class ColorPicker {
+class ColorPicker extends Component {
   constructor(opts) {
+    super();
     this.color = opts.color;
     this.colors = opts.colors;
     this.onchange = opts.onchange;
@@ -452,16 +524,12 @@ class ColorPicker {
   }
 
   render() {
-    return jsml.div(
-      {
-        className: "color-picker"
-      },
-      ...this.shirtColors.map(x => x.render())
-    );
+    return super.render("div", {}, ...this.shirtColors.map(x => x.render()));
   }
 }
-class Dropdown {
+class Dropdown extends Component {
   constructor(opts) {
+    super();
     this._selections = opts.selections.map(x => x.toString());
     this._selected = opts.selected;
     this.onchange = opts.onchange;
@@ -511,11 +579,12 @@ class Dropdown {
   }
 
   render() {
-    return this.select;
+    return super.render("div", {}, this.select);
   }
 }
-class Label {
+class Label extends Component {
   constructor(opts) {
+    super();
     this._text = opts.text;
 
     this.span = jsml.span({
@@ -534,13 +603,17 @@ class Label {
   }
 
   render() {
-    return this.span;
+    return super.render("span", {}, this.span);
   }
 }
-class Navbar {
-  constructor() {}
+class Navbar extends Component {
+  constructor() {
+    super();
+  }
+
   render() {
-    return jsml.nav(
+    return super.render(
+      "nav",
       {
         className: "navbar navbar-light bg-light"
       },
@@ -577,8 +650,9 @@ class Navbar {
     );
   }
 }
-class NumberInput {
+class NumberInput extends Component {
   constructor(opts) {
+    super();
     this._value = opts.value || 50;
     this._max = opts.max || 500;
     this._min = opts.min || 1;
@@ -606,7 +680,6 @@ class NumberInput {
       value: this.value,
       min: this.min,
       max: this.max,
-      // style: "-webkit-appearance: none; margin: 0;",
       onchange: event => {
         let el = event.target;
         this.value = el.value;
@@ -651,7 +724,8 @@ class NumberInput {
   }
 
   render() {
-    return jsml.div(
+    return super.render(
+      "div",
       { className: "input-group" },
       jsml.div({ className: "input-group-prepend" }, this.decrementButton),
       this.input,
@@ -664,8 +738,9 @@ class NumberInput {
     );
   }
 }
-class PickAShirt {
+class PickAShirt extends Component {
   constructor() {
+    super();
     this.shirtViews = APP.shirts.map(shirt => {
       return new ShirtView({
         shirt: shirt
@@ -674,65 +749,21 @@ class PickAShirt {
   }
 
   render() {
-    return jsml.div(
+    return super.render(
+      "div",
       {
-        className: "pick-a-shirt d-flex justify-content-center text-center"
+        className: "d-flex justify-content-center text-center"
       },
       jsml.div({}, ...this.shirtViews.map(x => x.render()))
     );
   }
 }
-class ProductDetailView {
+class ProductView extends Component {
   constructor(opts) {
-    this.id = opts.id;
-    this.product = opts.product;
-    this.onchange = opts.onchange;
-
-    this.quantityInputView = new QuantityInputView({
-      product: this.product
-    });
-  }
-
-  render() {
-    return jsml.div(
-      {
-        className: "product-detail media",
-        style: "border: 1px solid black"
-      },
-      jsml.div(
-        {
-          className: "media-body"
-        },
-        jsml.h5(
-          {
-            className: "product-detail-title"
-          },
-          jsml.strong({
-            className: "product-detail-number mr-2",
-            innerText: this.id + 1 + "."
-          }),
-          jsml.text(this.product.shirt.name),
-          jsml.button({
-            className: "trash-button float-right btn btn-danger",
-            innerText: "TRASH",
-            onclick: () => {
-              APP.quote.remove(this.product);
-              this.onchange();
-            }
-          })
-        ),
-        this.quantityInputView.render()
-      )
-    );
-  }
-}
-const DEFAULT_QUANTITY = 50;
-
-class ProductView {
-  constructor(opts) {
+    super();
     this.product = new Product({
       shirt: APP.shirts[opts.shirtId],
-      quantity: DEFAULT_QUANTITY,
+      quantity: 50,
       frontColorCount: 1,
       backColorCount: 1
     });
@@ -752,7 +783,7 @@ class ProductView {
     });
 
     this.quantityInput = new NumberInput({
-      quantity: DEFAULT_QUANTITY,
+      quantity: this.quantity,
       max: 500,
       min: this.minQuantity(),
       onchange: quantity => {
@@ -939,9 +970,10 @@ class ProductView {
   }
 
   render() {
-    return jsml.div(
+    return super.render(
+      "div",
       {
-        className: "product-view text-center"
+        className: "text-center"
       },
       jsml.h1({
         innerText: this.shirt.name
@@ -980,9 +1012,11 @@ class ProductView {
     );
   }
 }
-class QuantityInputView {
+class QuantityInputs extends Component {
   constructor(opts) {
+    super();
     this.product = opts.product;
+    this.onchange = opts.onchange;
 
     this.inputs = this.shirt.availableSizes.map((size, i) => {
       return jsml.li(
@@ -994,7 +1028,11 @@ class QuantityInputView {
         }),
         jsml.input({
           className: "form-control",
-          value: this.product.quantities[this.shirt.availableSizes[i]]
+          value: this.product.quantities[this.shirt.availableSizes[i]],
+          onchange: event => {
+            console.log(event.target.value);
+            this.onchange();
+          }
         })
       );
     });
@@ -1005,7 +1043,8 @@ class QuantityInputView {
   }
 
   render() {
-    return jsml.ul(
+    return super.render(
+      "ul",
       {
         className: "list-inline"
       },
@@ -1013,63 +1052,140 @@ class QuantityInputView {
     );
   }
 }
-class QuoteView {
-  constructor() {
-    this.quote = APP.quote;
+class QuoteItem extends Component {
+  constructor(opts) {
+    super();
+    this.quote = opts.quote;
+    this.index = opts.index;
+    this.product = opts.product;
+    this.onchange = opts.onchange;
+    this.ondelete = opts.ondelete;
   }
 
-  get size() {
-    return this.products.length;
+  render() {
+    return super.render(
+      "div",
+      {
+        className: "media"
+      },
+      jsml.div(
+        {
+          className: "media-body"
+        },
+        jsml.h5(
+          {
+            className: "quote-item-title"
+          },
+          jsml.strong({
+            className: "quote-item-index mr-2",
+            innerText: this.index + 1 + "."
+          }),
+          jsml.text(this.product.shirt.name),
+          jsml.button({
+            className: "trash-button float-right btn btn-danger",
+            innerText: "TRASH",
+            onclick: () => {
+              this.quote.remove(this.product);
+              this.ondelete(this.index);
+            }
+          })
+        ),
+        new QuantityInputs({
+          product: this.product,
+          onchange: this.onchange
+        }).render()
+      )
+    );
+  }
+}
+class QuoteItems extends Component {
+  constructor(opts) {
+    super();
+    this.quote = opts.quote;
+    this.onchange = opts.onchange;
   }
 
-  get products() {
-    return this.quote.products;
-  }
-
-  get productDetails() {
-    if (this.size == 0) {
-      // TODO: conditional rendering?
+  get quoteItems() {
+    if (this.empty()) {
       return [
         jsml.p({
-          innerText: "This quote has no items yet."
+          innerText: "There are no items here yet."
         })
       ];
     }
-
-    return this.products.map((product, i) => {
-      return new ProductDetailView({
-        id: i,
+    return this.quote.products.map((product, index) => {
+      return new QuoteItem({
+        quote: this.quote,
+        index: index,
         product: product,
         onchange: () => {
-          if (this.quote.size == 0) {
-            APP.router.load(APP.root);
-          } else {
-            // HACK: fix this shite
-            APP.router.load("/quote");
-          }
+          console.log("changed a quote item.");
+          this.onchange();
+        },
+        ondelete: index => {
+          this.node.innerHTML = "";
+          this.node.appendChild(this.render());
         }
       }).render();
     });
   }
 
+  empty() {
+    return this.quote.size == 0;
+  }
+
   render() {
-    return jsml.div(
-      {
-        className: "quote-view"
-      },
-      ...this.productDetails
+    return super.render("div", {}, ...this.quoteItems);
+  }
+}
+class QuoteView extends Component {
+  constructor() {
+    super();
+    this.quote = APP.quote;
+  }
+
+  render() {
+    return super.render(
+      "div",
+      {},
+      new QuoteItems({
+        quote: this.quote,
+        onchange: () => {
+          console.log("something changed");
+        }
+      }).render()
     );
   }
 }
-class ShirtColor {
+class Root {
+  constructor() {
+    this.container = jsml.div({
+      id: "app",
+      className: "container"
+    });
+
+    document.body.appendChild(this.render());
+  }
+
+  render() {
+    return jsml.div({}, new Navbar().render(), this.container);
+  }
+
+  mount(component) {
+    this.container.innerHTML = "";
+    this.container.appendChild(component.render());
+  }
+}
+class ShirtColor extends Component {
   constructor(opts) {
+    super();
     this.color = opts.color;
     this.onclick = opts.onclick;
   }
 
   render() {
-    return jsml.div({
-      className: "shirt-color col-sm",
+    return super.render("div", {
+      className: "col-sm",
       style: "display: inline; background-color: " + this.color.hex,
       onclick: () => {
         this.onclick(this.color);
@@ -1077,13 +1193,15 @@ class ShirtColor {
     });
   }
 }
-class ShirtView {
+class ShirtView extends Component {
   constructor(opts) {
+    super();
     this.shirt = opts.shirt;
   }
 
   render() {
-    return jsml.div(
+    return super.render(
+      "div",
       {
         className: "card"
       },
@@ -1094,9 +1212,6 @@ class ShirtView {
         jsml.a(
           {
             href: "#/shirts/" + this.shirt.id
-            // onclick: () => {
-            //   APP.router.load("/shirts/" + this.shirt.id);
-            // }
           },
           jsml.img({
             className: "figure-img img-fluid rounded",
@@ -1113,26 +1228,16 @@ class ShirtView {
   }
 }
 window.onload = function() {
-  // mount root component
-  document.getElementsByTagName("body")[0].appendChild(new Root().render());
-
-  let APP = {
-    root: "/",
+  new App({
+    root: new Root(),
     quote: new Quote(),
     shirts: SHIRTS,
     router: new Router({
-      container: document.getElementById("app"),
       routes: [
         new Route({ href: "/", component: PickAShirt }),
         new Route({ href: "/shirts/:shirtId", component: ProductView }),
         new Route({ href: "/quote", component: QuoteView })
       ]
     })
-  };
-
-  // make app a global variable
-  window.APP = APP;
-
-  //load root page
-  APP.router.load("/");
+  });
 };
