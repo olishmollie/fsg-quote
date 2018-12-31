@@ -210,7 +210,7 @@ class ProductView {
     return side + (count === 1 ? " color" : " colors");
   }
 
-  node() {
+  render() {
     return jsml.div(
       {
         className: "product-view text-center"
@@ -223,7 +223,7 @@ class ProductView {
         jsml.p({
           innerText: this.shirt.description
         }),
-        this.colorPicker.node(),
+        this.colorPicker.render(),
         jsml.div(
           {
             className: "text-center m-auto p-3",
@@ -234,17 +234,17 @@ class ProductView {
             { className: "form-group mt-3" },
             jsml.strong(
               { id: "amount-per-shirt" },
-              this.pricePerShirtLabel.node(),
+              this.pricePerShirtLabel.render(),
               jsml.text("/shirt")
             )
           ),
-          jsml.div({ className: "form-group" }, this.quantityInput.node()),
+          jsml.div({ className: "form-group" }, this.quantityInput.render()),
           jsml.div(
             { className: "form-group" },
-            this.frontColorCountDropdown.node(),
-            this.frontColorCountLabel.node(),
-            this.backColorCountDropdown.node(),
-            this.backColorCountLabel.node()
+            this.frontColorCountDropdown.render(),
+            this.frontColorCountLabel.render(),
+            this.backColorCountDropdown.render(),
+            this.backColorCountLabel.render()
           ),
           jsml.div({ className: "form-group" }, this.submitButton)
         )

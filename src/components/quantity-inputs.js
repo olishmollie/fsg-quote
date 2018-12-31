@@ -22,7 +22,7 @@ class QuantityInputs {
     return this.product.shirt;
   }
 
-  node() {
+  render() {
     return jsml.ul(
       {
         className: "list-inline"

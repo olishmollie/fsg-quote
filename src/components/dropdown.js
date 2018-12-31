@@ -48,7 +48,7 @@ class Dropdown {
     this.selections[this._selected].selected = true;
   }
 
-  node() {
+  render() {
     return this.select;
   }
 }

@@ -2,9 +2,10 @@ class QuoteItems {
   constructor(opts) {
     this.quote = opts.quote;
     this.onchange = opts.onchange;
+    this.ondelete = opts.ondelete;
   }
 
-  node() {
+  render() {
     return jsml.div(
       {
         className: "quote-items"
@@ -16,8 +17,11 @@ class QuoteItems {
           product: product,
           onchange: () => {
             this.onchange();
+          },
+          ondelete: () => {
+            this.ondelete();
           }
-        }).node();
+        }).render();
       })
     );
   }

@@ -18,7 +18,7 @@ class Component {
 
   render() {
     this.container.innerHTML = "";
-    this.container.appendChild(this.node());
+    this.container.appendChild(this.render());
     return this.container;
   }
 }
@@ -490,12 +490,12 @@ class ColorPicker {
     });
   }
 
-  node() {
+  render() {
     return jsml.div(
       {
         className: "color-picker"
       },
-      ...this.shirtColors.map(x => x.node())
+      ...this.shirtColors.map(x => x.render())
     );
   }
 }
@@ -549,7 +549,7 @@ class Dropdown {
     this.selections[this._selected].selected = true;
   }
 
-  node() {
+  render() {
     return this.select;
   }
 }
@@ -572,13 +572,13 @@ class Label {
     this.span.innerText = this._text;
   }
 
-  node() {
+  render() {
     return this.span;
   }
 }
 class Navbar {
   constructor() {}
-  node() {
+  render() {
     return jsml.nav(
       {
         className: "navbar navbar-light bg-light"
@@ -689,7 +689,7 @@ class NumberInput {
     }
   }
 
-  node() {
+  render() {
     return jsml.div(
       { className: "input-group" },
       jsml.div({ className: "input-group-prepend" }, this.decrementButton),
@@ -712,12 +712,12 @@ class PickAShirt {
     });
   }
 
-  node() {
+  render() {
     return jsml.div(
       {
         className: "pick-a-shirt d-flex justify-content-center text-center"
       },
-      jsml.div({}, ...this.shirtViews.map(x => x.node()))
+      jsml.div({}, ...this.shirtViews.map(x => x.render()))
     );
   }
 }
@@ -933,7 +933,7 @@ class ProductView {
     return side + (count === 1 ? " color" : " colors");
   }
 
-  node() {
+  render() {
     return jsml.div(
       {
         className: "product-view text-center"
@@ -946,7 +946,7 @@ class ProductView {
         jsml.p({
           innerText: this.shirt.description
         }),
-        this.colorPicker.node(),
+        this.colorPicker.render(),
         jsml.div(
           {
             className: "text-center m-auto p-3",
@@ -957,17 +957,17 @@ class ProductView {
             { className: "form-group mt-3" },
             jsml.strong(
               { id: "amount-per-shirt" },
-              this.pricePerShirtLabel.node(),
+              this.pricePerShirtLabel.render(),
               jsml.text("/shirt")
             )
           ),
-          jsml.div({ className: "form-group" }, this.quantityInput.node()),
+          jsml.div({ className: "form-group" }, this.quantityInput.render()),
           jsml.div(
             { className: "form-group" },
-            this.frontColorCountDropdown.node(),
-            this.frontColorCountLabel.node(),
-            this.backColorCountDropdown.node(),
-            this.backColorCountLabel.node()
+            this.frontColorCountDropdown.render(),
+            this.frontColorCountLabel.render(),
+            this.backColorCountDropdown.render(),
+            this.backColorCountLabel.render()
           ),
           jsml.div({ className: "form-group" }, this.submitButton)
         )
@@ -999,7 +999,7 @@ class QuantityInputs {
     return this.product.shirt;
   }
 
-  node() {
+  render() {
     return jsml.ul(
       {
         className: "list-inline"
@@ -1014,9 +1014,10 @@ class QuoteItem {
     this.index = opts.index;
     this.product = opts.product;
     this.onchange = opts.onchange;
+    this.ondelete = opts.ondelete;
   }
 
-  node() {
+  render() {
     return jsml.div(
       {
         className: "quote-item media",
@@ -1040,13 +1041,13 @@ class QuoteItem {
             innerText: "TRASH",
             onclick: () => {
               this.quote.remove(this.product);
-              APP.router.load("/quote");
+              this.ondelete();
             }
           })
         ),
         new QuantityInputs({
           product: this.product
-        }).node()
+        }).render()
       )
     );
   }
@@ -1055,9 +1056,10 @@ class QuoteItems {
   constructor(opts) {
     this.quote = opts.quote;
     this.onchange = opts.onchange;
+    this.ondelete = opts.ondelete;
   }
 
-  node() {
+  render() {
     return jsml.div(
       {
         className: "quote-items"
@@ -1067,10 +1069,13 @@ class QuoteItems {
           quote: this.quote,
           index: index,
           product: product,
+          ondelete: () => {
+            this.ondelete();
+          },
           onchange: () => {
             this.onchange();
           }
-        }).node();
+        }).render();
       })
     );
   }
@@ -1091,14 +1096,24 @@ class QuoteView {
       quote: this.quote,
       onchange: () => {
         console.log("something changed");
+      },
+      ondelete: () => {
+        if (this.quote.size == 0) {
+          console.log("got here!");
+          APP.router.load("/");
+        } else {
+          let node = document.getElementById("quote-view");
+          node.innerHTML = "";
+          node.appendChild(this.render());
+        }
       }
-    }).node();
+    }).render();
   }
 
-  node() {
+  render() {
     return jsml.div(
       {
-        className: "quote-view"
+        id: "quote-view"
       },
       this.quoteItems
     );
@@ -1111,16 +1126,16 @@ class Root {
       className: "container"
     });
 
-    document.body.appendChild(this.node());
+    document.body.appendChild(this.render());
   }
 
-  node() {
-    return jsml.div({}, new Navbar().node(), this.container);
+  render() {
+    return jsml.div({}, new Navbar().render(), this.container);
   }
 
   mount(component) {
     this.container.innerHTML = "";
-    this.container.appendChild(component.node());
+    this.container.appendChild(component.render());
   }
 }
 class ShirtColor {
@@ -1129,7 +1144,7 @@ class ShirtColor {
     this.onclick = opts.onclick;
   }
 
-  node() {
+  render() {
     return jsml.div({
       className: "shirt-color col-sm",
       style: "display: inline; background-color: " + this.color.hex,
@@ -1144,7 +1159,7 @@ class ShirtView {
     this.shirt = opts.shirt;
   }
 
-  node() {
+  render() {
     return jsml.div(
       {
         className: "card"

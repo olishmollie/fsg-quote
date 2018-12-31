@@ -7,7 +7,7 @@ class Component {
 
   render() {
     this.container.innerHTML = "";
-    this.container.appendChild(this.node());
+    this.container.appendChild(this.render());
     return this.container;
   }
 }

@@ -5,15 +5,15 @@ class Root {
       className: "container"
     });
 
-    document.body.appendChild(this.node());
+    document.body.appendChild(this.render());
   }
 
-  node() {
-    return jsml.div({}, new Navbar().node(), this.container);
+  render() {
+    return jsml.div({}, new Navbar().render(), this.container);
   }
 
   mount(component) {
     this.container.innerHTML = "";
-    this.container.appendChild(component.node());
+    this.container.appendChild(component.render());
   }
 }

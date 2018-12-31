@@ -71,7 +71,7 @@ class NumberInput {
     }
   }
 
-  node() {
+  render() {
     return jsml.div(
       { className: "input-group" },
       jsml.div({ className: "input-group-prepend" }, this.decrementButton),

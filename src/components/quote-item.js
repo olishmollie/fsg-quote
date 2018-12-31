@@ -4,9 +4,10 @@ class QuoteItem {
     this.index = opts.index;
     this.product = opts.product;
     this.onchange = opts.onchange;
+    this.ondelete = opts.ondelete;
   }
 
-  node() {
+  render() {
     return jsml.div(
       {
         className: "quote-item media",
@@ -30,13 +31,13 @@ class QuoteItem {
             innerText: "TRASH",
             onclick: () => {
               this.quote.remove(this.product);
-              APP.router.load("/quote");
+              this.ondelete();
             }
           })
         ),
         new QuantityInputs({
           product: this.product
-        }).node()
+        }).render()
       )
     );
   }

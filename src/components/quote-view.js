@@ -14,14 +14,24 @@ class QuoteView {
       quote: this.quote,
       onchange: () => {
         console.log("something changed");
+      },
+      ondelete: () => {
+        if (this.quote.size == 0) {
+          console.log("got here!");
+          APP.router.load("/");
+        } else {
+          let node = document.getElementById("quote-view");
+          node.innerHTML = "";
+          node.appendChild(this.render());
+        }
       }
-    }).node();
+    }).render();
   }
 
-  node() {
+  render() {
     return jsml.div(
       {
-        className: "quote-view"
+        id: "quote-view"
       },
       this.quoteItems
     );
