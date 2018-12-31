@@ -474,25 +474,6 @@ let SHIRTS = [
     ]
   })
 ];
-class Root {
-  constructor() {
-    this.container = jsml.div({
-      id: "app",
-      className: "container"
-    });
-
-    document.body.appendChild(this.node());
-  }
-
-  node() {
-    return jsml.div({}, new Navbar().node(), this.container);
-  }
-
-  mount(component) {
-    this.container.innerHTML = "";
-    this.container.appendChild(component.node());
-  }
-}
 class ColorPicker {
   constructor(opts) {
     this.color = opts.color;
@@ -1121,6 +1102,25 @@ class QuoteView {
       },
       this.quoteItems
     );
+  }
+}
+class Root {
+  constructor() {
+    this.container = jsml.div({
+      id: "app",
+      className: "container"
+    });
+
+    document.body.appendChild(this.node());
+  }
+
+  node() {
+    return jsml.div({}, new Navbar().node(), this.container);
+  }
+
+  mount(component) {
+    this.container.innerHTML = "";
+    this.container.appendChild(component.node());
   }
 }
 class ShirtColor {
