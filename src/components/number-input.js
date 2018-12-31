@@ -1,5 +1,6 @@
-class NumberInput {
+class NumberInput extends Component {
   constructor(opts) {
+    super();
     this._value = opts.value || 50;
     this._max = opts.max || 500;
     this._min = opts.min || 1;
@@ -27,7 +28,6 @@ class NumberInput {
       value: this.value,
       min: this.min,
       max: this.max,
-      // style: "-webkit-appearance: none; margin: 0;",
       onchange: event => {
         let el = event.target;
         this.value = el.value;
@@ -72,7 +72,8 @@ class NumberInput {
   }
 
   render() {
-    return jsml.div(
+    return super.container(
+      "div",
       { className: "input-group" },
       jsml.div({ className: "input-group-prepend" }, this.decrementButton),
       this.input,

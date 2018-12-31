@@ -1,5 +1,6 @@
-class QuoteItem {
+class QuoteItem extends Component {
   constructor(opts) {
+    super();
     this.quote = opts.quote;
     this.index = opts.index;
     this.product = opts.product;
@@ -8,10 +9,10 @@ class QuoteItem {
   }
 
   render() {
-    return jsml.div(
+    return super.container(
+      "div",
       {
-        className: "quote-item media",
-        style: "border: 1px solid black"
+        className: "media"
       },
       jsml.div(
         {
@@ -31,7 +32,7 @@ class QuoteItem {
             innerText: "TRASH",
             onclick: () => {
               this.quote.remove(this.product);
-              this.ondelete();
+              this.ondelete(this.index);
             }
           })
         ),

@@ -1,5 +1,6 @@
-class ColorPicker {
+class ColorPicker extends Component {
   constructor(opts) {
+    super();
     this.color = opts.color;
     this.colors = opts.colors;
     this.onchange = opts.onchange;
@@ -15,11 +16,6 @@ class ColorPicker {
   }
 
   render() {
-    return jsml.div(
-      {
-        className: "color-picker"
-      },
-      ...this.shirtColors.map(x => x.render())
-    );
+    return super.container("div", {}, ...this.shirtColors.map(x => x.render()));
   }
 }

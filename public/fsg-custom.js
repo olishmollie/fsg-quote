@@ -11,15 +11,24 @@ class App {
 }
 class Component {
   constructor() {
+    this.id = util.idName(this);
     this.container = jsml.div({
-      id: util.idName(this)
+      id: this.id
     });
+    this._node = null;
   }
 
-  render() {
-    this.container.innerHTML = "";
-    this.container.appendChild(this.render());
-    return this.container;
+  get node() {
+    if (this._node) {
+      return this._node;
+    }
+    this._node = document.getElementById(this.id);
+    return this._node;
+  }
+
+  container(tag, attributes, ...children) {
+    let id = { id: util.idName(this) };
+    return jsml.makeElement(tag, Object.assign(attributes, id), ...children);
   }
 }
 var jsml = (function() {
@@ -38,6 +47,7 @@ var jsml = (function() {
   }
 
   return {
+    makeElement: makeElement,
     h1: (attributes, ...children) => {
       return makeElement("h1", attributes, ...children);
     },
@@ -474,8 +484,9 @@ let SHIRTS = [
     ]
   })
 ];
-class ColorPicker {
+class ColorPicker extends Component {
   constructor(opts) {
+    super();
     this.color = opts.color;
     this.colors = opts.colors;
     this.onchange = opts.onchange;
@@ -491,16 +502,12 @@ class ColorPicker {
   }
 
   render() {
-    return jsml.div(
-      {
-        className: "color-picker"
-      },
-      ...this.shirtColors.map(x => x.render())
-    );
+    return super.container("div", {}, ...this.shirtColors.map(x => x.render()));
   }
 }
-class Dropdown {
+class Dropdown extends Component {
   constructor(opts) {
+    super();
     this._selections = opts.selections.map(x => x.toString());
     this._selected = opts.selected;
     this.onchange = opts.onchange;
@@ -550,11 +557,12 @@ class Dropdown {
   }
 
   render() {
-    return this.select;
+    return super.container("div", {}, this.select);
   }
 }
-class Label {
+class Label extends Component {
   constructor(opts) {
+    super();
     this._text = opts.text;
 
     this.span = jsml.span({
@@ -573,13 +581,17 @@ class Label {
   }
 
   render() {
-    return this.span;
+    return super.container("span", {}, this.span);
   }
 }
-class Navbar {
-  constructor() {}
+class Navbar extends Component {
+  constructor() {
+    super();
+  }
+
   render() {
-    return jsml.nav(
+    return super.container(
+      "nav",
       {
         className: "navbar navbar-light bg-light"
       },
@@ -616,8 +628,9 @@ class Navbar {
     );
   }
 }
-class NumberInput {
+class NumberInput extends Component {
   constructor(opts) {
+    super();
     this._value = opts.value || 50;
     this._max = opts.max || 500;
     this._min = opts.min || 1;
@@ -645,7 +658,6 @@ class NumberInput {
       value: this.value,
       min: this.min,
       max: this.max,
-      // style: "-webkit-appearance: none; margin: 0;",
       onchange: event => {
         let el = event.target;
         this.value = el.value;
@@ -690,7 +702,8 @@ class NumberInput {
   }
 
   render() {
-    return jsml.div(
+    return super.container(
+      "div",
       { className: "input-group" },
       jsml.div({ className: "input-group-prepend" }, this.decrementButton),
       this.input,
@@ -703,8 +716,9 @@ class NumberInput {
     );
   }
 }
-class PickAShirt {
+class PickAShirt extends Component {
   constructor() {
+    super();
     this.shirtViews = APP.shirts.map(shirt => {
       return new ShirtView({
         shirt: shirt
@@ -713,21 +727,21 @@ class PickAShirt {
   }
 
   render() {
-    return jsml.div(
+    return super.container(
+      "div",
       {
-        className: "pick-a-shirt d-flex justify-content-center text-center"
+        className: "d-flex justify-content-center text-center"
       },
       jsml.div({}, ...this.shirtViews.map(x => x.render()))
     );
   }
 }
-const DEFAULT_QUANTITY = 50;
-
-class ProductView {
+class ProductView extends Component {
   constructor(opts) {
+    super();
     this.product = new Product({
       shirt: APP.shirts[opts.shirtId],
-      quantity: DEFAULT_QUANTITY,
+      quantity: 50,
       frontColorCount: 1,
       backColorCount: 1
     });
@@ -747,7 +761,7 @@ class ProductView {
     });
 
     this.quantityInput = new NumberInput({
-      quantity: DEFAULT_QUANTITY,
+      quantity: this.quantity,
       max: 500,
       min: this.minQuantity(),
       onchange: quantity => {
@@ -934,9 +948,10 @@ class ProductView {
   }
 
   render() {
-    return jsml.div(
+    return super.container(
+      "div",
       {
-        className: "product-view text-center"
+        className: "text-center"
       },
       jsml.h1({
         innerText: this.shirt.name
@@ -975,8 +990,9 @@ class ProductView {
     );
   }
 }
-class QuantityInputs {
+class QuantityInputs extends Component {
   constructor(opts) {
+    super();
     this.product = opts.product;
 
     this.inputs = this.shirt.availableSizes.map((size, i) => {
@@ -1000,7 +1016,8 @@ class QuantityInputs {
   }
 
   render() {
-    return jsml.ul(
+    return super.container(
+      "ul",
       {
         className: "list-inline"
       },
@@ -1008,8 +1025,9 @@ class QuantityInputs {
     );
   }
 }
-class QuoteItem {
+class QuoteItem extends Component {
   constructor(opts) {
+    super();
     this.quote = opts.quote;
     this.index = opts.index;
     this.product = opts.product;
@@ -1018,10 +1036,10 @@ class QuoteItem {
   }
 
   render() {
-    return jsml.div(
+    return super.container(
+      "div",
       {
-        className: "quote-item media",
-        style: "border: 1px solid black"
+        className: "media"
       },
       jsml.div(
         {
@@ -1041,7 +1059,7 @@ class QuoteItem {
             innerText: "TRASH",
             onclick: () => {
               this.quote.remove(this.product);
-              this.ondelete();
+              this.ondelete(this.index);
             }
           })
         ),
@@ -1052,70 +1070,61 @@ class QuoteItem {
     );
   }
 }
-class QuoteItems {
+class QuoteItems extends Component {
   constructor(opts) {
+    super();
     this.quote = opts.quote;
     this.onchange = opts.onchange;
-    this.ondelete = opts.ondelete;
-  }
-
-  render() {
-    return jsml.div(
-      {
-        className: "quote-items"
-      },
-      ...this.quote.products.map((product, index) => {
-        return new QuoteItem({
-          quote: this.quote,
-          index: index,
-          product: product,
-          ondelete: () => {
-            this.ondelete();
-          },
-          onchange: () => {
-            this.onchange();
-          }
-        }).render();
-      })
-    );
-  }
-}
-class QuoteView {
-  constructor() {
-    this.quote = APP.quote;
   }
 
   get quoteItems() {
-    if (this.quote.size == 0) {
-      // TODO: conditional rendering?
-      return jsml.p({
-        innerText: "This quote has no items yet."
-      });
+    if (this.empty()) {
+      return [
+        jsml.p({
+          innerText: "There are no items here yet."
+        })
+      ];
     }
-    return new QuoteItems({
-      quote: this.quote,
-      onchange: () => {
-        console.log("something changed");
-      },
-      ondelete: () => {
-        if (this.quote.size == 0) {
-          console.log("got here!");
-          APP.router.load("/");
-        } else {
-          let node = document.getElementById("quote-view");
-          node.innerHTML = "";
-          node.appendChild(this.render());
+    return this.quote.products.map((product, index) => {
+      return new QuoteItem({
+        quote: this.quote,
+        index: index,
+        product: product,
+        onchange: () => {
+          console.log("changed a quote item.");
+        },
+        ondelete: index => {
+          this.node.innerHTML = "";
+          this.node.appendChild(this.render());
         }
-      }
-    }).render();
+      }).render();
+    });
+  }
+
+  empty() {
+    return this.quote.size == 0;
   }
 
   render() {
-    return jsml.div(
-      {
-        id: "quote-view"
-      },
-      this.quoteItems
+    return super.container("div", {}, ...this.quoteItems);
+  }
+}
+class QuoteView extends Component {
+  constructor() {
+    super();
+    this.quote = APP.quote;
+  }
+
+  render() {
+    return super.container(
+      "div",
+      {},
+      new QuoteItems({
+        quote: this.quote,
+        onchange: () => {
+          console.log("something changed");
+        }
+      }).render()
     );
   }
 }
@@ -1138,15 +1147,16 @@ class Root {
     this.container.appendChild(component.render());
   }
 }
-class ShirtColor {
+class ShirtColor extends Component {
   constructor(opts) {
+    super();
     this.color = opts.color;
     this.onclick = opts.onclick;
   }
 
   render() {
-    return jsml.div({
-      className: "shirt-color col-sm",
+    return super.container("div", {
+      className: "col-sm",
       style: "display: inline; background-color: " + this.color.hex,
       onclick: () => {
         this.onclick(this.color);
@@ -1154,13 +1164,15 @@ class ShirtColor {
     });
   }
 }
-class ShirtView {
+class ShirtView extends Component {
   constructor(opts) {
+    super();
     this.shirt = opts.shirt;
   }
 
   render() {
-    return jsml.div(
+    return super.container(
+      "div",
       {
         className: "card"
       },
@@ -1171,9 +1183,6 @@ class ShirtView {
         jsml.a(
           {
             href: "#/shirts/" + this.shirt.id
-            // onclick: () => {
-            //   APP.router.load("/shirts/" + this.shirt.id);
-            // }
           },
           jsml.img({
             className: "figure-img img-fluid rounded",

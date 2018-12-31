@@ -1,5 +1,6 @@
-class QuantityInputs {
+class QuantityInputs extends Component {
   constructor(opts) {
+    super();
     this.product = opts.product;
 
     this.inputs = this.shirt.availableSizes.map((size, i) => {
@@ -23,7 +24,8 @@ class QuantityInputs {
   }
 
   render() {
-    return jsml.ul(
+    return super.container(
+      "ul",
       {
         className: "list-inline"
       },

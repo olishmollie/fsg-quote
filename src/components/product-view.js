@@ -1,10 +1,9 @@
-const DEFAULT_QUANTITY = 50;
-
-class ProductView {
+class ProductView extends Component {
   constructor(opts) {
+    super();
     this.product = new Product({
       shirt: APP.shirts[opts.shirtId],
-      quantity: DEFAULT_QUANTITY,
+      quantity: 50,
       frontColorCount: 1,
       backColorCount: 1
     });
@@ -24,7 +23,7 @@ class ProductView {
     });
 
     this.quantityInput = new NumberInput({
-      quantity: DEFAULT_QUANTITY,
+      quantity: this.quantity,
       max: 500,
       min: this.minQuantity(),
       onchange: quantity => {
@@ -211,9 +210,10 @@ class ProductView {
   }
 
   render() {
-    return jsml.div(
+    return super.container(
+      "div",
       {
-        className: "product-view text-center"
+        className: "text-center"
       },
       jsml.h1({
         innerText: this.shirt.name

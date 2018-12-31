@@ -1,28 +1,39 @@
-class QuoteItems {
+class QuoteItems extends Component {
   constructor(opts) {
+    super();
     this.quote = opts.quote;
     this.onchange = opts.onchange;
-    this.ondelete = opts.ondelete;
+  }
+
+  get quoteItems() {
+    if (this.empty()) {
+      return [
+        jsml.p({
+          innerText: "There are no items here yet."
+        })
+      ];
+    }
+    return this.quote.products.map((product, index) => {
+      return new QuoteItem({
+        quote: this.quote,
+        index: index,
+        product: product,
+        onchange: () => {
+          console.log("changed a quote item.");
+        },
+        ondelete: index => {
+          this.node.innerHTML = "";
+          this.node.appendChild(this.render());
+        }
+      }).render();
+    });
+  }
+
+  empty() {
+    return this.quote.size == 0;
   }
 
   render() {
-    return jsml.div(
-      {
-        className: "quote-items"
-      },
-      ...this.quote.products.map((product, index) => {
-        return new QuoteItem({
-          quote: this.quote,
-          index: index,
-          product: product,
-          onchange: () => {
-            this.onchange();
-          },
-          ondelete: () => {
-            this.ondelete();
-          }
-        }).render();
-      })
-    );
+    return super.container("div", {}, ...this.quoteItems);
   }
 }
