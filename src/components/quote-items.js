@@ -11,6 +11,7 @@ class QuoteItems {
       },
       ...this.quote.products.map((product, index) => {
         return new QuoteItem({
+          quote: this.quote,
           index: index,
           product: product,
           onchange: () => {

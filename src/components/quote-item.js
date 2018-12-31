@@ -1,5 +1,6 @@
 class QuoteItem {
   constructor(opts) {
+    this.quote = opts.quote;
     this.index = opts.index;
     this.product = opts.product;
     this.onchange = opts.onchange;
@@ -28,8 +29,8 @@ class QuoteItem {
             className: "trash-button float-right btn btn-danger",
             innerText: "TRASH",
             onclick: () => {
-              APP.quote.remove(this.product);
-              this.onchange();
+              this.quote.remove(this.product);
+              APP.router.load("/quote");
             }
           })
         ),

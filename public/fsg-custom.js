@@ -1,3 +1,27 @@
+class App {
+  constructor(opts) {
+    this.root = opts.root;
+    this.quote = opts.quote;
+    this.shirts = opts.shirts;
+    this.router = opts.router;
+
+    window.APP = this;
+    this.router.load(window.location.hash);
+  }
+}
+class Component {
+  constructor() {
+    this.container = jsml.div({
+      id: util.idName(this)
+    });
+  }
+
+  render() {
+    this.container.innerHTML = "";
+    this.container.appendChild(this.node());
+    return this.container;
+  }
+}
 var jsml = (function() {
   function makeElement(tag, attributes, ...children) {
     let element = document.createElement(tag);
@@ -130,39 +154,67 @@ class Route {
 }
 class Router {
   constructor(opts) {
-    this.container = opts.container;
     this.routes = opts.routes || [];
     this.location = null;
     this.listen();
   }
 
-  load(href) {
+  load(hash) {
     let route = this.routes.find(route => {
-      return route.regex.exec(href);
+      return route.regex.exec(hash);
     });
 
+    // load base route if not found
     if (!route) {
-      throw "unregistered route: " + href;
+      this.load("/");
+      return;
     }
 
     // update location
-    this.location = window.location.hash;
+    this.location = hash;
+
+    //replace url in browser
+    window.location.hash = hash;
 
     // load the view
-    this.container.innerHTML = "";
-    this.container.appendChild(route.resolve(href).node());
+    let component = route.resolve(hash);
+    APP.root.mount(component);
   }
 
   listen() {
     setTimeout(() => {
       if (window.location.hash != this.location) {
-        console.log("detected change in window location");
         this.load(window.location.hash);
       }
       this.listen();
     });
   }
 }
+let util = (function() {
+  function idName(component) {
+    var result = [];
+    var name = component.constructor.name;
+    var i = 0;
+    while (i < name.length) {
+      if (isUpper(name[i])) {
+        result.push(name[i++].toLowerCase());
+        while (i < name.length && !isUpper(name[i])) {
+          result.push(name[i++]);
+        }
+        if (i < name.length) result.push("-");
+      }
+    }
+    return result.join("");
+  }
+
+  function isUpper(c) {
+    return c === c.toUpperCase();
+  }
+
+  return {
+    idName
+  };
+})();
 class Product {
   constructor(opts) {
     this.shirt = opts.shirt;
@@ -423,16 +475,22 @@ let SHIRTS = [
   })
 ];
 class Root {
-  constructor() {}
+  constructor() {
+    this.container = jsml.div({
+      id: "app",
+      className: "container"
+    });
+
+    document.body.appendChild(this.node());
+  }
+
   node() {
-    return jsml.div(
-      {},
-      new Navbar().node(),
-      jsml.div({
-        id: "app",
-        className: "container"
-      })
-    );
+    return jsml.div({}, new Navbar().node(), this.container);
+  }
+
+  mount(component) {
+    this.container.innerHTML = "";
+    this.container.appendChild(component.node());
   }
 }
 class ColorPicker {
@@ -971,6 +1029,7 @@ class QuantityInputs {
 }
 class QuoteItem {
   constructor(opts) {
+    this.quote = opts.quote;
     this.index = opts.index;
     this.product = opts.product;
     this.onchange = opts.onchange;
@@ -999,8 +1058,8 @@ class QuoteItem {
             className: "trash-button float-right btn btn-danger",
             innerText: "TRASH",
             onclick: () => {
-              APP.quote.remove(this.product);
-              this.onchange();
+              this.quote.remove(this.product);
+              APP.router.load("/quote");
             }
           })
         ),
@@ -1024,6 +1083,7 @@ class QuoteItems {
       },
       ...this.quote.products.map((product, index) => {
         return new QuoteItem({
+          quote: this.quote,
           index: index,
           product: product,
           onchange: () => {
@@ -1115,26 +1175,16 @@ class ShirtView {
   }
 }
 window.onload = function() {
-  // mount root component
-  document.getElementsByTagName("body")[0].appendChild(new Root().node());
-
-  let APP = {
-    root: "/",
+  new App({
+    root: new Root(),
     quote: new Quote(),
     shirts: SHIRTS,
     router: new Router({
-      container: document.getElementById("app"),
       routes: [
         new Route({ href: "/", component: PickAShirt }),
         new Route({ href: "/shirts/:shirtId", component: ProductView }),
         new Route({ href: "/quote", component: QuoteView })
       ]
     })
-  };
-
-  // make app a global variable
-  window.APP = APP;
-
-  //load root page
-  APP.router.load("/");
+  });
 };
