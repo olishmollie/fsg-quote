@@ -14,10 +14,10 @@ class ShirtView {
         },
         jsml.a(
           {
-            href: "#/shirts/" + this.shirt.id,
-            onclick: () => {
-              APP.router.load("/shirts/" + this.shirt.id);
-            }
+            href: "#/shirts/" + this.shirt.id
+            // onclick: () => {
+            //   APP.router.load("/shirts/" + this.shirt.id);
+            // }
           },
           jsml.img({
             className: "figure-img img-fluid rounded",

@@ -3,11 +3,24 @@ class QuoteView {
     this.quote = APP.quote;
   }
 
+  get size() {
+    return this.products.length;
+  }
+
   get products() {
     return this.quote.products;
   }
 
-  get productDetailViews() {
+  get productDetails() {
+    if (this.size == 0) {
+      // TODO: conditional rendering?
+      return [
+        jsml.p({
+          innerText: "This quote has no items yet."
+        })
+      ];
+    }
+
     return this.products.map((product, i) => {
       return new ProductDetailView({
         id: i,
@@ -20,7 +33,7 @@ class QuoteView {
             APP.router.load("/quote");
           }
         }
-      });
+      }).render();
     });
   }
 
@@ -29,7 +42,7 @@ class QuoteView {
       {
         className: "quote-view"
       },
-      ...this.productDetailViews.map(x => x.render())
+      ...this.productDetails
     );
   }
 }

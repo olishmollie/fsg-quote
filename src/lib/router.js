@@ -2,9 +2,8 @@ class Router {
   constructor(opts) {
     this.container = opts.container;
     this.routes = opts.routes || [];
-    // TODO: fix history api
-    this.history = [];
-    // TODO: listen for changes in window location?
+    this.location = null;
+    this.listen();
   }
 
   load(href) {
@@ -16,22 +15,21 @@ class Router {
       throw "unregistered route: " + href;
     }
 
-    // add current url to history
-    // this.history.push(this.location);
-
-    // update url in nav bar
-    let currentUrl = window.location.href;
-    window.location.href = currentUrl.replace(/#.*$/, "") + "#" + href;
+    // update location
+    this.location = window.location.hash;
 
     // load the view
     this.container.innerHTML = "";
     this.container.appendChild(route.resolve(href).render());
   }
 
-  // TODO: fix history api
-  // back() {
-  //   let prevUrl = this.history.pop();
-  //   this.dispatch(prevUrl);
-  //   return prevUrl;
-  // }
+  listen() {
+    setTimeout(() => {
+      if (window.location.hash != this.location) {
+        console.log("detected change in window location");
+        this.load(window.location.hash);
+      }
+      this.listen();
+    });
+  }
 }

@@ -7,7 +7,7 @@ class Navbar {
       },
       jsml.a({
         className: "navbar-brand",
-        href: "#",
+        href: "#/",
         innerText: "FSG"
       }),
       jsml.ul(
@@ -20,7 +20,7 @@ class Navbar {
           },
           jsml.a({
             className: "nav-link",
-            href: "#",
+            href: "#/",
             innerText: "Shirts"
           })
         ),
