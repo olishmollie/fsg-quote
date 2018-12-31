@@ -4,6 +4,7 @@ class Quote {
   }
 
   add(product) {
+    product.id = this.size;
     this.products.push(product);
   }
 

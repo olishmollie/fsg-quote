@@ -1,4 +1,5 @@
 var jsml = (function() {
+  // creates a standard HTML dom element
   function makeElement(tag, attributes, ...children) {
     let element = document.createElement(tag);
 
@@ -13,8 +14,27 @@ var jsml = (function() {
     return element;
   }
 
+  // renders a component or a custom made node
+  function component(component, attributes, ...children) {
+    if (component instanceof Component) {
+      // TODO
+      return component.node;
+    } else {
+      for (let attr in attributes) {
+        component[attr] = attributes[attr];
+      }
+
+      for (let i = 0; i < children.length; i++) {
+        component.appendChild(children[i]);
+      }
+
+      return component;
+    }
+  }
+
   return {
     makeElement: makeElement,
+    component: component,
     h1: (attributes, ...children) => {
       return makeElement("h1", attributes, ...children);
     },
@@ -54,19 +74,19 @@ var jsml = (function() {
     figure: (attributes, ...children) => {
       return makeElement("figure", attributes, ...children);
     },
-    figcaption: attributes => {
+    figcaption: (attributes = {}) => {
       return makeElement("figcaption", attributes);
     },
-    img: attributes => {
+    img: (attributes = {}) => {
       return makeElement("img", attributes);
     },
-    button: attributes => {
+    button: (attributes = {}) => {
       return makeElement("button", attributes);
     },
     label: (attributes, ...children) => {
       return makeElement("label", attributes, ...children);
     },
-    input: attributes => {
+    input: (attributes = {}) => {
       return makeElement("input", attributes);
     },
     ul: (attributes, ...children) => {
@@ -92,6 +112,9 @@ var jsml = (function() {
     },
     option: (attributes, ...children) => {
       return makeElement("option", attributes, ...children);
+    },
+    canvas: (attributes = {}) => {
+      return makeElement("canvas", attributes);
     }
   };
 })();

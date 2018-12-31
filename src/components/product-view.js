@@ -75,7 +75,8 @@ class ProductView extends Component {
         this.product.distributeSizes();
         console.log(this.product);
         APP.quote.add(this.product);
-        APP.router.load("/quote");
+        console.log(this.shirt.id);
+        APP.router.load("#/products/" + this.product.id + "/canvas");
       }
     });
   }
