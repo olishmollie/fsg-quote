@@ -1,5 +1,5 @@
 class Route {
-  constructor(opts) {
+  constructor(opts = {}) {
     this.href = opts.href;
     this.path = this.href
       .replace(":", "")

@@ -1,5 +1,5 @@
 class Shirt {
-  constructor(opts) {
+  constructor(opts = {}) {
     this.id = opts.id;
     this.name = opts.name;
     this.price = opts.price;

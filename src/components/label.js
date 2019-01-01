@@ -1,11 +1,10 @@
 class Label extends Component {
-  constructor(opts) {
+  constructor(opts = {}) {
     super();
     this._text = opts.text;
 
     this.span = jsml.span({
-      innerText: this._text,
-      style: opts.style
+      innerText: this._text
     });
   }
 

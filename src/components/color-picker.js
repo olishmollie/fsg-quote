@@ -1,5 +1,5 @@
 class ColorPicker extends Component {
-  constructor(opts) {
+  constructor(opts = {}) {
     super();
     this.color = opts.color;
     this.colors = opts.colors;
@@ -15,8 +15,8 @@ class ColorPicker extends Component {
           new ShirtColor({
             color: color,
             onclick: color => {
-              this.onchange(color);
               this.color = color;
+              this.onchange(color);
             }
           })
         );

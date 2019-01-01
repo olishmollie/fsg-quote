@@ -1,5 +1,5 @@
 class App {
-  constructor(opts) {
+  constructor(opts = {}) {
     this.root = opts.root;
     this.shirts = opts.shirts;
     this.router = opts.router;

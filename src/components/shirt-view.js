@@ -1,5 +1,5 @@
 class ShirtView extends Component {
-  constructor(opts) {
+  constructor(opts = {}) {
     super();
     this.shirt = opts.shirt;
   }

@@ -1,5 +1,5 @@
 class NumberInput extends Component {
-  constructor(opts) {
+  constructor(opts = {}) {
     super();
     this._value = opts.value || 50;
     this._max = opts.max || 500;
@@ -7,16 +7,12 @@ class NumberInput extends Component {
     this.onchange = opts.onchange;
 
     this.incrementButton = jsml.button({
-      className: "btn btn-sm btn-outline-primary",
-      innerText: "\u002B",
       onclick: () => {
         this.value++;
       }
     });
 
     this.decrementButton = jsml.button({
-      className: "btn btn-sm btn-outline-primary",
-      innerText: "\u2212",
       onclick: () => {
         this.value--;
       }
@@ -75,13 +71,20 @@ class NumberInput extends Component {
     return super.render(
       "div",
       { className: "input-group" },
-      jsml.div({ className: "input-group-prepend" }, this.decrementButton),
+      jsml.div({ className: "input-group-prepend" }),
+      jsml.component(this.decrementButton, {
+        className: "btn btn-sm btn-outline-primary",
+        innerText: "\u2212"
+      }),
       this.input,
       jsml.div(
         {
           className: "input-group-append"
         },
-        this.incrementButton
+        jsml.component(this.incrementButton, {
+          className: "btn btn-sm btn-outline-primary",
+          innerText: "\u002B"
+        })
       )
     );
   }

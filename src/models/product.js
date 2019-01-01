@@ -1,5 +1,5 @@
 class Product {
-  constructor(opts) {
+  constructor(opts = {}) {
     this.shirt = opts.shirt;
     this.color = opts.color;
     this.quantity = opts.quantity;

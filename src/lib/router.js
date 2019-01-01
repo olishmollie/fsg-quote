@@ -1,5 +1,5 @@
 class Router {
-  constructor(opts) {
+  constructor(opts = {}) {
     this.routes = opts.routes || [];
     this.location = null;
     this.listen();

@@ -1,5 +1,5 @@
 class QuoteItems extends Component {
-  constructor(opts) {
+  constructor(opts = {}) {
     super();
     this.quote = opts.quote;
     this.onchange = opts.onchange;

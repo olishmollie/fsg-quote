@@ -1,14 +1,45 @@
 class ImageCanvas extends Component {
-  constructor(opts) {
+  constructor(opts = {}) {
     super();
     this.quote = APP.quote;
     this.product = this.quote.products[opts.productId];
 
-    this.frontImageInput = jsml.input();
-    this.backImageInput = jsml.input();
+    this.frontImageInput = jsml.input({
+      type: "file",
+      accept: "image/png, image/jpeg",
+      onchange: () => {
+        let files = this.frontImageInput.files;
+        if (files.length > 0) {
+          let file = files[0];
+          this.drawImage(file);
+          this.product.frontImage = file;
+        }
+      }
+    });
+
+    this.backImageInput = jsml.input({
+      type: "file",
+      accept: "image/png, image/jpeg",
+      onchange: () => {
+        let files = this.backImageInput.files;
+        if (files.length > 0) {
+          let file = files[0];
+          this.drawImage(file);
+          this.product.backImage = file;
+        }
+      }
+    });
 
     this.canvas = jsml.canvas();
-    this.clearButton = jsml.button();
+
+    this.clearButton = jsml.button({
+      onclick: () => {
+        this.clearCanvas();
+        this.product.frontImage = null;
+        // TODO: might not work on older browsers
+        this.frontImageInput.value = null;
+      }
+    });
   }
 
   drawImage(file) {
@@ -58,18 +89,7 @@ class ImageCanvas extends Component {
         style: "margin: 50px"
       },
       jsml.component(this.frontImageInput, {
-        className: "form-control",
-        type: "file",
-        accept: "image/png, image/jpeg",
-        onchange: () => {
-          let files = this.frontImageInput.files;
-          if (files.length > 0) {
-            let file = files[0];
-            this.drawImage(file);
-            this.product.frontImage = file;
-            console.log(this.product);
-          }
-        }
+        className: "form-control"
       }),
       jsml.div(
         {
@@ -82,13 +102,7 @@ class ImageCanvas extends Component {
       ),
       jsml.component(this.clearButton, {
         className: "btn btn-danger btn-sm",
-        innerText: "Clear",
-        onclick: () => {
-          this.clearCanvas();
-          this.product.frontImage = null;
-          // TODO: might not work on older browsers
-          this.frontImageInput.value = null;
-        }
+        innerText: "Clear"
       })
     );
   }

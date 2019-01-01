@@ -1,5 +1,5 @@
 class ShirtColor extends Component {
-  constructor(opts) {
+  constructor(opts = {}) {
     super();
     this.color = opts.color;
     this.onclick = opts.onclick;
