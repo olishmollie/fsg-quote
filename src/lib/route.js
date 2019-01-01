@@ -15,7 +15,7 @@ class Route {
       href.replace(/:(\w+)/g, (_, name) => {
         this.variables.push(name);
         return "([^/]+)";
-      }) + "(?:/|$)"
+      }) + "(?:/$|$)" // TODO: does this actually work?
     );
   }
 

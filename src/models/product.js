@@ -6,6 +6,12 @@ class Product {
     this.frontColorCount = opts.frontColorCount;
     this.backColorCount = opts.backColorCount;
     this.quantities = {};
+
+    this.frontImage = null;
+    this.backImage = null;
+
+    // assigned when added to a quote
+    this.id = null;
   }
 
   distributeSizes() {

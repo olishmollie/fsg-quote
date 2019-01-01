@@ -4,18 +4,23 @@ class ColorPicker extends Component {
     this.color = opts.color;
     this.colors = opts.colors;
     this.onchange = opts.onchange;
-    this.shirtColors = this.colors.map(color => {
-      return new ShirtColor({
-        color: color,
-        onclick: color => {
-          this.onchange(color);
-          this.color = color;
-        }
-      });
-    });
   }
 
   render() {
-    return super.render("div", {}, ...this.shirtColors.map(x => x.render()));
+    return super.render(
+      "div",
+      {},
+      ...this.colors.map(color => {
+        return jsml.component(
+          new ShirtColor({
+            color: color,
+            onclick: color => {
+              this.onchange(color);
+              this.color = color;
+            }
+          })
+        );
+      })
+    );
   }
 }

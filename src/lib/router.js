@@ -12,6 +12,7 @@ class Router {
 
     // load base route if not found
     if (!route) {
+      console.log("unknown route: " + hash);
       this.load("/");
       return;
     }
