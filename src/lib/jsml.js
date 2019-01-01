@@ -20,14 +20,13 @@ var jsml = (function() {
       component = Object.assign(component, attributes);
       return component.render();
     } else {
+      // it's not a component, so it's a pure HTML node
       for (let attr in attributes) {
         component[attr] = attributes[attr];
       }
-
       for (let i = 0; i < children.length; i++) {
         component.appendChild(children[i]);
       }
-
       return component;
     }
   }

@@ -1,13 +1,11 @@
 class Dropdown extends Component {
   constructor(opts) {
     super();
-    this._selections = opts.selections.map(x => x.toString());
+    this._selections = opts.selections;
     this._selected = opts.selected;
     this.onchange = opts.onchange;
 
     this.select = jsml.select(this._selections, this._selected, {
-      className: opts.className,
-      style: opts.style,
       onchange: event => {
         let selection = event.target.value;
         this.selected = this._selections.indexOf(selection);
@@ -50,6 +48,6 @@ class Dropdown extends Component {
   }
 
   render() {
-    return super.render("div", {}, this.select);
+    return super.render("div", {}, jsml.component(this.select));
   }
 }

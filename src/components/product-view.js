@@ -11,7 +11,7 @@ class ProductView extends Component {
     });
 
     this.colorPicker = new ColorPicker({
-      color: "black",
+      color: { name: "black", hex: "#111" },
       colors: this.shirt.availableColors,
       onchange: color => {
         this.product.color = color;
@@ -20,8 +20,7 @@ class ProductView extends Component {
     });
 
     this.pricePerShirtLabel = new Label({
-      text: this.pricePerShirt,
-      style: "font-size: 1.3em"
+      text: this.pricePerShirt
     });
 
     this.quantityInput = new NumberInput({
@@ -41,8 +40,6 @@ class ProductView extends Component {
     });
 
     this.frontColorCountDropdown = new Dropdown({
-      className: "form-control col-sm-1 m-auto",
-      style: "display: inline; border: 0;",
       selections: this.dropdownSelections(),
       selected: this.frontColorCount,
       onchange: selection => {
@@ -58,8 +55,6 @@ class ProductView extends Component {
     });
 
     this.backColorCountDropdown = new Dropdown({
-      className: "form-control col-sm-1 m-auto",
-      style: "display: inline; border: 0;",
       selections: this.dropdownSelections(),
       selected: this.backColorCount,
       onchange: selection => {
@@ -71,8 +66,6 @@ class ProductView extends Component {
     });
 
     this.submitButton = jsml.button({
-      className: "btn btn-primary",
-      innerText: "Submit",
       onclick: () => {
         this.product.distributeSizes();
         this.quote.add(this.product);
@@ -224,7 +217,7 @@ class ProductView extends Component {
         jsml.p({
           innerText: this.shirt.description
         }),
-        this.colorPicker.render(),
+        jsml.component(this.colorPicker),
         jsml.div(
           {
             className: "text-center m-auto p-3",
@@ -234,20 +227,37 @@ class ProductView extends Component {
           jsml.div(
             { className: "form-group mt-3" },
             jsml.strong(
-              { id: "amount-per-shirt" },
-              this.pricePerShirtLabel.render(),
+              {},
+              jsml.component(this.pricePerShirtLabel, {
+                style: "font-size: 1.3em"
+              }),
               jsml.text("/shirt")
             )
           ),
-          jsml.div({ className: "form-group" }, this.quantityInput.render()),
           jsml.div(
             { className: "form-group" },
-            this.frontColorCountDropdown.render(),
-            this.frontColorCountLabel.render(),
-            this.backColorCountDropdown.render(),
-            this.backColorCountLabel.render()
+            jsml.component(this.quantityInput)
           ),
-          jsml.div({ className: "form-group" }, this.submitButton)
+          jsml.div(
+            { className: "form-group" },
+            jsml.component(this.frontColorCountDropdown, {
+              className: "form-control col-sm-1 m-auto",
+              style: "display: inline; border: 0;"
+            }),
+            jsml.component(this.frontColorCountLabel),
+            jsml.component(this.backColorCountDropdown, {
+              className: "form-control col-sm-1 m-auto",
+              style: "display: inline; border: 0;"
+            }),
+            jsml.component(this.backColorCountLabel)
+          ),
+          jsml.div(
+            { className: "form-group" },
+            jsml.component(this.submitButton, {
+              className: "btn btn-primary",
+              innerText: "Submit"
+            })
+          )
         )
       )
     );
