@@ -15,8 +15,8 @@ class ColorPicker extends Component {
           new ShirtColor({
             color: color,
             onclick: color => {
-              this.onchange(color);
               this.color = color;
+              this.onchange(color);
             }
           })
         );

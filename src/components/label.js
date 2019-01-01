@@ -4,8 +4,7 @@ class Label extends Component {
     this._text = opts.text;
 
     this.span = jsml.span({
-      innerText: this._text,
-      style: opts.style
+      innerText: this._text
     });
   }
 
