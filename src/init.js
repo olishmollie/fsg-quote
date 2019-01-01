@@ -1,7 +1,7 @@
 window.onload = function() {
   new App({
     root: new Root(),
-    quote: new Quote(),
+    localStorage: new Storage(),
     shirts: SHIRTS,
     router: new Router({
       routes: [

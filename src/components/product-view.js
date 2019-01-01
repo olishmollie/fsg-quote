@@ -1,6 +1,8 @@
 class ProductView extends Component {
   constructor(opts) {
     super();
+    this.quote = APP.quote;
+
     this.product = new Product({
       shirt: APP.shirts[opts.shirtId],
       quantity: 50,
@@ -73,9 +75,7 @@ class ProductView extends Component {
       innerText: "Submit",
       onclick: () => {
         this.product.distributeSizes();
-        console.log(this.product);
-        APP.quote.add(this.product);
-        console.log(this.shirt.id);
+        this.quote.add(this.product);
         APP.router.load("#/products/" + this.product.id + "/canvas");
       }
     });

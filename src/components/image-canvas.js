@@ -1,7 +1,8 @@
 class ImageCanvas extends Component {
   constructor(opts) {
     super();
-    this.product = APP.quote.products[opts.productId];
+    this.quote = APP.quote;
+    this.product = this.quote.products[opts.productId];
 
     this.frontImageInput = jsml.input();
     this.backImageInput = jsml.input();
