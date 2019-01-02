@@ -1,33 +1,12 @@
 class ImageCanvas extends Component {
   constructor(opts) {
     super();
-    this.quote = APP.quote;
-    this.product = opts.product;
-
-    this.backgroundImage = opts.backgroundImage;
-
-    this.fileInput = jsml.input({
-      type: "file",
-      accept: "image/png, image/jpeg",
-      onchange: () => {
-        let files = this.fileInput.files;
-        if (files.length > 0) {
-          let file = files[0];
-          this.drawImage(file);
-          this.product.frontImage = file;
-        }
-      }
-    });
-
-    this.canvas = jsml.canvas();
-
-    this.clearButton = jsml.button({
-      onclick: () => {
-        this.clearCanvas();
-        this.product.frontImage = null;
-        // TODO: might not work on older browsers
-        this.fileInput.value = null;
-      }
+    this.height = opts.height;
+    this.width = opts.width;
+    this.canvas = jsml.canvas({
+      style: "height: auto; width: 100%",
+      height: this.height,
+      width: this.width
     });
   }
 
@@ -74,24 +53,10 @@ class ImageCanvas extends Component {
     return super.render(
       "div",
       {
-        className: "text-center",
         style: "margin: 50px"
       },
-      jsml.component(this.fileInput, {
-        className: "form-control"
-      }),
-      jsml.div(
-        {
-          className: "canvas"
-        },
-        jsml.component(this.canvas, {
-          className: "mt-2",
-          style: "background-color: gray"
-        })
-      ),
-      jsml.component(this.clearButton, {
-        className: "btn btn-danger btn-sm",
-        innerText: "Clear"
+      jsml.component(this.canvas, {
+        style: "height: auto; width: 100%; background-color: gray"
       })
     );
   }

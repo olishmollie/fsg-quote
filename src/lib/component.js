@@ -19,6 +19,7 @@ class Component {
   render(tag, attributes, ...children) {
     let id = { id: this.id };
 
+    // BUG: doesn't work if class name is assigned through jsml.component
     // combine class names
     if (attributes.className) {
       attributes.className += " " + this.className;

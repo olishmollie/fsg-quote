@@ -31,6 +31,7 @@ class CustomizeView extends Component {
       min: this.minQuantity(),
       onchange: quantity => {
         this.product.quantity = parseInt(quantity);
+        this.product.distributeSizes();
         this.frontColorCountDropdown.selections = this.dropdownSelections();
         this.backColorCountDropdown.selections = this.dropdownSelections();
         this.pricePerShirtLabel.text =
@@ -75,6 +76,45 @@ class CustomizeView extends Component {
         this.save();
         APP.router.load("#/quote");
       }
+    });
+
+    this.frontImageFileInput = new FileInput({
+      file: this.product.frontImage,
+      label: "Image Front",
+      accept: "image/png, image/jpeg",
+      onchange: () => {
+        let files = this.frontImageFileInput.files;
+        if (files.length > 0) {
+          let file = files[0];
+          this.imageCanvas.drawImage(file);
+          this.product.frontImage = file;
+        }
+      },
+      onclear: () => {
+        this.imageCanvas.clearCanvas();
+      }
+    });
+
+    this.backImageFileInput = new FileInput({
+      file: this.product.backImage,
+      label: "Image Back",
+      accept: "image/png, image/jpeg",
+      onchange: () => {
+        let files = this.backImageFileInput.files;
+        if (files.length > 0) {
+          let file = files[0];
+          this.imageCanvas.drawImage(file);
+          this.product.backImage = file;
+        }
+      },
+      onclear: () => {
+        this.imageCanvas.clearCanvas();
+      }
+    });
+
+    this.imageCanvas = new ImageCanvas({
+      height: 500,
+      width: 800
     });
   }
 
@@ -179,10 +219,13 @@ class CustomizeView extends Component {
             })
           )
         ),
-        jsml.component(
-          new ImageCanvas({
-            product: this.product
-          })
+        jsml.div(
+          {
+            className: "form-group mt-5"
+          },
+          jsml.component(this.frontImageFileInput, {}),
+          jsml.component(this.backImageFileInput, {}),
+          jsml.component(this.imageCanvas, {})
         )
       )
     );
