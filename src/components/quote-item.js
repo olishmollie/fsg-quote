@@ -45,7 +45,7 @@ class QuoteItem extends Component {
           onclick: () => {
             this.quote.remove(this.product);
             this.quote.save();
-            this.ondelete(this.index);
+            this.ondelete();
           }
         }),
         jsml.component(

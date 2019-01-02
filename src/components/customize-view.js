@@ -80,10 +80,10 @@ class CustomizeView extends Component {
 
   save() {
     if (!this.product.persisted()) {
+      this.product.distributeSizes();
       this.quote.add(this.product);
       this.quote.save();
     }
-    this.product.distributeSizes();
     this.quote.updateProduct(this.product.id, this.product);
   }
 

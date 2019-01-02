@@ -23,7 +23,6 @@ class Product {
     for (let key in this.quantities) {
       quantity += parseInt(this.quantities[key]);
     }
-    console.log("quantity from size = " + quantity);
     return quantity;
   }
 

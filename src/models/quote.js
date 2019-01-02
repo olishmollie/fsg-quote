@@ -24,7 +24,7 @@ class Quote {
   }
 
   remove(product) {
-    this._products.splice(this._products.indexOf(product), 1);
+    this._products.splice(product.id, 1);
     this.size--;
   }
 
