@@ -82,7 +82,6 @@ class CustomizeView extends Component {
     if (!this.product.persisted()) {
       this.product.distributeSizes();
       this.quote.add(this.product);
-      this.quote.save();
     }
     this.quote.updateProduct(this.product.id, this.product);
   }

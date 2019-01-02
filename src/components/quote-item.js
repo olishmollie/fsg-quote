@@ -44,7 +44,6 @@ class QuoteItem extends Component {
           innerText: "TRASH",
           onclick: () => {
             this.quote.remove(this.product);
-            this.quote.save();
             this.ondelete();
           }
         }),

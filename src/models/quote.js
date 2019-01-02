@@ -21,11 +21,17 @@ class Quote {
   add(product) {
     product.id = this.size++;
     this._products.push(product);
+    this.save();
   }
 
   remove(product) {
     this._products.splice(product.id, 1);
     this.size--;
+    // reset product ids
+    for (let i = 0; i < this.size; i++) {
+      this._products[i].id = i;
+    }
+    this.save();
   }
 
   save() {

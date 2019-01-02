@@ -20,7 +20,14 @@ class Router {
 
     let params = this.parseParams(route, path);
     let component = route.component;
-    APP.root.mount(new component(params));
+
+    try {
+      APP.root.mount(new component(params));
+    } catch (err) {
+      // TODO: flash user a message?
+      console.error(err);
+      this.load("/");
+    }
   }
 
   findRoute(path) {

@@ -4,28 +4,17 @@ class ImageCanvas extends Component {
     this.quote = APP.quote;
     this.product = opts.product;
 
-    this.frontImageInput = jsml.input({
+    this.backgroundImage = opts.backgroundImage;
+
+    this.fileInput = jsml.input({
       type: "file",
       accept: "image/png, image/jpeg",
       onchange: () => {
-        let files = this.frontImageInput.files;
+        let files = this.fileInput.files;
         if (files.length > 0) {
           let file = files[0];
           this.drawImage(file);
           this.product.frontImage = file;
-        }
-      }
-    });
-
-    this.backImageInput = jsml.input({
-      type: "file",
-      accept: "image/png, image/jpeg",
-      onchange: () => {
-        let files = this.backImageInput.files;
-        if (files.length > 0) {
-          let file = files[0];
-          this.drawImage(file);
-          this.product.backImage = file;
         }
       }
     });
@@ -37,7 +26,7 @@ class ImageCanvas extends Component {
         this.clearCanvas();
         this.product.frontImage = null;
         // TODO: might not work on older browsers
-        this.frontImageInput.value = null;
+        this.fileInput.value = null;
       }
     });
   }
@@ -88,7 +77,7 @@ class ImageCanvas extends Component {
         className: "text-center",
         style: "margin: 50px"
       },
-      jsml.component(this.frontImageInput, {
+      jsml.component(this.fileInput, {
         className: "form-control"
       }),
       jsml.div(
