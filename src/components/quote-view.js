@@ -1,7 +1,7 @@
 class QuoteView extends Component {
   constructor() {
     super();
-    this.quote = new Quote(APP.localStorage.getItem("quote"));
+    this.quote = APP.quote;
   }
 
   render() {
