@@ -50,6 +50,7 @@ class QuoteItem extends Component {
         }),
         jsml.component(
           new QuantityInputs({
+            quote: this.quote,
             product: this.product,
             onchange: this.onchange
           })

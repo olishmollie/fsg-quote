@@ -5,9 +5,8 @@ class App {
     this.router = opts.router;
     this.localStorage = opts.localStorage;
 
-    this.quote = this.localStorage.getItem("quote")
-      ? new Quote(this.localStorage.getItem("quote"))
-      : new Quote();
+    let quoteParams = this.localStorage.getItem("quote");
+    this.quote = new Quote(quoteParams);
 
     window.APP = this;
     this.router.load(window.location.hash);

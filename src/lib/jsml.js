@@ -31,9 +31,18 @@ var jsml = (function() {
     }
   }
 
+  // conditional rendering
+  function cond(predicate, thenComponent, elseComponent) {
+    if (predicate) {
+      return thenComponent;
+    }
+    return elseComponent;
+  }
+
   return {
     makeElement: makeElement,
     component: component,
+    cond: cond,
     h1: (attributes, ...children) => {
       return makeElement("h1", attributes, ...children);
     },

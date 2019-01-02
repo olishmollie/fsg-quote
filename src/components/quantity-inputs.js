@@ -1,6 +1,7 @@
 class QuantityInputs extends Component {
   constructor(opts) {
     super();
+    this.quote = opts.quote;
     this.product = opts.product;
     this.onchange = opts.onchange;
   }
@@ -27,7 +28,9 @@ class QuantityInputs extends Component {
             className: "form-control",
             value: this.product.quantities[this.shirt.availableSizes[i]],
             onchange: event => {
-              console.log(event.target.value);
+              this.product.quantities[size] = parseInt(event.target.value);
+              this.product.quantity = this.product.quantityFromSizes();
+              this.quote.updateProduct(this.product.id, this.product);
               this.onchange();
             }
           })

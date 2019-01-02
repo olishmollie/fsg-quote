@@ -18,6 +18,15 @@ class Product {
     return this.id != null && this.id != undefined;
   }
 
+  quantityFromSizes() {
+    let quantity = 0;
+    for (let key in this.quantities) {
+      quantity += parseInt(this.quantities[key]);
+    }
+    console.log("quantity from size = " + quantity);
+    return quantity;
+  }
+
   costPerShirt() {
     let prices = this.priceTable();
     let firstLocationPrice =
