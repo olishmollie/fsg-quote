@@ -5,7 +5,7 @@ class App {
     this.router = opts.router;
     this.localStorage = opts.localStorage;
 
-    let quoteParams = this.localStorage.getItem("quote");
+    let quoteParams = this.localStorage.getItem("quote") || {};
     this.quote = new Quote(quoteParams);
 
     window.APP = this;
