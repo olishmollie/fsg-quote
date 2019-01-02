@@ -38,11 +38,35 @@ class QuoteView extends Component {
               })
             );
           }),
-          jsml.h3(
-            {
-              innerText: "Estimated Cost: "
-            },
-            jsml.component(this.estimatedCostLabel)
+          jsml.div(
+            { className: "mt-3" },
+            jsml.h3(
+              {
+                innerText: "Estimated Cost: "
+              },
+              jsml.component(this.estimatedCostLabel)
+            ),
+            jsml.div(
+              {
+                className: "form-group"
+              },
+              jsml.input({
+                type: "email",
+                className: "form-control user-email",
+                placeholder: "Email"
+              }),
+              jsml.button({
+                className: "form-submit btn btn-primary mt-1",
+                innerText: "Submit",
+                onclick: () => {
+                  // TODO: mailto script
+                }
+              })
+            ),
+            jsml.p({
+              innerText:
+                "Submit your order and we'll email you with a mockup within the week."
+            })
           )
         )
       )
