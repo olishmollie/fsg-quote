@@ -1,4 +1,4 @@
 public/fsg-custom.js
-public/jquery.min.js
 public/jcanvas.min.js
-public/jcanvas.handles.min.js
+public/jcanvas-handles.min.js
+public/jquery-3.3.1.min.js
