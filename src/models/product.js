@@ -5,13 +5,17 @@ class Product {
     this.quantity = opts.quantity;
     this.frontColorCount = opts.frontColorCount;
     this.backColorCount = opts.backColorCount;
-    this.quantities = {};
+    this.quantities = opts.quantities || {};
 
-    this.frontImage = null;
-    this.backImage = null;
+    this.frontImage = opts.frontImage || null;
+    this.backImage = opts.backImage || null;
 
     // assigned when added to a quote
-    this.id = null;
+    this.id = opts.id;
+  }
+
+  persisted() {
+    return this.id != null && this.id != undefined;
   }
 
   distributeSizes() {

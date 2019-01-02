@@ -16,7 +16,7 @@ class ShirtView extends Component {
         },
         jsml.a(
           {
-            href: "#/shirts/" + this.shirt.id
+            href: "#/products/" + this.shirt.id
           },
           jsml.img({
             className: "figure-img img-fluid rounded",

@@ -6,7 +6,7 @@ window.onload = function() {
     router: new Router({
       routes: [
         new Route({ href: "/", component: PickAShirt }),
-        new Route({ href: "/shirts/:shirtId", component: ProductView }),
+        new Route({ href: "/products/:shirtId", component: CustomizeView }),
         new Route({ href: "/quote", component: QuoteView })
       ]
     })

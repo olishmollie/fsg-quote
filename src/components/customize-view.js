@@ -1,14 +1,16 @@
-class ProductView extends Component {
+class CustomizeView extends Component {
   constructor(opts) {
     super();
     this.quote = APP.quote;
 
-    this.product = new Product({
-      shirt: APP.shirts[opts.shirtId],
-      quantity: 50,
-      frontColorCount: 1,
-      backColorCount: 1
-    });
+    this.product = opts.productId
+      ? new Product(this.quote.products[opts.productId])
+      : new Product({
+          shirt: APP.shirts[opts.shirtId],
+          quantity: 50,
+          frontColorCount: 1,
+          backColorCount: 1
+        });
 
     this.colorPicker = new ColorPicker({
       color: { name: "black", hex: "#111" },
@@ -20,18 +22,19 @@ class ProductView extends Component {
     });
 
     this.pricePerShirtLabel = new Label({
-      text: this.pricePerShirt
+      text: "$" + this.calcAmountPerShirt().toFixed(2)
     });
 
     this.quantityInput = new NumberInput({
-      quantity: this.quantity,
+      value: this.product.quantity,
       max: 500,
       min: this.minQuantity(),
       onchange: quantity => {
-        this.quantity = quantity;
+        this.product.quantity = parseInt(quantity);
         this.frontColorCountDropdown.selections = this.dropdownSelections();
         this.backColorCountDropdown.selections = this.dropdownSelections();
-        this.pricePerShirt = this.calcAmountPerShirt();
+        this.pricePerShirtLabel.text =
+          "$" + this.calcAmountPerShirt().toFixed(2);
       }
     });
 
@@ -41,12 +44,13 @@ class ProductView extends Component {
 
     this.frontColorCountDropdown = new Dropdown({
       selections: this.dropdownSelections(),
-      selected: this.frontColorCount,
+      selected: this.product.frontColorCount,
       onchange: selection => {
-        this.frontColorCount = selection;
+        this.product.frontColorCount = parseInt(selection);
         this.frontColorCountLabel.text = this.colorLabel("front");
         this.quantityInput.min = this.minQuantity();
-        this.pricePerShirt = this.calcAmountPerShirt();
+        this.pricePerShirtLabel.text =
+          "$" + this.calcAmountPerShirt().toFixed(2);
       }
     });
 
@@ -56,58 +60,35 @@ class ProductView extends Component {
 
     this.backColorCountDropdown = new Dropdown({
       selections: this.dropdownSelections(),
-      selected: this.backColorCount,
+      selected: this.product.backColorCount,
       onchange: selection => {
-        this.backColorCount = selection;
+        this.product.backColorCount = parseInt(selection);
         this.backColorCountLabel.text = this.colorLabel("back");
         this.quantityInput.min = this.minQuantity();
-        this.pricePerShirt = this.calcAmountPerShirt();
+        this.pricePerShirtLabel.text =
+          "$" + this.calcAmountPerShirt().toFixed(2);
       }
     });
 
-    this.submitButton = jsml.button({
+    this.saveButton = jsml.button({
       onclick: () => {
-        this.product.distributeSizes();
-        this.quote.add(this.product);
+        this.save();
         APP.router.load("#/quote");
       }
     });
   }
 
+  save() {
+    if (!this.product.persisted()) {
+      this.quote.add(this.product);
+      this.quote.save();
+    }
+    this.product.distributeSizes();
+    this.quote.updateProduct(this.product.id, this.product);
+  }
+
   get shirt() {
     return this.product.shirt;
-  }
-
-  get pricePerShirt() {
-    return "$" + this.calcAmountPerShirt().toFixed(2);
-  }
-
-  set pricePerShirt(price) {
-    this.pricePerShirtLabel.text = "$" + price.toFixed(2);
-  }
-
-  get quantity() {
-    return this.product.quantity;
-  }
-
-  set quantity(quantity) {
-    this.product.quantity = parseInt(quantity);
-  }
-
-  get frontColorCount() {
-    return this.product.frontColorCount;
-  }
-
-  set frontColorCount(count) {
-    this.product.frontColorCount = parseInt(count);
-  }
-
-  get backColorCount() {
-    return this.product.backColorCount;
-  }
-
-  set backColorCount(count) {
-    this.product.backColorCount = parseInt(count);
   }
 
   dropdownSelections() {
@@ -123,9 +104,12 @@ class ProductView extends Component {
   }
 
   minQuantity() {
-    if (this.frontColorCount <= 2 && this.backColorCount <= 2) {
+    if (this.product.frontColorCount <= 2 && this.product.backColorCount <= 2) {
       return 1;
-    } else if (this.frontColorCount <= 4 && this.backColorCount <= 4) {
+    } else if (
+      this.product.frontColorCount <= 4 &&
+      this.product.backColorCount <= 4
+    ) {
       return 24;
     } else {
       return 50;
@@ -135,13 +119,13 @@ class ProductView extends Component {
   calcAmountPerShirt() {
     let prices = this.priceTable();
     let firstLocationPrice =
-      prices[this.frontColorCount] > prices[this.backColorCount]
-        ? prices[this.frontColorCount]
-        : prices[this.backColorCount];
+      prices[this.product.frontColorCount] > prices[this.product.backColorCount]
+        ? prices[this.product.frontColorCount]
+        : prices[this.product.backColorCount];
     let secondLocationPrice =
-      prices[this.frontColorCount] > prices[this.backColorCount]
-        ? prices[this.backColorCount] / 2
-        : prices[this.frontColorCount] / 2;
+      prices[this.product.frontColorCount] > prices[this.product.backColorCount]
+        ? prices[this.product.backColorCount] / 2
+        : prices[this.product.frontColorCount] / 2;
     return this.shirt.price + firstLocationPrice + secondLocationPrice;
   }
 
@@ -253,9 +237,9 @@ class ProductView extends Component {
           ),
           jsml.div(
             { className: "form-group" },
-            jsml.component(this.submitButton, {
+            jsml.component(this.saveButton, {
               className: "btn btn-primary",
-              innerText: "Submit"
+              innerText: "Save"
             })
           )
         ),

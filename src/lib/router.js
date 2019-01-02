@@ -5,27 +5,57 @@ class Router {
     this.listen();
   }
 
-  load(hash) {
-    let route = this.routes.find(route => {
-      return route.regex.exec(hash);
-    });
-
-    // load base route if not found
+  load(path) {
+    let route = this.findRoute(path);
     if (!route) {
-      console.log("unknown route: " + hash);
+      // load base route if not found
+      console.log("unknown route: " + path);
       this.load("/");
       return;
     }
 
-    // update location
-    this.location = hash;
+    this.location = path;
+    // update url in the browser window
+    window.location.hash = path;
 
-    //replace url in browser
-    window.location.hash = hash;
+    let params = this.parseParams(route, path);
+    let component = route.component;
+    APP.root.mount(new component(params));
+  }
 
-    // load the view
-    let component = route.resolve(hash);
-    APP.root.mount(component);
+  findRoute(path) {
+    return this.routes.find(route => {
+      return route.regex.exec(path);
+    });
+  }
+
+  parseParams(route, path) {
+    let params = {};
+    this.parseColons(route, path, params);
+    this.parseQuery(path, params);
+    return params;
+  }
+
+  parseColons(route, path, params) {
+    let match = path.match(route.regex);
+    if (match) {
+      match = match.slice(1); // get rid of matched string
+      for (let i = 0; i < route.variables.length; i++) {
+        params[route.variables[i]] = match[i];
+      }
+    } else {
+      throw "Could not resolve route: " + path;
+    }
+  }
+
+  parseQuery(path, params) {
+    let query = path.split("?")[1];
+    if (query && query.length > 0) {
+      query = query.split("=");
+      for (let i = 0; i < query.length; i += 2) {
+        params[query[i]] = query[i + 1];
+      }
+    }
   }
 
   listen() {

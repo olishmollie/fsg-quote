@@ -8,6 +8,12 @@ class QuoteItem extends Component {
     this.ondelete = opts.ondelete;
   }
 
+  customizeRoute() {
+    return (
+      "#/products/" + this.product.shirt.id + "?productId=" + this.product.id
+    );
+  }
+
   render() {
     return super.render(
       "div",
@@ -18,28 +24,36 @@ class QuoteItem extends Component {
         {
           className: "media-body"
         },
-        jsml.h5(
+        jsml.a(
           {
-            className: "quote-item-title"
+            href: this.customizeRoute()
           },
-          jsml.strong({
-            className: "quote-item-index mr-2",
-            innerText: this.index + 1 + "."
-          }),
-          jsml.text(this.product.shirt.name),
-          jsml.button({
-            className: "trash-button float-right btn btn-danger",
-            innerText: "TRASH",
-            onclick: () => {
-              this.quote.remove(this.product);
-              this.ondelete(this.index);
-            }
-          })
+          jsml.h5(
+            {
+              className: "quote-item-title"
+            },
+            jsml.strong({
+              className: "quote-item-index mr-2",
+              innerText: this.index + 1 + "."
+            }),
+            jsml.text(this.product.shirt.name)
+          )
         ),
-        new QuantityInputs({
-          product: this.product,
-          onchange: this.onchange
-        }).render()
+        jsml.button({
+          className: "trash-button float-right btn btn-danger",
+          innerText: "TRASH",
+          onclick: () => {
+            this.quote.remove(this.product);
+            this.quote.save();
+            this.ondelete(this.index);
+          }
+        }),
+        jsml.component(
+          new QuantityInputs({
+            product: this.product,
+            onchange: this.onchange
+          })
+        )
       )
     );
   }

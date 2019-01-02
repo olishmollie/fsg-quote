@@ -8,13 +8,13 @@ class NumberInput extends Component {
 
     this.incrementButton = jsml.button({
       onclick: () => {
-        this.value++;
+        ++this.value;
       }
     });
 
     this.decrementButton = jsml.button({
       onclick: () => {
-        this.value--;
+        --this.value;
       }
     });
 
