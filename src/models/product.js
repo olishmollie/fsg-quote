@@ -18,6 +18,69 @@ class Product {
     return this.id != null && this.id != undefined;
   }
 
+  costPerShirt() {
+    let prices = this.priceTable();
+    let firstLocationPrice =
+      prices[this.frontColorCount] > prices[this.backColorCount]
+        ? prices[this.frontColorCount]
+        : prices[this.backColorCount];
+    let secondLocationPrice =
+      prices[this.frontColorCount] > prices[this.backColorCount]
+        ? prices[this.backColorCount] / 2
+        : prices[this.frontColorCount] / 2;
+    return this.shirt.price + firstLocationPrice + secondLocationPrice;
+  }
+
+  priceTable() {
+    var result;
+    if (this.quantity < 24) {
+      result = {
+        "0": 0,
+        "1": 8,
+        "2": 11
+      };
+    } else if (this.quantity <= 49) {
+      result = {
+        "0": 0,
+        "1": 3,
+        "2": 4,
+        "3": 5,
+        "4": 6
+      };
+    } else if (this.quantity <= 99) {
+      result = {
+        "0": 0,
+        "1": 2.25,
+        "2": 3.25,
+        "3": 4.25,
+        "4": 5.25,
+        "5": 6.15,
+        "6": 7.15
+      };
+    } else if (this.quantity <= 249) {
+      result = {
+        "0": 0,
+        "1": 2,
+        "2": 3,
+        "3": 4,
+        "4": 5,
+        "5": 6,
+        "6": 7
+      };
+    } else {
+      result = {
+        "0": 0,
+        "1": 1.75,
+        "2": 2.85,
+        "3": 3.85,
+        "4": 4.85,
+        "5": 5.6,
+        "6": 6.75
+      };
+    }
+    return result;
+  }
+
   distributeSizes() {
     const ratios = {
       XS: 0.5,

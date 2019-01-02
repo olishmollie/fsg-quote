@@ -14,7 +14,7 @@ class CustomizeView extends Component {
 
     this.colorPicker = new ColorPicker({
       color: { name: "black", hex: "#111" },
-      colors: this.shirt.availableColors,
+      colors: this.product.shirt.availableColors,
       onchange: color => {
         this.product.color = color;
         console.log(color.name + " clicked.");
@@ -22,7 +22,7 @@ class CustomizeView extends Component {
     });
 
     this.pricePerShirtLabel = new Label({
-      text: "$" + this.calcAmountPerShirt().toFixed(2)
+      text: "$" + this.product.costPerShirt().toFixed(2)
     });
 
     this.quantityInput = new NumberInput({
@@ -34,7 +34,7 @@ class CustomizeView extends Component {
         this.frontColorCountDropdown.selections = this.dropdownSelections();
         this.backColorCountDropdown.selections = this.dropdownSelections();
         this.pricePerShirtLabel.text =
-          "$" + this.calcAmountPerShirt().toFixed(2);
+          "$" + this.product.costPerShirt().toFixed(2);
       }
     });
 
@@ -50,7 +50,7 @@ class CustomizeView extends Component {
         this.frontColorCountLabel.text = this.colorLabel("front");
         this.quantityInput.min = this.minQuantity();
         this.pricePerShirtLabel.text =
-          "$" + this.calcAmountPerShirt().toFixed(2);
+          "$" + this.product.costPerShirt().toFixed(2);
       }
     });
 
@@ -66,7 +66,7 @@ class CustomizeView extends Component {
         this.backColorCountLabel.text = this.colorLabel("back");
         this.quantityInput.min = this.minQuantity();
         this.pricePerShirtLabel.text =
-          "$" + this.calcAmountPerShirt().toFixed(2);
+          "$" + this.product.costPerShirt().toFixed(2);
       }
     });
 
@@ -116,69 +116,6 @@ class CustomizeView extends Component {
     }
   }
 
-  calcAmountPerShirt() {
-    let prices = this.priceTable();
-    let firstLocationPrice =
-      prices[this.product.frontColorCount] > prices[this.product.backColorCount]
-        ? prices[this.product.frontColorCount]
-        : prices[this.product.backColorCount];
-    let secondLocationPrice =
-      prices[this.product.frontColorCount] > prices[this.product.backColorCount]
-        ? prices[this.product.backColorCount] / 2
-        : prices[this.product.frontColorCount] / 2;
-    return this.shirt.price + firstLocationPrice + secondLocationPrice;
-  }
-
-  priceTable() {
-    var result;
-    if (this.quantity < 24) {
-      result = {
-        "0": 0,
-        "1": 8,
-        "2": 11
-      };
-    } else if (this.quantity <= 49) {
-      result = {
-        "0": 0,
-        "1": 3,
-        "2": 4,
-        "3": 5,
-        "4": 6
-      };
-    } else if (this.quantity <= 99) {
-      result = {
-        "0": 0,
-        "1": 2.25,
-        "2": 3.25,
-        "3": 4.25,
-        "4": 5.25,
-        "5": 6.15,
-        "6": 7.15
-      };
-    } else if (this.quantity <= 249) {
-      result = {
-        "0": 0,
-        "1": 2,
-        "2": 3,
-        "3": 4,
-        "4": 5,
-        "5": 6,
-        "6": 7
-      };
-    } else {
-      result = {
-        "0": 0,
-        "1": 1.75,
-        "2": 2.85,
-        "3": 3.85,
-        "4": 4.85,
-        "5": 5.6,
-        "6": 6.75
-      };
-    }
-    return result;
-  }
-
   colorLabel(side) {
     if (side != "front" && side != "back") {
       throw "invalid side for color label";
@@ -194,12 +131,12 @@ class CustomizeView extends Component {
         className: "text-center"
       },
       jsml.h1({
-        innerText: this.shirt.name
+        innerText: this.product.shirt.name
       }),
       jsml.div(
         {},
         jsml.p({
-          innerText: this.shirt.description
+          innerText: this.product.shirt.description
         }),
         jsml.component(this.colorPicker),
         jsml.div(
