@@ -2,7 +2,7 @@ class ImageCanvas extends Component {
   constructor(opts) {
     super();
     this.quote = APP.quote;
-    this.product = this.quote.products[opts.productId];
+    this.product = opts.product;
 
     this.frontImageInput = jsml.input({
       type: "file",

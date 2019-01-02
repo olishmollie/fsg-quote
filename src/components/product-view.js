@@ -69,7 +69,7 @@ class ProductView extends Component {
       onclick: () => {
         this.product.distributeSizes();
         this.quote.add(this.product);
-        APP.router.load("#/products/" + this.product.id + "/canvas");
+        APP.router.load("#/quote");
       }
     });
   }
@@ -258,6 +258,11 @@ class ProductView extends Component {
               innerText: "Submit"
             })
           )
+        ),
+        jsml.component(
+          new ImageCanvas({
+            product: this.product
+          })
         )
       )
     );
