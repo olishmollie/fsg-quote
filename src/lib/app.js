@@ -5,6 +5,8 @@ class App {
     this.router = opts.router;
     this.localStorage = opts.localStorage;
 
+    this.flashContainer = new Flash();
+
     let quoteParams = this.localStorage.getItem("quote") || {};
     this.quote = new Quote(quoteParams);
 
@@ -17,7 +19,7 @@ class App {
     this.router.load(window.location.hash);
   }
 
-  flash(msg) {
-    this.root.flash(msg);
+  flash(type, msg) {
+    this.flashContainer.show(type, msg);
   }
 }

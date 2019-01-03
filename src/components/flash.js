@@ -1,14 +1,13 @@
 class Flash extends Component {
-  constructor(opts = {}) {
+  constructor() {
     super();
-
-    this.type = opts.type;
     this.p = jsml.p();
   }
 
-  show(msg) {
+  show(type, msg) {
     this.p.innerText = msg;
     this.node.style.display = "block";
+    this.node.className = "alert-" + type;
   }
 
   hide() {
