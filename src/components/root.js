@@ -1,15 +1,21 @@
-class Root {
+class Root extends Component {
   constructor() {
-    this.container = jsml.div({
-      id: "app",
-      className: "container"
-    });
+    super();
 
-    document.body.appendChild(this.render());
+    this.container = jsml.div({
+      id: "app"
+    });
   }
 
   render() {
-    return jsml.div({}, new Navbar().render(), this.container);
+    return super.render(
+      "div",
+      {
+        className: "container"
+      },
+      jsml.component(new Navbar()),
+      jsml.component(this.container)
+    );
   }
 
   mount(component) {
