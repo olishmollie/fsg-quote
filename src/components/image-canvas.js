@@ -4,7 +4,6 @@ class ImageCanvas extends Component {
     this.height = opts.height;
     this.width = opts.width;
     this.canvas = jsml.canvas({
-      style: "height: auto; width: 100%",
       height: this.height,
       width: this.width
     });
@@ -56,7 +55,7 @@ class ImageCanvas extends Component {
         style: "margin: 50px"
       },
       jsml.component(this.canvas, {
-        style: "height: auto; width: 100%; background-color: gray"
+        style: "background-color: gray"
       })
     );
   }
