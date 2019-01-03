@@ -2,9 +2,6 @@ class Component {
   constructor() {
     this.id = this.className = util.camelToDashed(this.constructor.name);
     this.id += "_" + util.randomString(5);
-    this.container = jsml.div({
-      id: this.id
-    });
     this._node = null;
   }
 
