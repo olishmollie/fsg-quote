@@ -2,9 +2,15 @@ class Root extends Component {
   constructor() {
     super();
 
+    this.flashContainer = new Flash();
+
     this.container = jsml.div({
       id: "app"
     });
+  }
+
+  flash(msg) {
+    this.flashContainer.show(msg);
   }
 
   render() {
@@ -14,6 +20,7 @@ class Root extends Component {
         className: "container"
       },
       jsml.component(new Navbar()),
+      jsml.component(this.flashContainer),
       jsml.component(this.container)
     );
   }

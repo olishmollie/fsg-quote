@@ -16,4 +16,8 @@ class App {
 
     this.router.load(window.location.hash);
   }
+
+  flash(msg) {
+    this.root.flash(msg);
+  }
 }
