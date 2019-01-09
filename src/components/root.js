@@ -19,9 +19,4 @@ class Root extends Component {
       )
     );
   }
-
-  mount(component) {
-    this.container.innerHTML = "";
-    this.container.appendChild(component.render());
-  }
 }

@@ -1,13 +1,9 @@
 class Route {
   constructor(opts) {
-    this.href = opts.href;
-    this.path = this.href
-      .replace(":", "")
-      .split("/")
-      .slice(1);
     this.variables = [];
-    this.regex = this.parse(this.href);
+    this.regex = this.parse(opts.href);
     this.component = opts.component;
+    this.params = opts.params;
   }
 
   parse(href) {

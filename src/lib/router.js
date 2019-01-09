@@ -1,6 +1,7 @@
 class Router {
   constructor(opts) {
     this.routes = opts.routes || [];
+    this.container = opts.container;
     this.location = null;
     this.listen();
   }
@@ -22,7 +23,7 @@ class Router {
     let component = route.component;
 
     try {
-      APP.root.mount(new component(params));
+      Component.mount(new component(params), this.container);
     } catch (err) {
       // TODO: flash user a message?
       console.error(err);
@@ -37,7 +38,7 @@ class Router {
   }
 
   parseParams(route, path) {
-    let params = {};
+    let params = route.params;
     this.parseColons(route, path, params);
     this.parseQuery(path, params);
     return params;

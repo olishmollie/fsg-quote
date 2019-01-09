@@ -19,7 +19,6 @@ class ProductDetail extends Component {
         this.product.distributeSizes();
         this.frontColorCountDropdown.selections = this.dropdownSelections();
         this.backColorCountDropdown.selections = this.dropdownSelections();
-        console.log(this.frontColorCountDropdown.selections);
         this.pricePerShirtLabel.text =
           "$" + this.product.costPerShirt().toFixed(2);
       },

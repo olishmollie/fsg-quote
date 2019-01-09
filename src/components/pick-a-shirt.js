@@ -14,7 +14,7 @@ class PickAShirt extends Component {
         {
           className: "d-flex justify-content-center text-center"
         },
-        jsml.div({}, ...this.shirtViews.map(x => x.render()))
+        ...this.shirtViews.map(x => x.render())
       )
     );
   }
