@@ -6,6 +6,9 @@ class QuoteItem extends Component {
     this.product = opts.product;
     this.onchange = opts.onchange;
     this.ondelete = opts.ondelete;
+    this.onerror = opts.onerror;
+
+    this.flash = new Flash();
   }
 
   customizeRoute() {
@@ -14,12 +17,31 @@ class QuoteItem extends Component {
     );
   }
 
+  handleInputChange(size, value) {
+    if (!isNaN(value)) {
+      this.product.quantities[size] = parseInt(value);
+      this.product.quantity = this.product.quantityFromSizes();
+      if (this.product.quantity >= this.product.minQuantity()) {
+        this.quote.updateProduct(this.product.id, this.product);
+        this.flash.hide();
+        this.onchange();
+      }
+    } else {
+      this.flash.show(
+        "danger",
+        "A minimum of " + this.product.minQuantity() + " shirts are required."
+      );
+      this.onerror();
+    }
+  }
+
   render() {
     return super.render(
       jsml.div(
         {
           className: "media"
         },
+        jsml.component(this.flash),
         jsml.div(
           {
             className: "media-body"
@@ -47,13 +69,23 @@ class QuoteItem extends Component {
               this.ondelete();
             }
           }),
-          jsml.component(
-            new QuantityInputs({
-              quote: this.quote,
-              product: this.product,
-              onchange: this.onchange
-            })
-          )
+          ...this.product.shirt.availableSizes.map(size => {
+            return jsml.div(
+              {},
+              jsml.label({}, jsml.text(size)),
+              jsml.component(
+                new ControlledInput({
+                  value: this.product.quantities[size],
+                  onchange: value => {
+                    this.handleInputChange(size, parseInt(value));
+                  },
+                  onblur: () => {
+                    this.handleInputChange(size, this.product.quantities[size]);
+                  }
+                })
+              )
+            );
+          })
         )
       )
     );

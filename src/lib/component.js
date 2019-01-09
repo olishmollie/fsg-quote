@@ -11,7 +11,6 @@ class Component {
   render(node) {
     node.id = this.id;
     node.className = this.className + " " + node.className;
-
     return node;
   }
 }

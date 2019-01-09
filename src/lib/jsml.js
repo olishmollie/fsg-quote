@@ -31,18 +31,9 @@ var jsml = (function() {
     }
   }
 
-  // conditional rendering
-  function cond(predicate, thenComponent, elseComponent) {
-    if (predicate) {
-      return thenComponent;
-    }
-    return elseComponent;
-  }
-
   return {
     makeElement: makeElement,
     component: component,
-    cond: cond,
     h1: (attributes, ...children) => {
       return makeElement("h1", attributes, ...children);
     },
@@ -82,19 +73,19 @@ var jsml = (function() {
     figure: (attributes, ...children) => {
       return makeElement("figure", attributes, ...children);
     },
-    figcaption: (attributes = {}) => {
+    figcaption: attributes => {
       return makeElement("figcaption", attributes);
     },
-    img: (attributes = {}) => {
+    img: attributes => {
       return makeElement("img", attributes);
     },
-    button: (attributes = {}) => {
-      return makeElement("button", attributes);
+    button: (attributes, ...children) => {
+      return makeElement("button", attributes, ...children);
     },
     label: (attributes, ...children) => {
       return makeElement("label", attributes, ...children);
     },
-    input: (attributes = {}) => {
+    input: attributes => {
       return makeElement("input", attributes);
     },
     ul: (attributes, ...children) => {
@@ -121,7 +112,7 @@ var jsml = (function() {
     option: (attributes, ...children) => {
       return makeElement("option", attributes, ...children);
     },
-    canvas: (attributes = {}) => {
+    canvas: attributes => {
       return makeElement("canvas", attributes);
     }
   };

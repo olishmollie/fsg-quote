@@ -14,6 +14,16 @@ class Product {
     this.id = opts.id;
   }
 
+  minQuantity() {
+    if (this.frontColorCount <= 2 && this.backColorCount <= 2) {
+      return 1;
+    } else if (this.frontColorCount <= 4 && this.backColorCount <= 4) {
+      return 24;
+    } else {
+      return 50;
+    }
+  }
+
   persisted() {
     return this.id != null && this.id != undefined;
   }

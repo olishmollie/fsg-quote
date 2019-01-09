@@ -22,7 +22,8 @@ let util = (function() {
 
   function randomString(length) {
     var result = "";
-    var alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var alphabet =
+      "01234567890!@#$%^&**()+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     for (var i = 0; i < length; i++) {
       result += alphabet.charAt(Math.floor(Math.random() * alphabet.length));

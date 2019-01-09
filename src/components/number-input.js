@@ -1,46 +1,29 @@
 class NumberInput extends Component {
   constructor(opts) {
     super();
-    this._value = opts.value || 50;
-    this._max = opts.max || 500;
+    this.value = opts.value || 50;
+    this._max = opts.max || 10000;
     this._min = opts.min || 1;
+    this._readOnly = opts.readOnly || false;
     this.onchange = opts.onchange;
+    this.outofbounds = opts.outofbounds;
+    this.inbounds = opts.inbounds;
 
-    this.incrementButton = jsml.button({
-      onclick: () => {
-        ++this.value;
-      }
-    });
-
-    this.decrementButton = jsml.button({
-      onclick: () => {
-        --this.value;
-      }
-    });
-
-    this.input = jsml.input({
-      className: "form-control form-control-sm text-center",
-      type: "number",
-      value: this.value,
-      min: this.min,
-      max: this.max,
-      onchange: event => {
-        let el = event.target;
-        this.value = el.value;
-      }
-    });
-  }
-
-  get value() {
-    return this._value;
-  }
-
-  set value(v) {
-    if (v >= this.min && v <= this.max) {
-      this._value = v;
-    }
-    this.input.value = this._value;
-    this.onchange(this._value);
+    this.input = jsml.component(
+      new ControlledInput({
+        type: "number",
+        value: this.value,
+        min: this.min,
+        max: this.max,
+        readOnly: this.readOnly,
+        onchange: value => {
+          this.handleInput(value);
+        },
+        onblur: () => {
+          this.input.value = this.value;
+        }
+      })
+    );
   }
 
   get min() {
@@ -49,9 +32,9 @@ class NumberInput extends Component {
 
   set min(min) {
     this._min = min;
-    this.input.min = this._min;
-    if (this.value < this.min) {
-      this.value = this.min;
+    if (this.value <= min) {
+      this.value = min;
+      this.handleInput(this.value);
     }
   }
 
@@ -61,9 +44,32 @@ class NumberInput extends Component {
 
   set max(max) {
     this._max = max;
-    this.input.max = this._max;
-    if (this.value > this.max) {
-      this.value = this.max;
+    if (this.value >= max) {
+      this.value = max;
+      this.handleInput(this.value);
+    }
+  }
+
+  get readOnly() {
+    return this._readOnly;
+  }
+
+  set readOnly(ro) {
+    this._readOnly = ro;
+    this.input.readOnly = this._readOnly;
+  }
+
+  handleInput(value) {
+    value = parseInt(value);
+    if (!isNaN(value)) {
+      this.value = value;
+      this.input.value = value;
+      if (value >= this.min) {
+        this.onchange(this.value);
+        this.inbounds();
+      } else {
+        this.outofbounds();
+      }
     }
   }
 
@@ -71,20 +77,24 @@ class NumberInput extends Component {
     return super.render(
       jsml.div(
         { className: "input-group" },
-        jsml.div({ className: "input-group-prepend" }),
-        jsml.component(this.decrementButton, {
-          className: "btn btn-sm btn-outline-primary",
-          innerText: "\u2212"
-        }),
-        this.input,
-        jsml.div(
+        jsml.button(
           {
-            className: "input-group-append"
+            onclick: () => {
+              let value = this.value - 1;
+              this.handleInput(value);
+            }
           },
-          jsml.component(this.incrementButton, {
-            className: "btn btn-sm btn-outline-primary",
-            innerText: "\u002B"
-          })
+          jsml.text("\u2212")
+        ),
+        jsml.component(this.input),
+        jsml.button(
+          {
+            onclick: () => {
+              let value = this.value + 1;
+              this.handleInput(value);
+            }
+          },
+          jsml.text("\u002B")
         )
       )
     );

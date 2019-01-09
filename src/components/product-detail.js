@@ -5,21 +5,34 @@ class ProductDetail extends Component {
     this.product = opts.product;
     this.onsave = opts.onsave;
 
+    this.flash = new Flash();
+
     this.pricePerShirtLabel = new Label({
       text: "$" + this.product.costPerShirt().toFixed(2)
     });
 
     this.quantityInput = new NumberInput({
       value: this.product.quantity,
-      max: 500,
-      min: this.minQuantity(),
+      min: this.product.minQuantity(),
       onchange: quantity => {
-        this.product.quantity = parseInt(quantity);
+        this.product.quantity = quantity;
         this.product.distributeSizes();
         this.frontColorCountDropdown.selections = this.dropdownSelections();
         this.backColorCountDropdown.selections = this.dropdownSelections();
+        console.log(this.frontColorCountDropdown.selections);
         this.pricePerShirtLabel.text =
           "$" + this.product.costPerShirt().toFixed(2);
+      },
+      outofbounds: () => {
+        this.flash.show(
+          "danger",
+          "A minimum of " + this.product.minQuantity() + " shirts are required."
+        );
+        this.saveButton.disabled = true;
+      },
+      inbounds: () => {
+        this.flash.hide();
+        this.saveButton.disabled = false;
       }
     });
 
@@ -33,7 +46,7 @@ class ProductDetail extends Component {
       onchange: selection => {
         this.product.frontColorCount = parseInt(selection);
         this.frontColorCountLabel.text = this.colorLabel("front");
-        this.quantityInput.min = this.minQuantity();
+        this.quantityInput.min = this.product.minQuantity();
         this.pricePerShirtLabel.text =
           "$" + this.product.costPerShirt().toFixed(2);
       }
@@ -49,7 +62,7 @@ class ProductDetail extends Component {
       onchange: selection => {
         this.product.backColorCount = parseInt(selection);
         this.backColorCountLabel.text = this.colorLabel("back");
-        this.quantityInput.min = this.minQuantity();
+        this.quantityInput.min = this.product.minQuantity();
         this.pricePerShirtLabel.text =
           "$" + this.product.costPerShirt().toFixed(2);
       }
@@ -62,32 +75,22 @@ class ProductDetail extends Component {
     });
   }
 
-  minQuantity() {
-    if (this.product.frontColorCount <= 2 && this.product.backColorCount <= 2) {
-      return 1;
-    } else if (
-      this.product.frontColorCount <= 4 &&
-      this.product.backColorCount <= 4
-    ) {
-      return 24;
-    } else {
-      return 50;
-    }
-  }
-
   colorLabel(side) {
     if (side != "front" && side != "back") {
       throw "invalid side for color label";
     }
-    let count = side === "front" ? this.frontColorCount : this.backColorCount;
+    let count =
+      side === "front"
+        ? this.product.frontColorCount
+        : this.product.backColorCount;
     return side + (count === 1 ? " color" : " colors");
   }
 
   dropdownSelections() {
     var count;
-    if (this.quantity < 24) {
+    if (this.product.quantity < 24) {
       count = 3;
-    } else if (this.quantity <= 49) {
+    } else if (this.product.quantity <= 49) {
       count = 5;
     } else {
       count = 7;
@@ -103,6 +106,7 @@ class ProductDetail extends Component {
           style:
             "border: 1px solid black; box-shadow: 8px 10px rgba(0,0,0,0.05);"
         },
+        jsml.component(this.flash),
         jsml.div(
           { className: "form-group mt-3" },
           jsml.strong(
