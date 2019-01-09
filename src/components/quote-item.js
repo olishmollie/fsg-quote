@@ -9,6 +9,13 @@ class QuoteItem extends Component {
     this.onerror = opts.onerror;
 
     this.flash = new Flash();
+
+    this.colorCountDropdowns = new ColorCountDropdowns({
+      product: this.product,
+      onchange: () => {
+        this.handleDropdownChange();
+      }
+    });
   }
 
   customizeRoute() {
@@ -17,22 +24,44 @@ class QuoteItem extends Component {
     );
   }
 
+  handleDropdownChange() {
+    if (!this.hasErrors()) {
+      this.quote.updateProduct(this.product.id, this.product);
+      this.flash.hide();
+      this.onchange();
+    } else {
+      this.onerror();
+    }
+  }
+
   handleInputChange(size, value) {
     if (!isNaN(value)) {
       this.product.quantities[size] = parseInt(value);
       this.product.quantity = this.product.quantityFromSizes();
-      if (this.product.quantity >= this.product.minQuantity()) {
+      if (!this.hasErrors()) {
+        this.colorCountDropdowns.updateSelections();
         this.quote.updateProduct(this.product.id, this.product);
         this.flash.hide();
         this.onchange();
+      } else {
+        this.onerror();
       }
-    } else {
+    }
+  }
+
+  hasErrors() {
+    if (this.product.notEnoughQuantity()) {
       this.flash.show(
         "danger",
         "A minimum of " + this.product.minQuantity() + " shirts are required."
       );
-      this.onerror();
+      return true;
     }
+    if (this.product.notEnoughColors()) {
+      this.flash.show("danger", "A minimum of 1 color is required.");
+      return true;
+    }
+    return false;
   }
 
   render() {
@@ -75,6 +104,7 @@ class QuoteItem extends Component {
               jsml.label({}, jsml.text(size)),
               jsml.component(
                 new ControlledInput({
+                  type: "number",
                   value: this.product.quantities[size],
                   onchange: value => {
                     this.handleInputChange(size, parseInt(value));
@@ -85,7 +115,8 @@ class QuoteItem extends Component {
                 })
               )
             );
-          })
+          }),
+          jsml.component(this.colorCountDropdowns)
         )
       )
     );

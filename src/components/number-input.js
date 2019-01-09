@@ -6,8 +6,6 @@ class NumberInput extends Component {
     this._min = opts.min || 1;
     this._readOnly = opts.readOnly || false;
     this.onchange = opts.onchange;
-    this.outofbounds = opts.outofbounds;
-    this.inbounds = opts.inbounds;
 
     this.input = jsml.component(
       new ControlledInput({
@@ -64,19 +62,14 @@ class NumberInput extends Component {
     if (!isNaN(value)) {
       this.value = value;
       this.input.value = value;
-      if (value >= this.min) {
-        this.onchange(this.value);
-        this.inbounds();
-      } else {
-        this.outofbounds();
-      }
+      this.onchange(this.value);
     }
   }
 
   render() {
     return super.render(
       jsml.div(
-        { className: "input-group" },
+        {},
         jsml.button(
           {
             onclick: () => {

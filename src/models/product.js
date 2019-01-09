@@ -24,6 +24,14 @@ class Product {
     }
   }
 
+  notEnoughColors() {
+    return this.frontColorCount === 0 && this.backColorCount === 0;
+  }
+
+  notEnoughQuantity() {
+    return this.quantity < this.minQuantity();
+  }
+
   persisted() {
     return this.id != null && this.id != undefined;
   }

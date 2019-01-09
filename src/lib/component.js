@@ -5,8 +5,8 @@ class Component {
   }
 
   constructor() {
-    this.id = this.className = util.camelToDashed(this.constructor.name);
-    this.id += "_" + util.randomString(5);
+    this.className = util.camelToDashed(this.constructor.name);
+    this.id = this.className + "_" + util.randomString(5);
   }
 
   get node() {

@@ -38,7 +38,7 @@ class Router {
   }
 
   parseParams(route, path) {
-    let params = route.params;
+    let params = Object.assign({}, route.params);
     this.parseColons(route, path, params);
     this.parseQuery(path, params);
     return params;
