@@ -10,11 +10,12 @@ class PickAShirt extends Component {
 
   render() {
     return super.render(
-      "div",
-      {
-        className: "d-flex justify-content-center text-center"
-      },
-      jsml.div({}, ...this.shirtViews.map(x => x.render()))
+      jsml.div(
+        {
+          className: "d-flex justify-content-center text-center"
+        },
+        jsml.div({}, ...this.shirtViews.map(x => x.render()))
+      )
     );
   }
 }

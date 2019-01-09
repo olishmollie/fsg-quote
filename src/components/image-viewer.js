@@ -55,14 +55,15 @@ class ImageViewer extends Component {
 
   render() {
     return super.render(
-      "div",
-      {
-        className: "form-group mt-5"
-      },
-      jsml.component(this.frontImageFileInput),
-      jsml.component(this.backImageFileInput),
-      jsml.component(this.imageCanvas),
-      jsml.component(this.colorPicker)
+      jsml.div(
+        {
+          className: "form-group mt-5"
+        },
+        jsml.component(this.frontImageFileInput),
+        jsml.component(this.backImageFileInput),
+        jsml.component(this.imageCanvas),
+        jsml.component(this.colorPicker)
+      )
     );
   }
 }

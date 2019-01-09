@@ -16,18 +16,19 @@ class Flash extends Component {
 
   render() {
     return super.render(
-      "div",
-      {
-        className: "alert alert-danger",
-        style: "display: none"
-      },
-      jsml.button({
-        innerText: "\u2716",
-        onclick: () => {
-          this.hide();
-        }
-      }),
-      jsml.component(this.p)
+      jsml.div(
+        {
+          className: "alert alert-danger",
+          style: "display: none"
+        },
+        jsml.button({
+          innerText: "\u2716",
+          onclick: () => {
+            this.hide();
+          }
+        }),
+        jsml.component(this.p)
+      )
     );
   }
 }

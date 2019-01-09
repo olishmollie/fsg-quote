@@ -35,18 +35,19 @@ class CustomizeView extends Component {
 
   render() {
     return super.render(
-      "div",
-      {
-        className: "text-center"
-      },
-      jsml.h1({
-        innerText: this.product.shirt.name
-      }),
-      jsml.p({
-        innerText: this.product.shirt.description
-      }),
-      jsml.component(this.imageViewer),
-      jsml.component(this.productDetail)
+      jsml.div(
+        {
+          className: "text-center"
+        },
+        jsml.h1({
+          innerText: this.product.shirt.name
+        }),
+        jsml.p({
+          innerText: this.product.shirt.description
+        }),
+        jsml.component(this.imageViewer),
+        jsml.component(this.productDetail)
+      )
     );
   }
 }

@@ -9,13 +9,14 @@ class Root extends Component {
 
   render() {
     return super.render(
-      "div",
-      {
-        className: "container"
-      },
-      jsml.component(new Navbar()),
-      jsml.component(APP.flashContainer),
-      jsml.component(this.container)
+      jsml.div(
+        {
+          className: "container"
+        },
+        jsml.component(new Navbar()),
+        jsml.component(APP.flashContainer),
+        jsml.component(this.container)
+      )
     );
   }
 

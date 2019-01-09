@@ -97,39 +97,44 @@ class ProductDetail extends Component {
 
   render() {
     return super.render(
-      "div",
-      {
-        className: "text-center m-auto p-3",
-        style: "border: 1px solid black; box-shadow: 8px 10px rgba(0,0,0,0.05);"
-      },
       jsml.div(
-        { className: "form-group mt-3" },
-        jsml.strong(
-          {},
-          jsml.component(this.pricePerShirtLabel, {
-            style: "font-size: 1.3em"
+        {
+          className: "text-center m-auto p-3",
+          style:
+            "border: 1px solid black; box-shadow: 8px 10px rgba(0,0,0,0.05);"
+        },
+        jsml.div(
+          { className: "form-group mt-3" },
+          jsml.strong(
+            {},
+            jsml.component(this.pricePerShirtLabel, {
+              style: "font-size: 1.3em"
+            }),
+            jsml.text("/shirt")
+          )
+        ),
+        jsml.div(
+          { className: "form-group" },
+          jsml.component(this.quantityInput)
+        ),
+        jsml.div(
+          { className: "form-group" },
+          jsml.component(this.frontColorCountDropdown, {
+            className: "col-sm-1 m-auto",
+            style: "display: inline; border: 0;"
           }),
-          jsml.text("/shirt")
-        )
-      ),
-      jsml.div({ className: "form-group" }, jsml.component(this.quantityInput)),
-      jsml.div(
-        { className: "form-group" },
-        jsml.component(this.frontColorCountDropdown, {
-          className: "col-sm-1 m-auto",
-          style: "display: inline; border: 0;"
-        }),
-        jsml.component(this.frontColorCountLabel),
-        jsml.component(this.backColorCountDropdown, {
-          className: "col-sm-1 m-auto",
-          style: "display: inline; border: 0;"
-        }),
-        jsml.component(this.backColorCountLabel)
-      ),
-      jsml.component(this.saveButton, {
-        className: "btn btn-primary",
-        innerText: "Save"
-      })
+          jsml.component(this.frontColorCountLabel),
+          jsml.component(this.backColorCountDropdown, {
+            className: "col-sm-1 m-auto",
+            style: "display: inline; border: 0;"
+          }),
+          jsml.component(this.backColorCountLabel)
+        ),
+        jsml.component(this.saveButton, {
+          className: "btn btn-primary",
+          innerText: "Save"
+        })
+      )
     );
   }
 }

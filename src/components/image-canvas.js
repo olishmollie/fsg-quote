@@ -50,13 +50,14 @@ class ImageCanvas extends Component {
 
   render() {
     return super.render(
-      "div",
-      {
-        style: "margin: 50px"
-      },
-      jsml.component(this.canvas, {
-        style: "background-color: gray"
-      })
+      jsml.div(
+        {
+          style: "margin: 50px"
+        },
+        jsml.component(this.canvas, {
+          style: "background-color: gray"
+        })
+      )
     );
   }
 }

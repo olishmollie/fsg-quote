@@ -69,22 +69,23 @@ class NumberInput extends Component {
 
   render() {
     return super.render(
-      "div",
-      { className: "input-group" },
-      jsml.div({ className: "input-group-prepend" }),
-      jsml.component(this.decrementButton, {
-        className: "btn btn-sm btn-outline-primary",
-        innerText: "\u2212"
-      }),
-      this.input,
       jsml.div(
-        {
-          className: "input-group-append"
-        },
-        jsml.component(this.incrementButton, {
+        { className: "input-group" },
+        jsml.div({ className: "input-group-prepend" }),
+        jsml.component(this.decrementButton, {
           className: "btn btn-sm btn-outline-primary",
-          innerText: "\u002B"
-        })
+          innerText: "\u2212"
+        }),
+        this.input,
+        jsml.div(
+          {
+            className: "input-group-append"
+          },
+          jsml.component(this.incrementButton, {
+            className: "btn btn-sm btn-outline-primary",
+            innerText: "\u002B"
+          })
+        )
       )
     );
   }

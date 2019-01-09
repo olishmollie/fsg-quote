@@ -16,43 +16,44 @@ class QuoteItem extends Component {
 
   render() {
     return super.render(
-      "div",
-      {
-        className: "media"
-      },
       jsml.div(
         {
-          className: "media-body"
+          className: "media"
         },
-        jsml.a(
+        jsml.div(
           {
-            href: this.customizeRoute()
+            className: "media-body"
           },
-          jsml.h5(
+          jsml.a(
             {
-              className: "quote-item-title"
+              href: this.customizeRoute()
             },
-            jsml.strong({
-              className: "quote-item-index mr-2",
-              innerText: this.index + 1 + "."
-            }),
-            jsml.text(this.product.shirt.name)
+            jsml.h5(
+              {
+                className: "quote-item-title"
+              },
+              jsml.strong({
+                className: "quote-item-index mr-2",
+                innerText: this.index + 1 + "."
+              }),
+              jsml.text(this.product.shirt.name)
+            )
+          ),
+          jsml.button({
+            className: "trash-button float-right btn btn-danger",
+            innerText: "TRASH",
+            onclick: () => {
+              this.quote.remove(this.product);
+              this.ondelete();
+            }
+          }),
+          jsml.component(
+            new QuantityInputs({
+              quote: this.quote,
+              product: this.product,
+              onchange: this.onchange
+            })
           )
-        ),
-        jsml.button({
-          className: "trash-button float-right btn btn-danger",
-          innerText: "TRASH",
-          onclick: () => {
-            this.quote.remove(this.product);
-            this.ondelete();
-          }
-        }),
-        jsml.component(
-          new QuantityInputs({
-            quote: this.quote,
-            product: this.product,
-            onchange: this.onchange
-          })
         )
       )
     );
