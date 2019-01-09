@@ -70,11 +70,11 @@ class QuoteItem extends Component {
         {
           className: "media"
         },
-        jsml.component(this.flash),
         jsml.div(
           {
             className: "media-body"
           },
+          jsml.component(this.flash),
           jsml.a(
             {
               href: this.customizeRoute()

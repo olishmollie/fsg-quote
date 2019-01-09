@@ -4,6 +4,6 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
-.controlled-input {
+.number-input .controlled-input {
     text-align: center;
 }
