@@ -20,7 +20,7 @@ class ShirtView extends Component {
             },
             jsml.img({
               className: "figure-img img-fluid rounded",
-              src: this.shirt.imageUrl,
+              src: this.shirt.frontImageUrl,
               alt: this.shirt.name
             }),
             jsml.figcaption({

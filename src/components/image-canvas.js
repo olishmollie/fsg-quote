@@ -3,43 +3,121 @@ class ImageCanvas extends Component {
     super();
     this.height = opts.height;
     this.width = opts.width;
+    this.onload = opts.onload;
+
     this.canvas = jsml.canvas({
-      height: this.height,
-      width: this.width
+      width: this.width,
+      height: this.height
     });
+
+    this.initCanvas();
   }
 
-  drawImage(file) {
-    let url = window.URL.createObjectURL(file);
-    $("canvas")
-      .addLayer({
-        name: "image",
-        type: "image",
-        source: url,
-        draggable: true,
-        x: 100,
-        y: 100,
-        resizeFromCenter: false
-      })
-      .drawLayers();
+  initCanvas() {
+    this.canvas.addEventListener(
+      "dragover",
+      event => {
+        event.preventDefault();
+      },
+      false
+    );
+
+    this.canvas.addEventListener(
+      "dragenter",
+      event => {
+        event.preventDefault();
+        // turn on dragged over effect
+        this.canvas.className += " dragged-over";
+      },
+      false
+    );
+
+    this.canvas.addEventListener(
+      "dragleave",
+      event => {
+        event.preventDefault();
+        // turn off dragged over effect
+        this.canvas.className = this.className;
+      },
+      false
+    );
+
+    this.canvas.addEventListener(
+      "drop",
+      dropEvent => {
+        event.preventDefault();
+
+        // turn off dragged over effect
+        this.canvas.className = this.className;
+
+        // convert file to binary string and draw it on canvas
+        if (dropEvent.dataTransfer.files.length > 0) {
+          let fileReader = new FileReader();
+          let file = dropEvent.dataTransfer.files[0];
+          fileReader.onload = loadEvent => {
+            let url = loadEvent.target.result;
+            this.drawImage(url, dropEvent.layerX, dropEvent.layerY);
+            this.onload(url);
+          };
+          fileReader.readAsDataURL(file);
+        }
+      },
+      false
+    );
+  }
+
+  drawImage(url, x, y, width = null, height = null) {
+    $("canvas").addLayer({
+      name: "image",
+      type: "image",
+      source: url,
+      draggable: true,
+      x: x,
+      y: y,
+      width: width,
+      height: height,
+      resizeFromCenter: false
+    });
 
     // avoids weird bug where handles appear in center of image
     setTimeout(() => {
-      $("canvas")
-        .setLayer("image", {
-          handlePlacement: "both",
-          handle: {
-            type: "rectangle",
-            fillStyle: "#fff",
-            strokeStyle: "#111",
-            strokeWidth: 1,
-            width: 10,
-            height: 10,
-            cornerRadius: 3
-          }
-        })
-        .drawLayers();
+      $("canvas").setLayer("image", {
+        handlePlacement: "both",
+        handle: {
+          type: "rectangle",
+          fillStyle: "#fff",
+          strokeStyle: "#111",
+          strokeWidth: 1,
+          width: 10,
+          height: 10,
+          cornerRadius: 3
+        }
+      });
     }, 100);
+
+    $("canvas").drawLayers();
+  }
+
+  drawBackground(image) {
+    $("canvas")
+      .addLayer({
+        name: "background",
+        type: "image",
+        source: image,
+        index: 0,
+        x: 0,
+        y: 0,
+        fromCenter: false
+      })
+      .drawLayers();
+  }
+
+  removeImageHandles() {
+    $("canvas")
+      .setLayer("image", {
+        handle: null
+      })
+      .drawLayers();
   }
 
   clearCanvas() {
@@ -49,15 +127,6 @@ class ImageCanvas extends Component {
   }
 
   render() {
-    return super.render(
-      jsml.div(
-        {
-          style: "margin: 50px"
-        },
-        jsml.component(this.canvas, {
-          style: "background-color: gray"
-        })
-      )
-    );
+    return super.render(this.canvas);
   }
 }

@@ -3,7 +3,8 @@ class Shirt {
     this.id = opts.id;
     this.name = opts.name;
     this.price = opts.price;
-    this.imageUrl = opts.imageUrl;
+    this.frontImageUrl = opts.frontImageUrl;
+    this.backImageUrl = opts.backImageUrl;
     this.description = opts.description;
     this.availableSizes = opts.availableSizes;
     this.availableColors = opts.availableColors;

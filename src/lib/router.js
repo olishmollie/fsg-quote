@@ -59,9 +59,12 @@ class Router {
   parseQuery(path, params) {
     let query = path.split("?")[1];
     if (query && query.length > 0) {
-      query = query.split("=");
-      for (let i = 0; i < query.length; i += 2) {
-        params[query[i]] = query[i + 1];
+      let queryParams = query.split("&");
+      for (let i = 0; i < queryParams.length; i++) {
+        let param = queryParams[i].split("=");
+        for (let j = 0; j < param.length; j += 2) {
+          params[param[j]] = param[j + 1];
+        }
       }
     }
   }

@@ -4,6 +4,17 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+/* makes text centered in input */
 .number-input .controlled-input {
     text-align: center;
+}
+
+/* positions image directly under canvas */
+.image-viewer img {
+    position: absolute;
+    z-index: -1;
+}
+
+.image-viewer .dragged-over {
+    background-color: rgba(0, 0, 0, 0.2);
 }

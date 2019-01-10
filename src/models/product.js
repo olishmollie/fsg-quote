@@ -9,9 +9,25 @@ class Product {
 
     this.frontImage = opts.frontImage || null;
     this.backImage = opts.backImage || null;
+    this.frontMockup = opts.frontMockup || null;
+    this.backMockup = opts.backMockup || null;
+
+    // image data cache
+    this.prevX = opts.prevX || null;
+    this.prevY = opts.prevY || null;
+    this.prevWidth = opts.prevWidth || null;
+    this.prevHeight = opts.prevHeight || null;
 
     // assigned when added to a quote
     this.id = opts.id;
+  }
+
+  save() {
+    APP.quote.updateProduct(this.id, this);
+  }
+
+  hasMockup() {
+    return !!this.frontMockup || !!this.backMockup;
   }
 
   minQuantity() {
@@ -54,7 +70,8 @@ class Product {
       prices[this.frontColorCount] > prices[this.backColorCount]
         ? prices[this.backColorCount] / 2
         : prices[this.frontColorCount] / 2;
-    return this.shirt.price + firstLocationPrice + secondLocationPrice;
+    let result = this.shirt.price + firstLocationPrice + secondLocationPrice;
+    return isNaN(result) ? 0 : result;
   }
 
   priceTable() {

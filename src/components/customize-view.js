@@ -20,11 +20,15 @@ class CustomizeView extends Component {
     });
 
     this.imageViewer = new ImageViewer({
-      product: this.product
+      product: this.product,
+      width: 500,
+      height: 300
     });
   }
 
   save() {
+    let image = this.imageViewer.getCanvasImage();
+    this.product.frontMockup = image;
     if (!this.product.persisted()) {
       this.product.distributeSizes();
       this.quote.add(this.product);

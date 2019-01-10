@@ -3,66 +3,132 @@ class ImageViewer extends Component {
     super();
 
     this.product = opts.product;
-
-    this.colorPicker = new ColorPicker({
-      color: { name: "black", hex: "#111" },
-      colors: this.product.shirt.availableColors,
-      onchange: color => {
-        this.product.color = color;
-        console.log(color.name + " clicked.");
-      }
-    });
-
-    this.frontImageFileInput = new FileInput({
-      file: this.product.frontImage,
-      label: "Image Front",
-      accept: "image/png, image/jpeg",
-      onchange: () => {
-        let files = this.frontImageFileInput.files;
-        if (files.length > 0) {
-          let file = files[0];
-          this.imageCanvas.drawImage(file);
-          this.product.frontImage = file;
-        }
-      },
-      onclear: () => {
-        this.imageCanvas.clearCanvas();
-      }
-    });
-
-    this.backImageFileInput = new FileInput({
-      file: this.product.backImage,
-      label: "Image Back",
-      accept: "image/png, image/jpeg",
-      onchange: () => {
-        let files = this.backImageFileInput.files;
-        if (files.length > 0) {
-          let file = files[0];
-          this.imageCanvas.drawImage(file);
-          this.product.backImage = file;
-        }
-      },
-      onclear: () => {
-        this.imageCanvas.clearCanvas();
-      }
-    });
+    this.width = opts.width;
+    this.height = opts.height;
 
     this.imageCanvas = new ImageCanvas({
-      height: 500,
-      width: 800
+      width: this.width,
+      height: this.height,
+      onload: file => {
+        this.product.frontImage = file;
+      }
     });
+
+    // if product has a mockup, render it, otherwise use the background image
+    this.backgroundImage = jsml.img({
+      src: this.product.hasMockup()
+        ? this.initialMockup()
+        : this.product.shirt.frontImageUrl,
+      width: this.width,
+      height: this.height
+    });
+
+    this.editButton = jsml.button(
+      {
+        onclick: () => {
+          this.editCanvas();
+        }
+      },
+      jsml.text("Edit")
+    );
+
+    this.clearButton = jsml.button(
+      {
+        onclick: () => {
+          this.clearCanvas();
+        }
+      },
+      jsml.text("Clear")
+    );
+  }
+
+  initialMockup() {
+    if (this.product.frontMockup) {
+      return this.product.frontMockup;
+    }
+    return this.product.backMockup;
+  }
+
+  editCanvas() {
+    // clear the canvas (w/o nulling the product image);
+    this.imageCanvas.clearCanvas();
+
+    // set the backgroundImage to the stock photo
+    let newImage = jsml.img({
+      width: this.width,
+      height: this.height,
+      src: this.initialBackground()
+    });
+    this.node.replaceChild(newImage, this.backgroundImage);
+    this.backgroundImage = newImage;
+
+    // get cached x, y, and size
+    let x = this.product.prevX;
+    let y = this.product.prevY;
+    let width = this.product.prevWidth;
+    let height = this.product.prevHeight;
+
+    // draw the image onto the canvas
+    this.imageCanvas.drawImage(this.initialImage(), x, y, width, height);
+
+    // replace the edit button with the clear button
+    this.node.replaceChild(this.clearButton, this.editButton);
+  }
+
+  initialBackground() {
+    if (this.product.frontMockup) {
+      return this.product.shirt.frontImageUrl;
+    }
+    return this.product.shirt.backImageUrl;
+  }
+
+  initialImage() {
+    if (this.product.frontMockup) {
+      return this.product.frontImage;
+    }
+    return this.product.backImage;
+  }
+
+  clearCanvas() {
+    this.imageCanvas.clearCanvas();
+    this.product.frontImage = null;
+    this.product.frontMockup = null;
+    if (this.product.persisted()) {
+      this.product.save();
+    }
+  }
+
+  getCanvasImage() {
+    if (this.containsImage()) {
+      this.imageCanvas.removeImageHandles();
+
+      // draw the background image onto the canvas
+      this.imageCanvas.drawBackground(this.backgroundImage);
+
+      // cache x, y, and size of image
+      let imageLayer = $("canvas").getLayer("image");
+      this.product.prevX = imageLayer.x;
+      this.product.prevY = imageLayer.y;
+      this.product.prevWidth = imageLayer.width;
+      this.product.prevHeight = imageLayer.height;
+      this.product.save();
+
+      return $("canvas").getCanvasImage();
+    }
+    return null;
+  }
+
+  containsImage() {
+    return !!$("canvas").getLayer("image");
   }
 
   render() {
     return super.render(
       jsml.div(
-        {
-          className: "form-group mt-5"
-        },
-        jsml.component(this.frontImageFileInput),
-        jsml.component(this.backImageFileInput),
+        {},
+        jsml.component(this.backgroundImage),
         jsml.component(this.imageCanvas),
-        jsml.component(this.colorPicker)
+        jsml.cond(this.product.hasMockup(), this.editButton, this.clearButton)
       )
     );
   }
