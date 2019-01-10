@@ -6,11 +6,16 @@ class ImageViewer extends Component {
     this.width = opts.width;
     this.height = opts.height;
 
+    this.flash = new Flash();
+
     this.imageCanvas = new ImageCanvas({
       width: this.width,
       height: this.height,
       onload: file => {
         this.product.frontImage = file;
+      },
+      oninvalidfile: () => {
+        this.flash.show("danger", "Invalid file type.");
       }
     });
 
@@ -126,6 +131,7 @@ class ImageViewer extends Component {
     return super.render(
       jsml.div(
         {},
+        jsml.component(this.flash),
         jsml.component(this.backgroundImage),
         jsml.component(this.imageCanvas),
         jsml.cond(this.product.hasMockup(), this.editButton, this.clearButton)

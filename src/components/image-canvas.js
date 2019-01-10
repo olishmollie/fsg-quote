@@ -4,6 +4,7 @@ class ImageCanvas extends Component {
     this.height = opts.height;
     this.width = opts.width;
     this.onload = opts.onload;
+    this.oninvalidfile = opts.oninvalidfile;
 
     this.canvas = jsml.canvas({
       width: this.width,
@@ -52,18 +53,26 @@ class ImageCanvas extends Component {
 
         // convert file to binary string and draw it on canvas
         if (dropEvent.dataTransfer.files.length > 0) {
-          let fileReader = new FileReader();
           let file = dropEvent.dataTransfer.files[0];
-          fileReader.onload = loadEvent => {
-            let url = loadEvent.target.result;
-            this.drawImage(url, dropEvent.layerX, dropEvent.layerY);
-            this.onload(url);
-          };
-          fileReader.readAsDataURL(file);
+          if (this.isValidFile(file)) {
+            let fileReader = new FileReader();
+            fileReader.onload = loadEvent => {
+              let url = loadEvent.target.result;
+              this.drawImage(url, dropEvent.layerX, dropEvent.layerY);
+              this.onload(url);
+            };
+            fileReader.readAsDataURL(file);
+          } else {
+            this.oninvalidfile();
+          }
         }
       },
       false
     );
+  }
+
+  isValidFile(file) {
+    return ImageCanvas.validFileTypes.includes(file.type);
   }
 
   drawImage(url, x, y, width = null, height = null) {
@@ -130,3 +139,5 @@ class ImageCanvas extends Component {
     return super.render(this.canvas);
   }
 }
+
+ImageCanvas.validFileTypes = ["image/jpeg", "image/png"];
