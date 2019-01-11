@@ -27,8 +27,11 @@ class CustomizeView extends Component {
   }
 
   save() {
-    let image = this.imageViewer.getCanvasImage();
-    this.product.frontMockup = image;
+    if (this.imageViewer.hasBeenEdited) {
+      let image = this.imageViewer.getCanvasImage();
+      this.product.frontMockup = image;
+    }
+
     if (!this.product.persisted()) {
       this.product.distributeSizes();
       this.quote.add(this.product);

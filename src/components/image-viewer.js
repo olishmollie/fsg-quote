@@ -5,6 +5,7 @@ class ImageViewer extends Component {
     this.product = opts.product;
     this.width = opts.width;
     this.height = opts.height;
+    this.hasBeenEdited = false;
 
     this.flash = new Flash();
 
@@ -12,6 +13,7 @@ class ImageViewer extends Component {
       width: this.width,
       height: this.height,
       onload: file => {
+        this.hasBeenEdited = true;
         this.product.frontImage = file;
       },
       oninvalidfile: () => {
@@ -31,6 +33,7 @@ class ImageViewer extends Component {
     this.editButton = jsml.button(
       {
         onclick: () => {
+          this.hasBeenEdited = true;
           this.editCanvas();
         }
       },
