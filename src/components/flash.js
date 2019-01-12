@@ -27,7 +27,7 @@ class Flash extends Component {
             this.hide();
           }
         }),
-        jsml.component(this.p)
+        jsml.element(this.p)
       )
     );
   }

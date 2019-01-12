@@ -74,7 +74,7 @@ class QuoteView extends Component {
               className: "form-control user-email",
               placeholder: "Email"
             }),
-            jsml.component(this.submitButton)
+            jsml.element(this.submitButton)
           ),
           jsml.p({
             innerText:

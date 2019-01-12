@@ -135,7 +135,7 @@ class ImageViewer extends Component {
       jsml.div(
         {},
         jsml.component(this.flash),
-        jsml.component(this.backgroundImage),
+        jsml.element(this.backgroundImage),
         jsml.component(this.imageCanvas),
         jsml.cond(this.product.hasMockup(), this.editButton, this.clearButton)
       )

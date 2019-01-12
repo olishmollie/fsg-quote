@@ -14,8 +14,7 @@ class Root extends Component {
           className: "container"
         },
         jsml.component(new Navbar()),
-        jsml.component(APP.flashContainer),
-        jsml.component(this.container)
+        jsml.element(this.container)
       )
     );
   }

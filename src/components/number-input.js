@@ -79,7 +79,7 @@ class NumberInput extends Component {
           },
           jsml.text("\u2212")
         ),
-        jsml.component(this.input),
+        jsml.element(this.input),
         jsml.button(
           {
             onclick: () => {

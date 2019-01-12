@@ -16,32 +16,45 @@ var jsml = (function() {
 
   // renders a component or a custom made node
   function component(component, attributes, ...children) {
-    if (component instanceof Component) {
-      component = Object.assign(component, attributes);
-      return component.render();
-    } else {
-      // it's not a component, so it's a pure HTML node
-      for (let attr in attributes) {
-        component[attr] = attributes[attr];
-      }
-      for (let i = 0; i < children.length; i++) {
-        component.appendChild(children[i]);
-      }
-      return component;
+    component = Object.assign(component, attributes);
+    let node = component.render();
+    for (let i = 0; i < children.length; i++) {
+      node.appendChild(children[i]);
     }
+    return node;
+  }
+
+  // renders a traditional html element
+  function element(element, attributes, ...children) {
+    for (let attr in attributes) {
+      element[attr] = attributes[attr];
+    }
+    for (let i = 0; i < children.length; i++) {
+      element.appendChild(children[i]);
+    }
+    return element;
+  }
+
+  function render(node, attributes, ...children) {
+    if (node instanceof component) {
+      return component(node, attributes, ...children);
+    }
+    return element(node, attributes, ...children);
   }
 
   // conditional rendering
   function cond(predicate, thenComponent, elseComponent) {
     if (predicate) {
-      return jsml.component(thenComponent);
+      return render(thenComponent);
     }
-    return jsml.component(elseComponent);
+    return render(elseComponent);
   }
 
   return {
     makeElement: makeElement,
     component: component,
+    element: element,
+    render: render,
     cond: cond,
     h1: (attributes, ...children) => {
       return makeElement("h1", attributes, ...children);

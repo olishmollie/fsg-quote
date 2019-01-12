@@ -97,7 +97,7 @@ class ProductDetail extends Component {
           jsml.component(this.quantityInput)
         ),
         jsml.component(this.colorCountDropdowns),
-        jsml.component(this.saveButton, {
+        jsml.element(this.saveButton, {
           className: "btn btn-primary",
           innerText: "Save"
         })

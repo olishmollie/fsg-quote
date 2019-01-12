@@ -8,6 +8,8 @@ class QuoteItem extends Component {
     this.ondelete = opts.ondelete;
     this.onerror = opts.onerror;
 
+    this.slideDown = new Slidedown();
+
     this.flash = new Flash();
 
     this.colorCountDropdowns = new ColorCountDropdowns({
@@ -70,6 +72,7 @@ class QuoteItem extends Component {
         {
           className: "media"
         },
+        jsml.component(this.slideDown, jsml.p("Are you sure?")),
         jsml.div(
           {
             className: "media-body"
@@ -94,8 +97,9 @@ class QuoteItem extends Component {
             className: "trash-button float-right btn btn-danger",
             innerText: "TRASH",
             onclick: () => {
-              this.quote.remove(this.product);
-              this.ondelete();
+              this.slideDown.slideDown();
+              // this.quote.remove(this.product);
+              // this.ondelete();
             }
           }),
           ...this.product.shirt.availableSizes.map(size => {
