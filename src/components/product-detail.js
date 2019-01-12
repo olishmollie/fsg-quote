@@ -25,21 +25,23 @@ class ProductDetail extends Component {
       min: this.product.minQuantity(),
       onchange: quantity => {
         this.product.quantity = quantity;
-        this.product.distributeSizes();
-        this.colorCountDropdowns.updateSelections();
-        this.pricePerShirtLabel.text =
-          "$" + this.product.costPerShirt().toFixed(2);
-        this.checkForErrors();
+        if (!this.hasErrors()) {
+          this.product.distributeSizes();
+          this.colorCountDropdowns.updateSelections();
+          this.pricePerShirtLabel.text =
+            "$" + this.product.costPerShirt().toFixed(2);
+        }
       }
     });
 
     this.colorCountDropdowns = new ColorCountDropdowns({
       product: this.product,
       onchange: () => {
-        this.quantityInput.min = this.product.minQuantity();
-        this.pricePerShirtLabel.text =
-          "$" + this.product.costPerShirt().toFixed(2);
-        this.checkForErrors();
+        if (!this.hasErrors()) {
+          this.quantityInput.min = this.product.minQuantity();
+          this.pricePerShirtLabel.text =
+            "$" + this.product.costPerShirt().toFixed(2);
+        }
       }
     });
 
@@ -50,16 +52,10 @@ class ProductDetail extends Component {
     });
   }
 
-  checkForErrors() {
-    this.saveButton.disabled = this.hasErrors();
-    if (!this.saveButton.disabled) {
-      this.flash.hide();
-    }
-  }
-
   hasErrors() {
     if (this.product.notEnoughColors()) {
       this.flash.show("danger", "A minimum of 1 color is required.");
+      this.saveButton.disabled = true;
       return true;
     }
     if (this.product.notEnoughQuantity()) {
@@ -67,8 +63,11 @@ class ProductDetail extends Component {
         "danger",
         "A minimum of " + this.product.minQuantity() + " shirts is required."
       );
+      this.saveButton.disabled = true;
       return true;
     }
+    this.flash.hide();
+    this.saveButton.disabled = false;
     return false;
   }
 
@@ -86,9 +85,7 @@ class ProductDetail extends Component {
           { className: "form-group mt-3" },
           jsml.strong(
             {},
-            jsml.component(this.pricePerShirtLabel, {
-              style: "font-size: 1.3em"
-            }),
+            jsml.component(this.pricePerShirtLabel),
             jsml.text("/shirt")
           )
         ),
