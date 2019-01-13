@@ -134,10 +134,14 @@ class ImageViewer extends Component {
     return super.render(
       jsml.div(
         {},
-        jsml.component(this.flash),
-        jsml.element(this.backgroundImage),
-        jsml.component(this.imageCanvas),
-        jsml.cond(this.product.hasMockup(), this.editButton, this.clearButton)
+        jsml.component({}, this.flash),
+        jsml.element({}, this.backgroundImage),
+        jsml.component({}, this.imageCanvas),
+        jsml.cond(
+          this.product.hasMockup(),
+          jsml.element({}, this.editButton),
+          jsml.element({}, this.clearButton)
+        )
       )
     );
   }

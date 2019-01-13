@@ -1,17 +1,23 @@
 let util = (function() {
+  // converts a style object to an inline style string
+  function styleObjectToString(styleObject) {
+    let result = "";
+    for (let key in styleObject) {
+      result += camelToDashed(key) + ": " + styleObject[key] + "; ";
+    }
+    return result;
+  }
+
   // takes a camel cased string and returns dashed equivalent
   // e.g. ClassName -> class-name
   function camelToDashed(name) {
-    var result = [];
-    var i = 0;
-    while (i < name.length) {
+    // first letter goes regardless
+    var result = [name[0].toLowerCase()];
+    for (let i = 1; i < name.length; i++) {
       if (isUpper(name[i])) {
-        result.push(name[i++].toLowerCase());
-        while (i < name.length && !isUpper(name[i])) {
-          result.push(name[i++]);
-        }
-        if (i < name.length) result.push("-");
+        result.push("-");
       }
+      result.push(name[i].toLowerCase());
     }
     return result.join("");
   }
@@ -33,6 +39,7 @@ let util = (function() {
   }
 
   return {
+    styleObjectToString,
     camelToDashed,
     randomString
   };

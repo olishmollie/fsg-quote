@@ -19,7 +19,9 @@ class Flash extends Component {
       jsml.div(
         {
           className: "alert alert-danger",
-          style: "display: none"
+          style: {
+            display: "none"
+          }
         },
         jsml.button({
           innerText: "\u2716",
@@ -27,7 +29,7 @@ class Flash extends Component {
             this.hide();
           }
         }),
-        jsml.element(this.p)
+        jsml.element({}, this.p)
       )
     );
   }

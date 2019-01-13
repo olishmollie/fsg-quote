@@ -2,9 +2,7 @@ class Root extends Component {
   constructor() {
     super();
 
-    this.container = jsml.div({
-      id: "app"
-    });
+    this.container = jsml.div();
   }
 
   render() {
@@ -13,8 +11,13 @@ class Root extends Component {
         {
           className: "container"
         },
-        jsml.component(new Navbar()),
-        jsml.element(this.container)
+        jsml.component({}, new Navbar()),
+        jsml.element(
+          {
+            id: "app"
+          },
+          this.container
+        )
       )
     );
   }

@@ -35,6 +35,11 @@ class QuoteView extends Component {
           {},
           ...this.quote.products.map((product, index) => {
             return jsml.component(
+              {
+                style: {
+                  position: "relative"
+                }
+              },
               new QuoteItem({
                 quote: this.quote,
                 product: product,
@@ -62,7 +67,7 @@ class QuoteView extends Component {
               {
                 innerText: "Estimated Cost: "
               },
-              jsml.component(this.estimatedCostLabel)
+              jsml.component({}, this.estimatedCostLabel)
             )
           ),
           jsml.div(
@@ -74,7 +79,7 @@ class QuoteView extends Component {
               className: "form-control user-email",
               placeholder: "Email"
             }),
-            jsml.element(this.submitButton)
+            jsml.element({}, this.submitButton)
           ),
           jsml.p({
             innerText:

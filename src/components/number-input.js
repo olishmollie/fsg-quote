@@ -7,21 +7,19 @@ class NumberInput extends Component {
     this._readOnly = opts.readOnly || false;
     this.onchange = opts.onchange;
 
-    this.input = jsml.component(
-      new ControlledInput({
-        type: "number",
-        value: this.value,
-        min: this.min,
-        max: this.max,
-        readOnly: this.readOnly,
-        onchange: value => {
-          this.handleInput(value);
-        },
-        onblur: () => {
-          this.input.value = this.value;
-        }
-      })
-    );
+    this.input = new ControlledInput({
+      type: "number",
+      value: this.value,
+      min: this.min,
+      max: this.max,
+      readOnly: this.readOnly,
+      onchange: value => {
+        this.handleInput(value);
+      },
+      onblur: () => {
+        this.input.value = this.value;
+      }
+    });
   }
 
   get min() {
@@ -79,7 +77,7 @@ class NumberInput extends Component {
           },
           jsml.text("\u2212")
         ),
-        jsml.element(this.input),
+        jsml.component({}, this.input),
         jsml.button(
           {
             onclick: () => {

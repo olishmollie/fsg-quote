@@ -79,25 +79,28 @@ class ProductDetail extends Component {
           style:
             "border: 1px solid black; box-shadow: 8px 10px rgba(0,0,0,0.05);"
         },
-        jsml.component(this.flash),
-        jsml.component(this.colorPicker),
+        jsml.component({}, this.flash),
+        jsml.component({}, this.colorPicker),
         jsml.div(
           { className: "form-group mt-3" },
           jsml.strong(
             {},
-            jsml.component(this.pricePerShirtLabel),
+            jsml.component({}, this.pricePerShirtLabel),
             jsml.text("/shirt")
           )
         ),
         jsml.div(
           { className: "form-group" },
-          jsml.component(this.quantityInput)
+          jsml.component({}, this.quantityInput)
         ),
-        jsml.component(this.colorCountDropdowns),
-        jsml.element(this.saveButton, {
-          className: "btn btn-primary",
-          innerText: "Save"
-        })
+        jsml.component({}, this.colorCountDropdowns),
+        jsml.element(
+          {
+            className: "btn btn-primary"
+          },
+          this.saveButton,
+          jsml.text("Save")
+        )
       )
     );
   }

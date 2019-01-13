@@ -72,12 +72,53 @@ class QuoteItem extends Component {
         {
           className: "media"
         },
-        jsml.component(this.slideDown, jsml.p("Are you sure?")),
         jsml.div(
           {
             className: "media-body"
           },
-          jsml.component(this.flash),
+          jsml.component(
+            {
+              style: {
+                backgroundColor: "blue",
+                color: "white"
+              }
+            },
+            this.slideDown,
+            jsml.div(
+              {
+                style: {
+                  position: "relative",
+                  top: "50%"
+                }
+              },
+              jsml.p(
+                {
+                  style: {
+                    display: "inline"
+                  }
+                },
+                jsml.text("Are you sure?")
+              ),
+              jsml.button(
+                {
+                  onclick: () => {
+                    this.slideDown.slideUp();
+                  }
+                },
+                jsml.text("Cancel")
+              ),
+              jsml.button(
+                {
+                  onclick: () => {
+                    this.quote.remove(this.product);
+                    this.ondelete();
+                  }
+                },
+                jsml.text("OK")
+              )
+            )
+          ),
+          jsml.component({}, this.flash),
           jsml.a(
             {
               href: this.customizeRoute()
@@ -93,20 +134,20 @@ class QuoteItem extends Component {
               jsml.text(this.product.shirt.name)
             )
           ),
-          jsml.button({
-            className: "trash-button float-right btn btn-danger",
-            innerText: "TRASH",
-            onclick: () => {
-              this.slideDown.slideDown();
-              // this.quote.remove(this.product);
-              // this.ondelete();
-            }
-          }),
+          jsml.button(
+            {
+              onclick: () => {
+                this.slideDown.slideDown();
+              }
+            },
+            jsml.text("TRASH")
+          ),
           ...this.product.shirt.availableSizes.map(size => {
             return jsml.div(
               {},
               jsml.label({}, jsml.text(size)),
               jsml.component(
+                {},
                 new ControlledInput({
                   type: "number",
                   value: this.product.quantities[size],
@@ -120,7 +161,7 @@ class QuoteItem extends Component {
               )
             );
           }),
-          jsml.component(this.colorCountDropdowns)
+          jsml.component({}, this.colorCountDropdowns)
         )
       )
     );

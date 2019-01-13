@@ -39,12 +39,18 @@ class FileInput extends Component {
         jsml.label({
           innerText: this.label
         }),
-        jsml.component(this.input, {
-          className: "form-control"
-        }),
-        jsml.component(this.clearButton, {
-          className: "btn btn-sm btn-danger"
-        })
+        jsml.component(
+          {
+            className: "form-control"
+          },
+          this.input
+        ),
+        jsml.component(
+          {
+            className: "btn btn-sm btn-danger"
+          },
+          this.clearButton
+        )
       )
     );
   }

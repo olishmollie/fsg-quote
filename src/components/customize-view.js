@@ -52,8 +52,8 @@ class CustomizeView extends Component {
         jsml.p({
           innerText: this.product.shirt.description
         }),
-        jsml.component(this.imageViewer),
-        jsml.component(this.productDetail)
+        jsml.component({}, this.imageViewer),
+        jsml.component({}, this.productDetail)
       )
     );
   }

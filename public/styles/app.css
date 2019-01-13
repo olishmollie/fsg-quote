@@ -18,3 +18,8 @@ input::-webkit-inner-spin-button {
 .image-viewer .dragged-over {
     background-color: rgba(0, 0, 0, 0.2);
 }
+
+/* .slidedown {
+    background-color: blue;
+    color: white;
+} */

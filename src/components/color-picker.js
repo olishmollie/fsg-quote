@@ -12,6 +12,7 @@ class ColorPicker extends Component {
         {},
         ...this.colors.map(color => {
           return jsml.component(
+            {},
             new ShirtColor({
               color: color,
               onclick: color => {

@@ -2,22 +2,22 @@ var jsml = (function() {
   // creates a standard HTML dom element
   function makeElement(tag, attributes, ...children) {
     let element = document.createElement(tag);
-
-    for (let attr in attributes) {
-      element[attr] = attributes[attr];
-    }
-
-    for (let i = 0; i < children.length; i++) {
-      element.appendChild(children[i]);
-    }
-
-    return element;
+    return jsml.element(attributes, element, ...children);
   }
 
   // renders a component or a custom made node
-  function component(component, attributes, ...children) {
-    component = Object.assign(component, attributes);
+  function component(attributes, component, ...children) {
     let node = component.render();
+    for (let attr in attributes) {
+      // b/c node is already set up as a tree, we must apply styles using object notation (instead of strings)
+      if (attr === "style") {
+        for (let styleAttr in attributes[attr]) {
+          node.style[styleAttr] = attributes[attr][styleAttr];
+        }
+      } else {
+        node[attr] = attributes[attr];
+      }
+    }
     for (let i = 0; i < children.length; i++) {
       node.appendChild(children[i]);
     }
@@ -25,9 +25,14 @@ var jsml = (function() {
   }
 
   // renders a traditional html element
-  function element(element, attributes, ...children) {
+  function element(attributes, element, ...children) {
     for (let attr in attributes) {
-      element[attr] = attributes[attr];
+      // convert style object to inline string
+      if (attr === "style") {
+        element.style = util.styleObjectToString(attributes[attr]);
+      } else {
+        element[attr] = attributes[attr];
+      }
     }
     for (let i = 0; i < children.length; i++) {
       element.appendChild(children[i]);
@@ -35,26 +40,18 @@ var jsml = (function() {
     return element;
   }
 
-  function render(node, attributes, ...children) {
-    if (node instanceof component) {
-      return component(node, attributes, ...children);
-    }
-    return element(node, attributes, ...children);
-  }
-
   // conditional rendering
   function cond(predicate, thenComponent, elseComponent) {
     if (predicate) {
-      return render(thenComponent);
+      return thenComponent;
     }
-    return render(elseComponent);
+    return elseComponent;
   }
 
   return {
     makeElement: makeElement,
     component: component,
     element: element,
-    render: render,
     cond: cond,
     h1: (attributes, ...children) => {
       return makeElement("h1", attributes, ...children);

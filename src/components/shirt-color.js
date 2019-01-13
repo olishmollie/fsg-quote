@@ -9,7 +9,10 @@ class ShirtColor extends Component {
     return super.render(
       jsml.div({
         className: "col-sm",
-        style: "display: inline; background-color: " + this.color.hex,
+        style: {
+          display: "inline",
+          backgroundColor: this.color.hex
+        },
         onclick: () => {
           this.onclick(this.color);
         }

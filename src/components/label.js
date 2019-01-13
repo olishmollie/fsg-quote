@@ -2,10 +2,7 @@ class Label extends Component {
   constructor(opts) {
     super();
     this._text = opts.text;
-
-    this.span = jsml.span({
-      innerText: this._text
-    });
+    this.textNode = jsml.text(this._text);
   }
 
   get text() {
@@ -14,10 +11,10 @@ class Label extends Component {
 
   set text(text) {
     this._text = text;
-    this.span.innerText = this._text;
+    this.textNode.nodeValue = text;
   }
 
   render() {
-    return super.render(jsml.span({}, this.span));
+    return super.render(jsml.span({}, this.textNode));
   }
 }
