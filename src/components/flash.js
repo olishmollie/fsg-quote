@@ -1,6 +1,9 @@
 class Flash extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+  }
+
+  init() {
     this.p = jsml.p({});
   }
 

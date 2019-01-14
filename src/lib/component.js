@@ -4,14 +4,22 @@ class Component {
     parent.appendChild(component.render());
   }
 
-  constructor() {
+  constructor(props) {
+    this.props = props;
     this.className = util.camelToDashed(this.constructor.name);
     this.id = this.className + "_" + util.randomString(5);
+
+    this.init();
+
+    this.node = this.render();
+    this.node.id = this.id;
+    this.node.className = this.className + " " + this.node.className;
+
+    this.didRender();
   }
 
-  get node() {
-    return document.getElementById(this.id);
-  }
+  init() {}
+  didRender() {}
 
   render(node) {
     node.id = this.id;

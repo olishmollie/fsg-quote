@@ -1,10 +1,12 @@
 class ImageViewer extends Component {
-  constructor(opts) {
-    super();
+  constructor(props) {
+    super(props);
+  }
 
-    this.product = opts.product;
-    this.width = opts.width;
-    this.height = opts.height;
+  init() {
+    this.product = this.props.product;
+    this.width = this.props.width;
+    this.height = this.props.height;
     this.hasBeenEdited = false;
 
     this.flash = new Flash();

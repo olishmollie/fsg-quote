@@ -1,8 +1,8 @@
 class App {
-  constructor(opts) {
-    this.root = opts.root;
-    this.shirts = opts.shirts;
-    this.localStorage = opts.localStorage;
+  constructor(props) {
+    this.root = props.root;
+    this.shirts = props.shirts;
+    this.localStorage = props.localStorage;
 
     let quoteParams = this.localStorage.getItem("quote") || {};
     this.quote = new Quote(quoteParams);

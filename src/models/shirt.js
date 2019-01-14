@@ -1,12 +1,12 @@
 class Shirt {
-  constructor(opts) {
-    this.id = opts.id;
-    this.name = opts.name;
-    this.price = opts.price;
-    this.frontImageUrl = opts.frontImageUrl;
-    this.backImageUrl = opts.backImageUrl;
-    this.description = opts.description;
-    this.availableSizes = opts.availableSizes;
-    this.availableColors = opts.availableColors;
+  constructor(props) {
+    this.id = props.id;
+    this.name = props.name;
+    this.price = props.price;
+    this.frontImageUrl = props.frontImageUrl;
+    this.backImageUrl = props.backImageUrl;
+    this.description = props.description;
+    this.availableSizes = props.availableSizes;
+    this.availableColors = props.availableColors;
   }
 }

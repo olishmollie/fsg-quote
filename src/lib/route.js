@@ -1,9 +1,9 @@
 class Route {
-  constructor(opts) {
+  constructor(props) {
     this.variables = [];
-    this.regex = this.parse(opts.href);
-    this.component = opts.component;
-    this.params = opts.params;
+    this.regex = this.parse(props.href);
+    this.component = props.component;
+    this.params = props.params;
   }
 
   parse(href) {

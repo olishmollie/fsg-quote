@@ -10,7 +10,10 @@ window.onload = function() {
     routes: [
       new Route({
         href: "/",
-        component: PickAShirt
+        component: PickAShirt,
+        params: {
+          shirts: APP.shirts
+        }
       }),
       new Route({
         href: "/products/:shirtId",

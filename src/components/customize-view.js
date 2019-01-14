@@ -1,12 +1,15 @@
 class CustomizeView extends Component {
-  constructor(opts) {
-    super();
+  constructor(props) {
+    super(props);
+  }
+
+  init() {
     this.quote = APP.quote;
 
-    this.product = opts.productId
-      ? new Product(this.quote.products[opts.productId])
+    this.product = this.props.productId
+      ? new Product(this.quote.products[this.props.productId])
       : new Product({
-          shirt: APP.shirts[opts.shirtId],
+          shirt: APP.shirts[this.props.shirtId],
           quantity: 50,
           frontColorCount: 1,
           backColorCount: 1

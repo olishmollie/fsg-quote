@@ -1,9 +1,12 @@
 class Dropdown extends Component {
-  constructor(opts) {
-    super();
-    this._selections = opts.selections;
-    this._selected = opts.selected;
-    this.onchange = opts.onchange;
+  constructor(props) {
+    super(props);
+  }
+
+  init() {
+    this._selections = this.props.selections;
+    this._selected = this.props.selected;
+    this.onchange = this.props.onchange;
 
     this.select = jsml.select(this._selections, this._selected, {
       onchange: event => {

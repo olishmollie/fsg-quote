@@ -1,6 +1,6 @@
 class Quote {
-  constructor(opts = {}) {
-    this._products = opts._products || [];
+  constructor(props = {}) {
+    this._products = props._products || [];
     this.size = this._products.length;
   }
 

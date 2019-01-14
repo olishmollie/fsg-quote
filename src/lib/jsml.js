@@ -7,7 +7,7 @@ var jsml = (function() {
 
   // renders a component or a custom made node
   function component(attributes, component, ...children) {
-    let node = component.render();
+    let node = component.node;
     for (let attr in attributes) {
       // b/c node is already set up as a tree, we must apply styles using object notation (instead of strings)
       if (attr === "style") {

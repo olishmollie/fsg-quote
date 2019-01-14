@@ -1,7 +1,9 @@
 class Root extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+  }
 
+  init() {
     this.container = jsml.div();
   }
 

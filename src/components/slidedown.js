@@ -1,6 +1,9 @@
 class Slidedown extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+  }
+
+  init() {
     this.div = jsml.div();
     this.down = false;
   }

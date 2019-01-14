@@ -1,7 +1,9 @@
 class Navbar extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
   }
+
+  init() {}
 
   render() {
     return super.render(

@@ -1,11 +1,14 @@
 class FileInput extends Component {
-  constructor(opts) {
-    super();
-    this.label = opts.label;
-    this.accept = opts.accept;
+  constructor(props) {
+    super(props);
+  }
 
-    this.onchange = opts.onchange;
-    this.onclear = opts.onclear;
+  init() {
+    this.label = this.props.label;
+    this.accept = this.props.accept;
+
+    this.onchange = this.props.onchange;
+    this.onclear = this.props.onclear;
 
     this.input = jsml.input({
       type: "file",

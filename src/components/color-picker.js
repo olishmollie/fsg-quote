@@ -1,9 +1,12 @@
 class ColorPicker extends Component {
-  constructor(opts) {
-    super();
-    this.color = opts.color;
-    this.colors = opts.colors;
-    this.onchange = opts.onchange;
+  constructor(props) {
+    super(props);
+  }
+
+  init() {
+    this.color = this.props.color;
+    this.colors = this.props.colors;
+    this.onchange = this.props.onchange;
   }
 
   render() {

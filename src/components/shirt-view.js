@@ -1,7 +1,10 @@
 class ShirtView extends Component {
-  constructor(opts) {
-    super();
-    this.shirt = opts.shirt;
+  constructor(props) {
+    super(props);
+  }
+
+  init() {
+    this.shirt = this.props.shirt;
   }
 
   render() {

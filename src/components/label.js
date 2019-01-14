@@ -1,7 +1,10 @@
 class Label extends Component {
-  constructor(opts) {
-    super();
-    this._text = opts.text;
+  constructor(props) {
+    super(props);
+  }
+
+  init() {
+    this._text = this.props.text;
     this.textNode = jsml.text(this._text);
   }
 

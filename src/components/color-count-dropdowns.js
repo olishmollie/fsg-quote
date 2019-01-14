@@ -1,8 +1,11 @@
 class ColorCountDropdowns extends Component {
-  constructor(opts) {
-    super();
-    this.product = opts.product;
-    this.onchange = opts.onchange;
+  constructor(props) {
+    super(props);
+  }
+
+  init() {
+    this.product = this.props.product;
+    this.onchange = this.props.onchange;
 
     this.frontColorCountLabel = new Label({
       text: this.colorLabel("front")

@@ -1,7 +1,10 @@
 class PickAShirt extends Component {
-  constructor() {
-    super();
-    this.shirtViews = APP.shirts.map(shirt => {
+  constructor(props) {
+    super(props);
+  }
+
+  init() {
+    this.shirtViews = this.props.shirts.map(shirt => {
       return new ShirtView({
         shirt: shirt
       });

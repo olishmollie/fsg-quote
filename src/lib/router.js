@@ -1,7 +1,7 @@
 class Router {
-  constructor(opts) {
-    this.routes = opts.routes || [];
-    this.container = opts.container;
+  constructor(props) {
+    this.routes = props.routes || [];
+    this.container = props.container;
     this.location = null;
     this.listen();
   }

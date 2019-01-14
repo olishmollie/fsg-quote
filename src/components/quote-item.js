@@ -1,19 +1,15 @@
 class QuoteItem extends Component {
-  constructor(opts) {
-    super();
-    this.quote = opts.quote;
-    this.index = opts.index;
-    this.product = opts.product;
-    this.onchange = opts.onchange;
-    this.ondelete = opts.ondelete;
-    this.onerror = opts.onerror;
+  constructor(props) {
+    super(props);
+  }
 
+  init() {
     this.slideDown = new Slidedown();
 
     this.flash = new Flash();
 
     this.colorCountDropdowns = new ColorCountDropdowns({
-      product: this.product,
+      product: this.props.product,
       onchange: () => {
         this.handleDropdownChange();
       }
@@ -22,51 +18,67 @@ class QuoteItem extends Component {
 
   customizeRoute() {
     return (
-      "#/products/" + this.product.shirt.id + "?productId=" + this.product.id
+      "#/products/" +
+      this.props.product.shirt.id +
+      "?productId=" +
+      this.props.product.id
     );
   }
 
   handleDropdownChange() {
-    if (!this.hasErrors()) {
-      this.quote.updateProduct(this.product.id, this.product);
+    if (!this.props.product.hasErrors()) {
+      this.props.quote.updateProduct(this.props.product.id, this.props.product);
       this.flash.hide();
-      this.onchange();
+      this.props.onchange();
+      this.noErrors();
     } else {
-      this.onerror();
+      this.handleErrors();
     }
   }
 
   handleInputChange(size, value) {
     if (!isNaN(value)) {
-      this.product.quantities[size] = parseInt(value);
-      this.product.quantity = this.product.quantityFromSizes();
-      if (!this.hasErrors()) {
+      this.props.product.quantities[size] = parseInt(value);
+      this.props.product.quantity = this.props.product.quantityFromSizes();
+      this.props.quote.updateProduct(this.props.product.id, this.props.product);
+      if (!this.props.product.hasErrors()) {
         this.colorCountDropdowns.updateSelections();
-        this.quote.updateProduct(this.product.id, this.product);
-        this.onchange();
+        this.props.onchange();
+        this.noErrors();
       } else {
-        this.onerror();
+        this.handleErrors();
       }
     }
   }
 
-  hasErrors() {
-    if (this.product.notEnoughQuantity()) {
+  handleErrors() {
+    if (this.props.product.notEnoughQuantity()) {
       this.node.style.borderColor = "red";
       this.flash.show(
         "danger",
-        "A minimum of " + this.product.minQuantity() + " shirts are required."
+        "A minimum of " +
+          this.props.product.minQuantity() +
+          " shirts are required."
       );
-      return true;
     }
-    if (this.product.notEnoughColors()) {
+    if (this.props.product.notEnoughColors()) {
       this.node.style.borderColor = "red";
       this.flash.show("danger", "A minimum of 1 color is required.");
-      return true;
     }
+    this.props.onerror();
+  }
+
+  noErrors() {
     this.node.style.borderColor = "";
     this.flash.hide();
-    return false;
+  }
+
+  didRender() {
+    if (this.props.product.hasErrors()) {
+      this.handleErrors();
+    } else {
+      this.noErrors();
+    }
   }
 
   render() {
@@ -109,8 +121,8 @@ class QuoteItem extends Component {
             jsml.button(
               {
                 onclick: () => {
-                  this.quote.remove(this.product);
-                  this.ondelete();
+                  this.props.quote.remove(this.props.product);
+                  this.props.ondelete();
                 }
               },
               jsml.text("Delete")
@@ -126,14 +138,14 @@ class QuoteItem extends Component {
               href: this.customizeRoute()
             },
             jsml.img({
-              src: this.product.frontMockup,
+              src: this.props.product.frontMockup,
               width: "64",
               height: "64"
             }),
             jsml.h5(
               {},
-              jsml.strong({}, jsml.text(this.index + 1 + ". ")),
-              jsml.text(this.product.shirt.name)
+              jsml.strong({}, jsml.text(this.props.index + 1 + ". ")),
+              jsml.text(this.props.product.shirt.name)
             )
           ),
           jsml.button(
@@ -149,7 +161,7 @@ class QuoteItem extends Component {
             {
               className: "quantity-inputs"
             },
-            ...this.product.shirt.availableSizes.map(size => {
+            ...this.props.product.shirt.availableSizes.map(size => {
               return jsml.div(
                 {
                   style: {
@@ -170,7 +182,7 @@ class QuoteItem extends Component {
                   {},
                   new ControlledInput({
                     type: "number",
-                    value: this.product.quantities[size],
+                    value: this.props.product.quantities[size],
                     min: 1,
                     max: 2000,
                     onchange: value => {
@@ -179,7 +191,7 @@ class QuoteItem extends Component {
                     onblur: () => {
                       this.handleInputChange(
                         size,
-                        this.product.quantities[size]
+                        this.props.product.quantities[size]
                       );
                     }
                   })

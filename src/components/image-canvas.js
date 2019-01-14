@@ -1,10 +1,13 @@
 class ImageCanvas extends Component {
-  constructor(opts) {
-    super();
-    this.height = opts.height;
-    this.width = opts.width;
-    this.onload = opts.onload;
-    this.oninvalidfile = opts.oninvalidfile;
+  constructor(props) {
+    super(props);
+  }
+
+  init() {
+    this.height = this.props.height;
+    this.width = this.props.width;
+    this.onload = this.props.onload;
+    this.oninvalidfile = this.props.oninvalidfile;
 
     this.canvas = jsml.canvas({
       width: this.width,

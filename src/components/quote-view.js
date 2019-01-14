@@ -1,7 +1,10 @@
 class QuoteView extends Component {
-  constructor() {
-    super();
-    this.quote = APP.quote;
+  constructor(props) {
+    super(props);
+  }
+
+  init() {
+    this.quote = this.props.quote;
 
     this.estimatedCostLabel = new Label({
       text: "$" + this.quote.estimatedCost().toFixed(2)

@@ -1,11 +1,14 @@
 class NumberInput extends Component {
-  constructor(opts) {
-    super();
-    this.value = opts.value || 50;
-    this._max = opts.max || 10000;
-    this._min = opts.min || 1;
-    this._readOnly = opts.readOnly || false;
-    this.onchange = opts.onchange;
+  constructor(props) {
+    super(props);
+  }
+
+  init() {
+    this.value = this.props.value || 50;
+    this._max = this.props.max || 10000;
+    this._min = this.props.min || 1;
+    this._readOnly = this.props.readOnly || false;
+    this.onchange = this.props.onchange;
 
     this.input = new ControlledInput({
       type: "number",

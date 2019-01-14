@@ -1,15 +1,18 @@
 class ControlledInput extends Component {
-  constructor(opts) {
-    super();
-    this._value = opts.value;
-    this._readOnly = opts.readOnly;
-    this._min = opts.min;
-    this._max = opts.max;
+  constructor(props) {
+    super(props);
+  }
 
-    this.type = opts.type;
-    this.autofocus = opts.autofocus;
-    this.onchange = opts.onchange;
-    this.onblur = opts.onblur;
+  init() {
+    this._value = this.props.value;
+    this._readOnly = this.props.readOnly;
+    this._min = this.props.min;
+    this._max = this.props.max;
+
+    this.type = this.props.type;
+    this.autofocus = this.props.autofocus;
+    this.onchange = this.props.onchange;
+    this.onblur = this.props.onblur;
 
     this.input = jsml.input();
   }

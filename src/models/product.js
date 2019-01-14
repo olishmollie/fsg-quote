@@ -1,25 +1,25 @@
 class Product {
-  constructor(opts) {
-    this.shirt = opts.shirt;
-    this.color = opts.color;
-    this.quantity = opts.quantity;
-    this.frontColorCount = opts.frontColorCount;
-    this.backColorCount = opts.backColorCount;
-    this.quantities = opts.quantities || {};
+  constructor(props) {
+    this.shirt = props.shirt;
+    this.color = props.color;
+    this.quantity = props.quantity;
+    this.frontColorCount = props.frontColorCount;
+    this.backColorCount = props.backColorCount;
+    this.quantities = props.quantities || {};
 
-    this.frontImage = opts.frontImage || null;
-    this.backImage = opts.backImage || null;
-    this.frontMockup = opts.frontMockup || null;
-    this.backMockup = opts.backMockup || null;
+    this.frontImage = props.frontImage || null;
+    this.backImage = props.backImage || null;
+    this.frontMockup = props.frontMockup || null;
+    this.backMockup = props.backMockup || null;
 
     // image data cache
-    this.prevX = opts.prevX || null;
-    this.prevY = opts.prevY || null;
-    this.prevWidth = opts.prevWidth || null;
-    this.prevHeight = opts.prevHeight || null;
+    this.prevX = props.prevX || null;
+    this.prevY = props.prevY || null;
+    this.prevWidth = props.prevWidth || null;
+    this.prevHeight = props.prevHeight || null;
 
     // assigned when added to a quote
-    this.id = opts.id;
+    this.id = props.id;
   }
 
   save() {
@@ -38,6 +38,10 @@ class Product {
     } else {
       return 50;
     }
+  }
+
+  hasErrors() {
+    return this.notEnoughColors() || this.notEnoughQuantity();
   }
 
   notEnoughColors() {
