@@ -8,13 +8,14 @@ class Slidedown extends Component {
   slideDown() {
     if (this.down) return;
     this.div.style.zIndex = 1;
-    this.div.style.opacity = 0.75;
     this.down = true;
     let timer = setInterval(() => {
       if (this.div.style.height === "100%") {
         clearInterval(timer);
+        return;
       }
       this.div.style.height = parseInt(this.div.style.height) + 1 + "%";
+      this.div.style.opacity = parseInt(this.div.style.height) / 100;
     });
   }
 
@@ -23,10 +24,11 @@ class Slidedown extends Component {
     let timer = setInterval(() => {
       if (this.div.style.height === "0%") {
         clearInterval(timer);
-        this.div.style.opacity = 0;
         this.div.style.zIndex = -1;
+        return;
       }
       this.div.style.height = parseInt(this.div.style.height) - 1 + "%";
+      this.div.style.opacity -= 0.01;
     });
     this.down = false;
   }
@@ -41,7 +43,8 @@ class Slidedown extends Component {
             textAlign: "center",
             position: "absolute",
             zIndex: -1,
-            opacity: 0
+            opacity: 0,
+            borderRadius: "inherit"
           }
         },
         this.div

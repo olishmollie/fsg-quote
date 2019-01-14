@@ -3,6 +3,9 @@ class ControlledInput extends Component {
     super();
     this._value = opts.value;
     this._readOnly = opts.readOnly;
+    this._min = opts.min;
+    this._max = opts.max;
+
     this.type = opts.type;
     this.autofocus = opts.autofocus;
     this.onchange = opts.onchange;
@@ -29,6 +32,24 @@ class ControlledInput extends Component {
     this.input.readOnly = this._readOnly;
   }
 
+  get min() {
+    return this._min;
+  }
+
+  set min(min) {
+    this._min = min;
+    this.input.min = this._min;
+  }
+
+  get max() {
+    return this._max;
+  }
+
+  set max(max) {
+    this._max = max;
+    this.input.max = this._max;
+  }
+
   handleInput(value) {
     if (value) {
       this.value = value;
@@ -44,6 +65,8 @@ class ControlledInput extends Component {
           value: this.value,
           readOnly: this.readOnly,
           autofocus: this.autofocus,
+          min: this.min,
+          max: this.max,
           onchange: event => {
             let value = event.target.value;
             this.handleInput(value);

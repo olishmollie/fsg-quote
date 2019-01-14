@@ -35,11 +35,7 @@ class QuoteView extends Component {
           {},
           ...this.quote.products.map((product, index) => {
             return jsml.component(
-              {
-                style: {
-                  position: "relative"
-                }
-              },
+              {},
               new QuoteItem({
                 quote: this.quote,
                 product: product,

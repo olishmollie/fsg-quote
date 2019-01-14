@@ -133,6 +133,9 @@ var jsml = (function() {
     },
     canvas: attributes => {
       return makeElement("canvas", attributes);
+    },
+    br: () => {
+      return makeElement("br");
     }
   };
 })();

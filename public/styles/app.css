@@ -1,25 +1,109 @@
+/*
+* For some reason this allows heights to be set on elements with absolute positions.
+* I'm not sure what this will do to overall styling, but I guess it's ok for now
+*/
+* {
+    position: relative;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-/* makes text centered in input */
-.number-input .controlled-input {
+.customize-view {
     text-align: center;
+    max-width: 500px;
+    margin: auto;
+}
+
+.customize-view .product-detail {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 3px;
 }
 
 /* positions image directly under canvas */
-.image-viewer img {
+.customize-view .image-viewer img {
     position: absolute;
     z-index: -1;
 }
 
-.image-viewer .dragged-over {
+.customize-view .image-viewer .dragged-over {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-/* .slidedown {
-    background-color: blue;
-    color: white;
-} */
+.customize-view .product-detail .color-picker {
+    margin: 10px;
+}
+
+.quote-view {
+    margin: auto;
+    max-width: 500px;
+}
+
+.quote-view .quote-item {
+    margin: 10px 0;
+    border: 1px solid black;
+    border-radius: 3px;
+}
+
+.quote-view .quote-item .slidedown * {
+   margin: 5px;
+}
+
+.quote-view .quote-item .media-body {
+    padding: 10px;
+}
+
+.quote-view .quote-item h5 {
+    display: inline-block;
+}
+
+.quote-view .quote-item .delete-button {
+    float: right;
+}
+
+.quote-view .quote-item .quantity-inputs {
+    margin: 0 10px;
+}
+
+.quote-view .quote-item .controlled-input {
+    margin-right: 5px;
+}
+
+.color-count-dropdowns {
+    margin: 10px 0;
+}
+
+.color-count-dropdowns .dropdown {
+    margin: 0 10px;
+}
+
+/* makes text centered in input */
+.controlled-input {
+    text-align: center;
+}
+
+.flash {
+    margin: 10px 0;
+}
+
+.flash p {
+    margin: 0;
+}
+
+/* flash types */
+.flash-danger {
+    color: red;
+}
+
+.flash-warning {
+    color: yellow;
+}
+
+.flash-success {
+    color: green;
+}

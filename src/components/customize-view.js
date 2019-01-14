@@ -43,9 +43,7 @@ class CustomizeView extends Component {
   render() {
     return super.render(
       jsml.div(
-        {
-          className: "text-center"
-        },
+        {},
         jsml.h1({
           innerText: this.product.shirt.name
         }),

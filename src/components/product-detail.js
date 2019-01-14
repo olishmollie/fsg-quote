@@ -74,15 +74,10 @@ class ProductDetail extends Component {
   render() {
     return super.render(
       jsml.div(
-        {
-          className: "text-center m-auto p-3",
-          style:
-            "border: 1px solid black; box-shadow: 8px 10px rgba(0,0,0,0.05);"
-        },
-        jsml.component({}, this.flash),
+        {},
         jsml.component({}, this.colorPicker),
         jsml.div(
-          { className: "form-group mt-3" },
+          { className: "form-group" },
           jsml.strong(
             {},
             jsml.component({}, this.pricePerShirtLabel),
@@ -94,6 +89,7 @@ class ProductDetail extends Component {
           jsml.component({}, this.quantityInput)
         ),
         jsml.component({}, this.colorCountDropdowns),
+        jsml.component({}, this.flash),
         jsml.element(
           {
             className: "btn btn-primary"

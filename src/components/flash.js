@@ -1,36 +1,21 @@
 class Flash extends Component {
   constructor() {
     super();
-    this.p = jsml.p();
+    this.p = jsml.p({});
   }
 
   show(type, msg) {
     this.p.innerText = msg;
     this.node.style.display = "block";
-    this.node.className = "alert-" + type;
+    this.node.className += " flash-" + type;
   }
 
   hide() {
     this.node.style.display = "none";
+    this.node.className = this.className;
   }
 
   render() {
-    return super.render(
-      jsml.div(
-        {
-          className: "alert alert-danger",
-          style: {
-            display: "none"
-          }
-        },
-        jsml.button({
-          innerText: "\u2716",
-          onclick: () => {
-            this.hide();
-          }
-        }),
-        jsml.element({}, this.p)
-      )
-    );
+    return super.render(jsml.div({}, jsml.element({}, this.p)));
   }
 }
