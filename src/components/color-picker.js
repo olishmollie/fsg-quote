@@ -10,22 +10,20 @@ class ColorPicker extends Component {
   }
 
   render() {
-    return super.render(
-      jsml.div(
-        {},
-        ...this.colors.map(color => {
-          return jsml.component(
-            {},
-            new ShirtColor({
-              color: color,
-              onclick: color => {
-                this.color = color;
-                this.onchange(color);
-              }
-            })
-          );
-        })
-      )
+    return jsml.div(
+      {},
+      ...this.colors.map(color => {
+        return jsml.component(
+          {},
+          new ShirtColor({
+            color: color,
+            onclick: color => {
+              this.color = color;
+              this.onchange(color);
+            }
+          })
+        );
+      })
     );
   }
 }

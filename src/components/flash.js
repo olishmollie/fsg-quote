@@ -19,6 +19,6 @@ class Flash extends Component {
   }
 
   render() {
-    return super.render(jsml.div({}, jsml.element({}, this.p)));
+    return jsml.div({}, jsml.element({}, this.p));
   }
 }

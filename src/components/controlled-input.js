@@ -61,31 +61,29 @@ class ControlledInput extends Component {
   }
 
   render() {
-    return super.render(
-      jsml.element(
-        {
-          type: this.type,
-          value: this.value,
-          readOnly: this.readOnly,
-          autofocus: this.autofocus,
-          min: this.min,
-          max: this.max,
-          onchange: event => {
-            let value = event.target.value;
-            this.handleInput(value);
-          },
-          onkeyup: event => {
-            let value = event.target.value;
-            this.handleInput(value);
-            this.onchange(value);
-          },
-          onblur: () => {
-            this.handleInput(this.value);
-            this.onblur();
-          }
+    return jsml.element(
+      {
+        type: this.type,
+        value: this.value,
+        readOnly: this.readOnly,
+        autofocus: this.autofocus,
+        min: this.min,
+        max: this.max,
+        onchange: event => {
+          let value = event.target.value;
+          this.handleInput(value);
         },
-        this.input
-      )
+        onkeyup: event => {
+          let value = event.target.value;
+          this.handleInput(value);
+          this.onchange(value);
+        },
+        onblur: () => {
+          this.handleInput(this.value);
+          this.onblur();
+        }
+      },
+      this.input
     );
   }
 }

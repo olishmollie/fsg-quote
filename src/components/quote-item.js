@@ -82,126 +82,124 @@ class QuoteItem extends Component {
   }
 
   render() {
-    return super.render(
-      jsml.div(
+    return jsml.div(
+      {
+        className: "media"
+      },
+      jsml.component(
         {
-          className: "media"
+          style: {
+            backgroundColor: "blue",
+            color: "white"
+          }
         },
-        jsml.component(
-          {
-            style: {
-              backgroundColor: "blue",
-              color: "white"
-            }
-          },
-          this.slideDown,
-          jsml.div(
-            {
-              style: {
-                position: "relative",
-                top: "40%"
-              }
-            },
-            jsml.p(
-              {
-                style: {
-                  display: "inline"
-                }
-              },
-              jsml.text("Are you sure?")
-            ),
-            jsml.button(
-              {
-                onclick: () => {
-                  this.slideDown.slideUp();
-                }
-              },
-              jsml.text("Cancel")
-            ),
-            jsml.button(
-              {
-                onclick: () => {
-                  this.props.quote.remove(this.props.product);
-                  this.props.ondelete();
-                }
-              },
-              jsml.text("Delete")
-            )
-          )
-        ),
+        this.slideDown,
         jsml.div(
           {
-            className: "media-body"
+            style: {
+              position: "relative",
+              top: "40%"
+            }
           },
-          jsml.a(
+          jsml.p(
             {
-              href: this.customizeRoute()
+              style: {
+                display: "inline"
+              }
             },
-            jsml.img({
-              src: this.props.product.frontMockup,
-              width: "64",
-              height: "64"
-            }),
-            jsml.h5(
-              {},
-              jsml.strong({}, jsml.text(this.props.index + 1 + ". ")),
-              jsml.text(this.props.product.shirt.name)
-            )
+            jsml.text("Are you sure?")
           ),
           jsml.button(
             {
-              className: "delete-button",
               onclick: () => {
-                this.slideDown.slideDown();
+                this.slideDown.slideUp();
               }
             },
-            jsml.text("TRASH")
+            jsml.text("Cancel")
           ),
-          jsml.div(
+          jsml.button(
             {
-              className: "quantity-inputs"
+              onclick: () => {
+                this.props.quote.remove(this.props.product);
+                this.props.ondelete();
+              }
             },
-            ...this.props.product.shirt.availableSizes.map(size => {
-              return jsml.div(
+            jsml.text("Delete")
+          )
+        )
+      ),
+      jsml.div(
+        {
+          className: "media-body"
+        },
+        jsml.a(
+          {
+            href: this.customizeRoute()
+          },
+          jsml.img({
+            src: this.props.product.frontMockup,
+            width: "64",
+            height: "64"
+          }),
+          jsml.h5(
+            {},
+            jsml.strong({}, jsml.text(this.props.index + 1 + ". ")),
+            jsml.text(this.props.product.shirt.name)
+          )
+        ),
+        jsml.button(
+          {
+            className: "delete-button",
+            onclick: () => {
+              this.slideDown.slideDown();
+            }
+          },
+          jsml.text("TRASH")
+        ),
+        jsml.div(
+          {
+            className: "quantity-inputs"
+          },
+          ...this.props.product.shirt.availableSizes.map(size => {
+            return jsml.div(
+              {
+                style: {
+                  display: "inline-block"
+                }
+              },
+              jsml.label(
                 {
                   style: {
-                    display: "inline-block"
+                    display: "block",
+                    textAlign: "center",
+                    margin: 0
                   }
                 },
-                jsml.label(
-                  {
-                    style: {
-                      display: "block",
-                      textAlign: "center",
-                      margin: 0
-                    }
+                jsml.text(size)
+              ),
+              jsml.component(
+                {},
+                new ControlledInput({
+                  type: "number",
+                  value: this.props.product.quantities[size],
+                  min: 1,
+                  max: 2000,
+                  onchange: value => {
+                    this.handleInputChange(size, parseInt(value));
                   },
-                  jsml.text(size)
-                ),
-                jsml.component(
-                  {},
-                  new ControlledInput({
-                    type: "number",
-                    value: this.props.product.quantities[size],
-                    min: 1,
-                    max: 2000,
-                    onchange: value => {
-                      this.handleInputChange(size, parseInt(value));
-                    },
-                    onblur: () => {
-                      this.handleInputChange(
-                        size,
-                        this.props.product.quantities[size]
-                      );
-                    }
-                  })
-                )
-              );
-            })
-          ),
-          jsml.component({}, this.flash),
-          jsml.component({}, this.colorCountDropdowns)
-        )
+                  onblur: () => {
+                    this.handleInputChange(
+                      size,
+                      this.props.product.quantities[size]
+                    );
+                  }
+                })
+              )
+            );
+          })
+        ),
+        jsml.component({}, this.flash),
+        jsml.component({}, this.colorCountDropdowns)
       )
     );
   }

@@ -4,19 +4,18 @@ class ImageViewer extends Component {
   }
 
   init() {
-    this.product = this.props.product;
-    this.width = this.props.width;
-    this.height = this.props.height;
     this.hasBeenEdited = false;
 
     this.flash = new Flash();
 
     this.imageCanvas = new ImageCanvas({
-      width: this.width,
-      height: this.height,
+      width: this.props.width,
+      height: this.props.height,
       onload: file => {
         this.hasBeenEdited = true;
-        this.product.frontImage = file;
+        this.props.product.frontImage = file;
+        this.props.product.save();
+        this.props.onload();
       },
       oninvalidfile: () => {
         this.flash.show("danger", "Invalid file type.");
@@ -25,11 +24,11 @@ class ImageViewer extends Component {
 
     // if product has a mockup, render it, otherwise use the background image
     this.backgroundImage = jsml.img({
-      src: this.product.hasMockup()
+      src: this.props.product.hasMockup()
         ? this.initialMockup()
-        : this.product.shirt.frontImageUrl,
-      width: this.width,
-      height: this.height
+        : this.props.product.shirt.frontImageUrl,
+      width: this.props.width,
+      height: this.props.height
     });
 
     this.editButton = jsml.button(
@@ -53,10 +52,10 @@ class ImageViewer extends Component {
   }
 
   initialMockup() {
-    if (this.product.frontMockup) {
-      return this.product.frontMockup;
+    if (this.props.product.frontMockup) {
+      return this.props.product.frontMockup;
     }
-    return this.product.backMockup;
+    return this.props.product.backMockup;
   }
 
   editCanvas() {
@@ -65,18 +64,18 @@ class ImageViewer extends Component {
 
     // set the backgroundImage to the stock photo
     let newImage = jsml.img({
-      width: this.width,
-      height: this.height,
+      width: this.props.width,
+      height: this.props.height,
       src: this.initialBackground()
     });
     this.node.replaceChild(newImage, this.backgroundImage);
     this.backgroundImage = newImage;
 
     // get cached x, y, and size
-    let x = this.product.prevX;
-    let y = this.product.prevY;
-    let width = this.product.prevWidth;
-    let height = this.product.prevHeight;
+    let x = this.props.product.prevX;
+    let y = this.props.product.prevY;
+    let width = this.props.product.prevWidth;
+    let height = this.props.product.prevHeight;
 
     // draw the image onto the canvas
     this.imageCanvas.drawImage(this.initialImage(), x, y, width, height);
@@ -86,25 +85,25 @@ class ImageViewer extends Component {
   }
 
   initialBackground() {
-    if (this.product.frontMockup) {
-      return this.product.shirt.frontImageUrl;
+    if (this.props.product.frontMockup) {
+      return this.props.product.shirt.frontImageUrl;
     }
-    return this.product.shirt.backImageUrl;
+    return this.props.product.shirt.backImageUrl;
   }
 
   initialImage() {
-    if (this.product.frontMockup) {
-      return this.product.frontImage;
+    if (this.props.product.frontMockup) {
+      return this.props.product.frontImage;
     }
-    return this.product.backImage;
+    return this.props.product.backImage;
   }
 
   clearCanvas() {
     this.imageCanvas.clearCanvas();
-    this.product.frontImage = null;
-    this.product.frontMockup = null;
-    if (this.product.persisted()) {
-      this.product.save();
+    this.props.product.frontImage = null;
+    this.props.product.frontMockup = null;
+    if (this.props.product.persisted()) {
+      this.props.product.save();
     }
   }
 
@@ -117,11 +116,11 @@ class ImageViewer extends Component {
 
       // cache x, y, and size of image
       let imageLayer = $("canvas").getLayer("image");
-      this.product.prevX = imageLayer.x;
-      this.product.prevY = imageLayer.y;
-      this.product.prevWidth = imageLayer.width;
-      this.product.prevHeight = imageLayer.height;
-      this.product.save();
+      this.props.product.prevX = imageLayer.x;
+      this.props.product.prevY = imageLayer.y;
+      this.props.product.prevWidth = imageLayer.width;
+      this.props.product.prevHeight = imageLayer.height;
+      this.props.product.save();
 
       return $("canvas").getCanvasImage();
     }
@@ -133,17 +132,15 @@ class ImageViewer extends Component {
   }
 
   render() {
-    return super.render(
-      jsml.div(
-        {},
-        jsml.component({}, this.flash),
-        jsml.element({}, this.backgroundImage),
-        jsml.component({}, this.imageCanvas),
-        jsml.cond(
-          this.product.hasMockup(),
-          jsml.element({}, this.editButton),
-          jsml.element({}, this.clearButton)
-        )
+    return jsml.div(
+      {},
+      jsml.component({}, this.flash),
+      jsml.element({}, this.backgroundImage),
+      jsml.component({}, this.imageCanvas),
+      jsml.cond(
+        this.props.product.hasMockup(),
+        jsml.element({}, this.editButton),
+        jsml.element({}, this.clearButton)
       )
     );
   }

@@ -9,17 +9,15 @@ class ShirtColor extends Component {
   }
 
   render() {
-    return super.render(
-      jsml.div({
-        className: "col-sm",
-        style: {
-          display: "inline",
-          backgroundColor: this.color.hex
-        },
-        onclick: () => {
-          this.onclick(this.color);
-        }
-      })
-    );
+    return jsml.div({
+      className: "col-sm",
+      style: {
+        display: "inline",
+        backgroundColor: this.color.hex
+      },
+      onclick: () => {
+        this.onclick(this.color);
+      }
+    });
   }
 }

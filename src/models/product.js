@@ -26,6 +26,10 @@ class Product {
     APP.quote.updateProduct(this.id, this);
   }
 
+  hasImage() {
+    return !!this.frontImage || !!this.backImage;
+  }
+
   hasMockup() {
     return !!this.frontMockup || !!this.backMockup;
   }

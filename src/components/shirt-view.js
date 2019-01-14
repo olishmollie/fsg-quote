@@ -8,29 +8,27 @@ class ShirtView extends Component {
   }
 
   render() {
-    return super.render(
-      jsml.div(
+    return jsml.div(
+      {
+        className: "card"
+      },
+      jsml.figure(
         {
-          className: "card"
+          className: "figure"
         },
-        jsml.figure(
+        jsml.a(
           {
-            className: "figure"
+            href: "#/products/" + this.shirt.id
           },
-          jsml.a(
-            {
-              href: "#/products/" + this.shirt.id
-            },
-            jsml.img({
-              className: "figure-img img-fluid rounded",
-              src: this.shirt.frontImageUrl,
-              alt: this.shirt.name
-            }),
-            jsml.figcaption({
-              className: "figure-caption text-center",
-              innerText: this.shirt.name
-            })
-          )
+          jsml.img({
+            className: "figure-img img-fluid rounded",
+            src: this.shirt.frontImageUrl,
+            alt: this.shirt.name
+          }),
+          jsml.figcaption({
+            className: "figure-caption text-center",
+            innerText: this.shirt.name
+          })
         )
       )
     );

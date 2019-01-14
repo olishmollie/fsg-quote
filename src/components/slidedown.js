@@ -37,21 +37,19 @@ class Slidedown extends Component {
   }
 
   render() {
-    return super.render(
-      jsml.element(
-        {
-          style: {
-            width: "100%",
-            height: "0",
-            textAlign: "center",
-            position: "absolute",
-            zIndex: -1,
-            opacity: 0,
-            borderRadius: "inherit"
-          }
-        },
-        this.div
-      )
+    return jsml.element(
+      {
+        style: {
+          width: "100%",
+          height: "0",
+          textAlign: "center",
+          position: "absolute",
+          zIndex: -1,
+          opacity: 0,
+          borderRadius: "inherit"
+        }
+      },
+      this.div
     );
   }
 }

@@ -24,67 +24,65 @@ class QuoteView extends Component {
 
   render() {
     if (this.quote.size === 0) {
-      return super.render(
-        jsml.div(
-          {},
-          jsml.p({
-            innerText: "There are no items here yet."
-          })
-        )
+      return jsml.div(
+        {},
+        jsml.p({
+          innerText: "There are no items here yet."
+        })
       );
     } else {
-      return super.render(
-        jsml.div(
-          {},
-          ...this.quote.products.map((product, index) => {
-            return jsml.component(
-              {},
-              new QuoteItem({
-                quote: this.quote,
-                product: product,
-                index: index,
-                onchange: () => {
-                  this.estimatedCostLabel.text =
-                    "$" + this.quote.estimatedCost().toFixed(2);
-                  this.submitButton.disabled = false;
-                },
-                ondelete: () => {
-                  this.node.innerHTML = "";
-                  this.node.appendChild(this.render());
-                  this.estimatedCostLabel.text =
-                    "$" + this.quote.estimatedCost().toFixed(2);
-                },
-                onerror: () => {
-                  this.submitButton.disabled = true;
-                }
-              })
-            );
-          }),
-          jsml.div(
-            { className: "mt-3" },
-            jsml.h3(
-              {
-                innerText: "Estimated Cost: "
+      return jsml.div(
+        {},
+        ...this.quote.products.map((product, index) => {
+          return jsml.component(
+            {},
+            new QuoteItem({
+              quote: this.quote,
+              product: product,
+              index: index,
+              onchange: () => {
+                this.estimatedCostLabel.text =
+                  "$" + this.quote.estimatedCost().toFixed(2);
+                this.submitButton.disabled = false;
               },
-              jsml.component({}, this.estimatedCostLabel)
-            )
-          ),
-          jsml.div(
+              ondelete: () => {
+                // re render quote-view
+                // let parent = this.node.parentElement;
+                // Component.mount(this.render(), parent);
+                // this.estimatedCostLabel.text =
+                //   "$" + this.quote.estimatedCost().toFixed(2);
+                this.update();
+              },
+              onerror: () => {
+                this.submitButton.disabled = true;
+              }
+            })
+          );
+        }),
+        jsml.div(
+          { className: "mt-3" },
+          jsml.h3(
             {
-              className: "form-group"
+              innerText: "Estimated Cost: "
             },
-            jsml.input({
-              type: "email",
-              className: "form-control user-email",
-              placeholder: "Email"
-            }),
-            jsml.element({}, this.submitButton)
-          ),
-          jsml.p({
-            innerText:
-              "Submit your order and we'll email you with a mockup within the week."
-          })
-        )
+            jsml.component({}, this.estimatedCostLabel)
+          )
+        ),
+        jsml.div(
+          {
+            className: "form-group"
+          },
+          jsml.input({
+            type: "email",
+            className: "form-control user-email",
+            placeholder: "Email"
+          }),
+          jsml.element({}, this.submitButton)
+        ),
+        jsml.p({
+          innerText:
+            "Submit your order and we'll email you with a mockup within the week."
+        })
       );
     }
   }

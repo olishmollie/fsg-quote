@@ -139,7 +139,7 @@ class ImageCanvas extends Component {
   }
 
   render() {
-    return super.render(this.canvas);
+    return this.canvas;
   }
 }
 

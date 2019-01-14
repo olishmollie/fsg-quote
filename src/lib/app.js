@@ -9,8 +9,7 @@ class App {
   }
 
   start() {
-    // mount the root
-    document.body.appendChild(this.root.render());
+    Component.mount(this.root, document.body);
     this.router.load(window.location.hash);
   }
 }

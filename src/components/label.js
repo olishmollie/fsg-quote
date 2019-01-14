@@ -18,6 +18,6 @@ class Label extends Component {
   }
 
   render() {
-    return super.render(jsml.span({}, this.textNode));
+    return jsml.span({}, this.textNode);
   }
 }

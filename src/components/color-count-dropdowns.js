@@ -73,14 +73,12 @@ class ColorCountDropdowns extends Component {
   }
 
   render() {
-    return super.render(
-      jsml.div(
-        {},
-        jsml.component({}, this.frontColorCountDropdown),
-        jsml.component({}, this.frontColorCountLabel),
-        jsml.component({}, this.backColorCountDropdown),
-        jsml.component({}, this.backColorCountLabel)
-      )
+    return jsml.div(
+      {},
+      jsml.component({}, this.frontColorCountDropdown),
+      jsml.component({}, this.frontColorCountLabel),
+      jsml.component({}, this.backColorCountDropdown),
+      jsml.component({}, this.backColorCountLabel)
     );
   }
 }

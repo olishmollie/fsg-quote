@@ -8,18 +8,16 @@ class Root extends Component {
   }
 
   render() {
-    return super.render(
-      jsml.div(
+    return jsml.div(
+      {
+        className: "container"
+      },
+      jsml.component({}, new Navbar()),
+      jsml.element(
         {
-          className: "container"
+          id: "app"
         },
-        jsml.component({}, new Navbar()),
-        jsml.element(
-          {
-            id: "app"
-          },
-          this.container
-        )
+        this.container
       )
     );
   }
