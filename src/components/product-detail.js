@@ -62,17 +62,25 @@ class ProductDetail extends Component {
       {},
       jsml.component({}, this.colorPicker),
       jsml.div(
-        { className: "form-group" },
+        {
+          className: "price-per-shirt-label"
+        },
         jsml.strong(
           {},
           jsml.component({}, this.pricePerShirtLabel),
           jsml.text("/shirt")
         )
       ),
-      jsml.div(
-        { className: "form-group" },
-        jsml.component({}, this.quantityInput)
+      jsml.button(
+        {
+          className: "btn btn-sm btn-link",
+          onclick: () => {
+            this.props.onShowPricingModal();
+          }
+        },
+        jsml.text("Show Pricing")
       ),
+      jsml.div({}, jsml.component({}, this.quantityInput)),
       jsml.component({}, this.colorCountDropdowns)
     );
   }

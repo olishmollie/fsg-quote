@@ -18,11 +18,15 @@ input::-webkit-inner-spin-button {
     margin: auto;
 }
 
-.customize-view .product-detail {
+.customize-view .product-detail-box {
     margin: 10px 0;
     padding: 10px;
     border: 1px solid black;
     border-radius: 3px;
+}
+
+.customize-view .product-detail-box .price-per-shirt-label {
+    display: "block";
 }
 
 /* positions image directly under canvas */
@@ -106,4 +110,16 @@ input::-webkit-inner-spin-button {
 
 .flash-success {
     color: green;
+}
+
+.modal {
+    position: fixed;
+    border-radius: 3px;
+    width: 400px;
+    height: 400px;
+    margin-top: -200px;
+    margin-left: -200px;
+    top: 50%;
+    left: 50%;
+    z-index: 999
 }

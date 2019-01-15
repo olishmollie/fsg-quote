@@ -134,6 +134,18 @@ var jsml = (function() {
     canvas: attributes => {
       return makeElement("canvas", attributes);
     },
+    table: (attributes, ...children) => {
+      return makeElement("table", attributes, ...children);
+    },
+    tr: (attributes, ...children) => {
+      return makeElement("tr", attributes, ...children);
+    },
+    td: (attributes, ...children) => {
+      return makeElement("td", attributes, ...children);
+    },
+    th: (attributes, ...children) => {
+      return makeElement("th", attributes, ...children);
+    },
     br: () => {
       return makeElement("br");
     }

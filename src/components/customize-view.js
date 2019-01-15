@@ -32,6 +32,9 @@ class CustomizeView extends Component {
       },
       noerrors: () => {
         this.noErrors();
+      },
+      onShowPricingModal: () => {
+        this.pricingModal.show();
       }
     });
 
@@ -43,6 +46,8 @@ class CustomizeView extends Component {
         this.noErrors();
       }
     });
+
+    this.pricingModal = new Modal();
   }
 
   save() {
@@ -83,7 +88,7 @@ class CustomizeView extends Component {
 
   handleImageError() {
     if (!this.product.hasImage() || !this.product.hasMockup()) {
-      this.flash.show("danger", "Please provide an image.");
+      this.flash.show("danger", "Please upload an image.");
     }
     this.saveButton.disabled = true;
   }
@@ -104,8 +109,21 @@ class CustomizeView extends Component {
       }),
       jsml.component({}, this.imageViewer),
       jsml.component(
-        {},
-        this.productDetail,
+        {
+          style: {
+            textAlign: "center",
+            backgroundColor: "blue",
+            color: "white"
+          }
+        },
+        this.pricingModal,
+        jsml.component({}, new PricingTable())
+      ),
+      jsml.div(
+        {
+          className: "product-detail-box"
+        },
+        jsml.component({}, this.productDetail),
         jsml.component({}, this.flash),
         jsml.element(
           {
