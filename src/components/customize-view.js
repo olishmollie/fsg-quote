@@ -109,13 +109,7 @@ class CustomizeView extends Component {
       }),
       jsml.component({}, this.imageViewer),
       jsml.component(
-        {
-          style: {
-            textAlign: "center",
-            backgroundColor: "blue",
-            color: "white"
-          }
-        },
+        {},
         this.pricingModal,
         jsml.component({}, new PricingTable())
       ),
