@@ -16,20 +16,21 @@ class ImageViewer extends Component {
         this.props.product.frontImage = file;
         this.props.product.save();
         this.props.onload();
+        this.dragArea.style.display = "none";
       },
+      // TODO: provide a flash option to have an x button
       oninvalidfile: () => {
         this.flash.show("danger", "Invalid file type.");
       }
     });
 
-    // if product has a mockup, render it, otherwise use the background image
-    this.backgroundImage = jsml.img({
-      src: this.props.product.hasMockup()
-        ? this.initialMockup()
-        : this.props.product.shirt.frontImageUrl,
-      width: this.props.width,
-      height: this.props.height
-    });
+    this.dragArea = jsml.div();
+    // if product has a mockup, hide drag area
+    if (this.props.product.hasMockup()) {
+      this.dragArea.style.display = "none";
+    }
+
+    this.backgroundImage = jsml.img();
 
     this.editButton = jsml.button(
       {
@@ -45,6 +46,7 @@ class ImageViewer extends Component {
       {
         onclick: () => {
           this.clearCanvas();
+          this.dragArea.style.display = "block";
         }
       },
       jsml.text("Clear")
@@ -135,7 +137,23 @@ class ImageViewer extends Component {
     return jsml.div(
       {},
       jsml.component({}, this.flash),
-      jsml.element({}, this.backgroundImage),
+      jsml.element(
+        {
+          className: "drag-area"
+        },
+        this.dragArea,
+        jsml.p({}, jsml.text("Drag and Drop an Image"))
+      ),
+      jsml.element(
+        {
+          src: this.props.product.hasMockup()
+            ? this.initialMockup()
+            : this.props.product.shirt.frontImageUrl,
+          width: this.props.width,
+          height: this.props.height
+        },
+        this.backgroundImage
+      ),
       jsml.component({}, this.imageCanvas),
       jsml.cond(
         this.props.product.hasMockup(),

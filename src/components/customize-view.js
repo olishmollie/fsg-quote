@@ -40,10 +40,23 @@ class CustomizeView extends Component {
 
     this.imageViewer = new ImageViewer({
       product: this.product,
-      width: 500,
+      width: 250,
       height: 300,
       onload: () => {
         this.noErrors();
+      }
+    });
+
+    this.colorLabel = new Label({
+      text: "Black"
+    });
+
+    this.colorPicker = new ColorPicker({
+      color: { name: "black", hex: "#111" },
+      colors: this.product.shirt.availableColors,
+      onchange: color => {
+        this.product.color = color;
+        this.colorLabel.text = color.name;
       }
     });
 
@@ -101,13 +114,15 @@ class CustomizeView extends Component {
   render() {
     return jsml.div(
       {},
+      jsml.component({}, this.imageViewer),
+      jsml.component({}, this.colorPicker),
       jsml.h1({
         innerText: this.product.shirt.name
       }),
+      jsml.h5({}, jsml.component({}, this.colorLabel)),
       jsml.p({
         innerText: this.product.shirt.description
       }),
-      jsml.component({}, this.imageViewer),
       jsml.component(
         {},
         this.pricingModal,

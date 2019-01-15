@@ -13,16 +13,73 @@ body {
     line-height: 1.5;
 }
 
+/* hides number input spinners */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
+.container {
+    max-width: 500px;
+}
+
+.navbar {
+    height: 40px;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar li {
+    display: inline-block;
+    width: 75px;
+}
+
 .customize-view {
     text-align: center;
-    max-width: 500px;
     margin: auto;
+}
+
+/* positions image directly under canvas */
+.customize-view .image-viewer img {
+    position: absolute;
+    z-index: -1;
+}
+
+.customize-view .image-viewer .drag-area {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 125px;
+    height: 150px;
+    border: 3px dashed black;
+}
+.customize-view .image-viewer .drag-area p {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    height: 75px;
+    margin: auto;
+}
+
+.customize-view .image-viewer .dragged-over {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.customize-view .image-viewer button {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .customize-view .product-detail-box {
@@ -36,23 +93,12 @@ input::-webkit-inner-spin-button {
     display: "block";
 }
 
-/* positions image directly under canvas */
-.customize-view .image-viewer img {
-    position: absolute;
-    z-index: -1;
-}
-
-.customize-view .image-viewer .dragged-over {
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
 .customize-view .product-detail .color-picker {
     margin: 10px;
 }
 
 .quote-view {
     margin: auto;
-    max-width: 500px;
 }
 
 .quote-view .quote-item {
@@ -125,7 +171,7 @@ input::-webkit-inner-spin-button {
     padding: 10px;
     position: fixed;
     border-radius: 3px;
-    width: 500px;
+    width: 400px;
     height: 400px;
     top: 0;
     left: 0;

@@ -19,9 +19,7 @@ class Root extends Component {
 
   render() {
     return jsml.div(
-      {
-        className: "container"
-      },
+      {},
       jsml.component({}, new Navbar()),
       jsml.element(
         {
@@ -40,7 +38,8 @@ class Root extends Component {
       ),
       jsml.element(
         {
-          id: "app"
+          id: "app",
+          className: "container"
         },
         this.container
       )

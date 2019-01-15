@@ -10,7 +10,10 @@ class ShirtView extends Component {
   render() {
     return jsml.div(
       {
-        className: "card"
+        className: "card",
+        style: {
+          maxWidth: "130px"
+        }
       },
       jsml.figure(
         {
@@ -23,6 +26,7 @@ class ShirtView extends Component {
           jsml.img({
             className: "figure-img img-fluid rounded",
             src: this.shirt.frontImageUrl,
+            width: 120,
             alt: this.shirt.name
           }),
           jsml.figcaption({

@@ -7,37 +7,35 @@ class Navbar extends Component {
 
   render() {
     return jsml.nav(
-      {
-        className: "navbar navbar-light bg-light"
-      },
-      jsml.a({
-        className: "navbar-brand",
-        href: "#/",
-        innerText: "FSG"
-      }),
+      {},
       jsml.ul(
-        {
-          className: "navbar-nav list-inline"
-        },
+        {},
         jsml.li(
-          {
-            className: "nav-item list-inline-item"
-          },
-          jsml.a({
-            className: "nav-link",
-            href: "#/",
-            innerText: "Shirts"
-          })
+          {},
+          jsml.a(
+            {
+              href: "#/"
+            },
+            jsml.text("FSG")
+          )
         ),
         jsml.li(
-          {
-            className: "nav-item list-inline-item"
-          },
-          jsml.a({
-            className: "nav-link",
-            href: "#/quote",
-            innerText: "Quote"
-          })
+          {},
+          jsml.a(
+            {
+              href: "#/"
+            },
+            jsml.text("Shirts")
+          )
+        ),
+        jsml.li(
+          {},
+          jsml.a(
+            {
+              href: "#/quote"
+            },
+            jsml.text("Quote")
+          )
         )
       )
     );

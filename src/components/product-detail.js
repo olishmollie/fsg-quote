@@ -4,15 +4,6 @@ class ProductDetail extends Component {
   }
 
   init() {
-    this.colorPicker = new ColorPicker({
-      color: { name: "black", hex: "#111" },
-      colors: this.props.product.shirt.availableColors,
-      onchange: color => {
-        this.props.product.color = color;
-        console.log(color.name + " clicked.");
-      }
-    });
-
     this.pricePerShirtLabel = new Label({
       text: "$" + this.props.product.costPerShirt().toFixed(2)
     });
@@ -60,7 +51,6 @@ class ProductDetail extends Component {
   render() {
     return jsml.div(
       {},
-      jsml.component({}, this.colorPicker),
       jsml.div(
         {
           className: "price-per-shirt-label"
