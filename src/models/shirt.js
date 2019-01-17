@@ -3,9 +3,8 @@ class Shirt {
     this.id = props.id;
     this.name = props.name;
     this.price = props.price;
-    this.frontImageUrl = props.frontImageUrl;
-    this.backImageUrl = props.backImageUrl;
     this.description = props.description;
+    this.defaultColor = props.defaultColor;
     this.availableSizes = props.availableSizes;
     this.availableColors = props.availableColors;
   }

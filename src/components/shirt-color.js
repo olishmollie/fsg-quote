@@ -3,21 +3,20 @@ class ShirtColor extends Component {
     super(props);
   }
 
-  init() {
-    this.color = this.props.color;
-    this.onclick = this.props.onclick;
-  }
-
   render() {
-    return jsml.div({
-      className: "col-sm",
-      style: {
-        display: "inline",
-        backgroundColor: this.color.hex
+    return jsml.div(
+      {
+        style: {
+          display: "inline-block",
+          margin: "2px",
+          backgroundColor: this.props.color.hex,
+          width: "30px"
+        },
+        onclick: () => {
+          this.props.onclick(this.props.color);
+        }
       },
-      onclick: () => {
-        this.onclick(this.color);
-      }
-    });
+      jsml.text("\u00A0")
+    );
   }
 }

@@ -3,10 +3,6 @@ class ShirtView extends Component {
     super(props);
   }
 
-  init() {
-    this.shirt = this.props.shirt;
-  }
-
   render() {
     return jsml.div(
       {
@@ -21,17 +17,17 @@ class ShirtView extends Component {
         },
         jsml.a(
           {
-            href: "#/products/" + this.shirt.id
+            href: "#/products/" + this.props.shirt.id
           },
           jsml.img({
             className: "figure-img img-fluid rounded",
-            src: this.shirt.frontImageUrl,
+            src: util.frontImageUrl(this.props.shirt.defaultColor),
             width: 120,
-            alt: this.shirt.name
+            alt: this.props.shirt.name
           }),
           jsml.figcaption({
             className: "figure-caption text-center",
-            innerText: this.shirt.name
+            innerText: this.props.shirt.name
           })
         )
       )

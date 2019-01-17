@@ -18,7 +18,7 @@ window.onload = function() {
       new Route({
         href: "/products/:shirtId",
         component: CustomizeView,
-        params: { quote: APP.quote }
+        params: { quote: APP.quote, shirts: APP.shirts }
       }),
       new Route({
         href: "/quote",

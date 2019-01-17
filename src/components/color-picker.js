@@ -3,23 +3,19 @@ class ColorPicker extends Component {
     super(props);
   }
 
-  init() {
-    this.color = this.props.color;
-    this.colors = this.props.colors;
-    this.onchange = this.props.onchange;
-  }
+  init() {}
 
   render() {
     return jsml.div(
       {},
-      ...this.colors.map(color => {
+      ...this.props.colors.map(color => {
         return jsml.component(
           {},
           new ShirtColor({
             color: color,
             onclick: color => {
-              this.color = color;
-              this.onchange(color);
+              this.props.color = color;
+              this.props.onchange(color);
             }
           })
         );

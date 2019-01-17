@@ -53,7 +53,6 @@ input::-webkit-inner-spin-button {
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
     z-index: -1;
 }
 
@@ -62,7 +61,7 @@ input::-webkit-inner-spin-button {
     margin: auto;
     top: 0;
     left: 0;
-    bottom: 0;
+    bottom: 50px;
     right: 0;
     width: 125px;
     height: 150px;
@@ -81,6 +80,11 @@ input::-webkit-inner-spin-button {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
+.customize-view .image-viewer .color-picker {
+    margin: 10px;
+}
+
+
 .customize-view .image-viewer button {
     position: absolute;
     top: 0;
@@ -96,10 +100,6 @@ input::-webkit-inner-spin-button {
 
 .customize-view .product-detail-box .price-per-shirt-label {
     display: "block";
-}
-
-.customize-view .product-detail .color-picker {
-    margin: 10px;
 }
 
 .quote-view {

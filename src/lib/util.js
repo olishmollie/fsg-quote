@@ -22,6 +22,22 @@ let util = (function() {
     return result.join("");
   }
 
+  function frontImageUrl(color) {
+    return (
+      "public/assets/" +
+      color.name.replace(/ /, "-").toLowerCase() +
+      "-front.jpg"
+    );
+  }
+
+  function backImageUrl(color) {
+    return (
+      "public/assets/" +
+      color.name.replace(/ /, "-").toLowerCase() +
+      "-back.jpg"
+    );
+  }
+
   function isUpper(c) {
     return c === c.toUpperCase();
   }
@@ -41,6 +57,8 @@ let util = (function() {
   return {
     styleObjectToString,
     camelToDashed,
+    frontImageUrl,
+    backImageUrl,
     randomString
   };
 })();

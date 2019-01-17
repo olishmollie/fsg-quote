@@ -4,7 +4,7 @@ let SHIRTS = [
     price: 5,
     tier: "middle",
     name: "Unisex Jersey Short Sleeve",
-    frontImageUrl: "public/assets/3001_06_1.jpg",
+    defaultColor: { name: "White", hex: "#fff" },
     description:
       "This updated unisex essential fits like a well-loved favorite, featuring a crew neck, short sleeves and designed with superior combed and ring-spun cotton that acts as the best blank canvas for printing. Offered in a variety of solid and heather cvc colors.",
     availableSizes: ["XS", "S", "M", "L", "XL"],
@@ -14,39 +14,35 @@ let SHIRTS = [
         hex: "#000000"
       },
       {
-        name: "Vintage Black",
-        hex: "#000000"
-      },
-      {
         name: "White",
         hex: "#ffffff"
       },
       {
-        name: "Aqua",
+        name: "Turquoise",
         hex: "#50B3CF"
       },
       {
-        name: "Army",
+        name: "Heavy Metal",
         hex: "#4D493B"
       },
       {
-        name: "Ash",
+        name: "Cream",
         hex: "#F3F4F6"
       },
       {
-        name: "Asphalt",
+        name: "Natural",
         hex: "#5F6062"
       },
       {
-        name: "Athletic Heather",
+        name: "Heather Grey",
         hex: "#9A9A9B"
       },
       {
-        name: "Brown",
+        name: "Dark Chocolate",
         hex: "#5B4F4B"
       },
       {
-        name: "Burnt Orange",
+        name: "Banana Cream",
         hex: "#D46F34"
       },
       {
@@ -54,129 +50,129 @@ let SHIRTS = [
         hex: "#7D252D"
       },
       {
-        name: "Coral",
-        hex: "#F85561"
-      }
-    ]
-  }),
-  new Shirt({
-    id: 1,
-    price: 7,
-    tier: "top",
-    name: "Tri-Blend Crew",
-    frontImageUrl: "public/assets/mn1_000032.jpg",
-    description:
-      "Top quality tri-blend crew cut. Superior design for a great feel and a perfect fit.",
-    availableSizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    availableColors: [
-      {
-        name: "Black",
-        hex: "#000000"
-      },
-      {
-        name: "Vintage Black",
-        hex: "#000000"
-      },
-      {
-        name: "White",
-        hex: "#ffffff"
-      },
-      {
-        name: "Aqua",
-        hex: "#50B3CF"
-      },
-      {
-        name: "Army",
-        hex: "#4D493B"
-      },
-      {
-        name: "Ash",
-        hex: "#F3F4F6"
-      },
-      {
-        name: "Asphalt",
-        hex: "#5F6062"
-      },
-      {
-        name: "Athletic Heather",
-        hex: "#9A9A9B"
-      },
-      {
-        name: "Brown",
-        hex: "#5B4F4B"
-      },
-      {
-        name: "Burnt Orange",
-        hex: "#D46F34"
-      },
-      {
-        name: "Cardinal",
-        hex: "#7D252D"
-      },
-      {
-        name: "Coral",
-        hex: "#F85561"
-      }
-    ]
-  }),
-  new Shirt({
-    id: 2,
-    price: 4,
-    tier: "bottom",
-    name: "Classic Short Sleeve",
-    frontImageUrl: "public/assets/G2000-095-SM.png",
-    description:
-      "Classic tee that'll never go out of style. Great shirt at a great price.",
-    availableSizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    availableColors: [
-      {
-        name: "Black",
-        hex: "#000000"
-      },
-      {
-        name: "Vintage Black",
-        hex: "#000000"
-      },
-      {
-        name: "White",
-        hex: "#ffffff"
-      },
-      {
-        name: "Aqua",
-        hex: "#50B3CF"
-      },
-      {
-        name: "Army",
-        hex: "#4D493B"
-      },
-      {
-        name: "Ash",
-        hex: "#F3F4F6"
-      },
-      {
-        name: "Asphalt",
-        hex: "#5F6062"
-      },
-      {
-        name: "Athletic Heather",
-        hex: "#9A9A9B"
-      },
-      {
-        name: "Brown",
-        hex: "#5B4F4B"
-      },
-      {
-        name: "Burnt Orange",
-        hex: "#D46F34"
-      },
-      {
-        name: "Cardinal",
-        hex: "#7D252D"
-      },
-      {
-        name: "Coral",
+        name: "Red",
         hex: "#F85561"
       }
     ]
   })
+  // new Shirt({
+  //   id: 1,
+  //   price: 7,
+  //   tier: "top",
+  //   name: "Tri-Blend Crew",
+  //   frontImageUrl: "public/assets/mn1_000032.jpg",
+  //   description:
+  //     "Top quality tri-blend crew cut. Superior design for a great feel and a perfect fit.",
+  //   availableSizes: ["XS", "S", "M", "L", "XL", "2XL"],
+  //   availableColors: [
+  //     {
+  //       name: "Black",
+  //       hex: "#000000"
+  //     },
+  //     {
+  //       name: "Vintage Black",
+  //       hex: "#000000"
+  //     },
+  //     {
+  //       name: "White",
+  //       hex: "#ffffff"
+  //     },
+  //     {
+  //       name: "Aqua",
+  //       hex: "#50B3CF"
+  //     },
+  //     {
+  //       name: "Army",
+  //       hex: "#4D493B"
+  //     },
+  //     {
+  //       name: "Ash",
+  //       hex: "#F3F4F6"
+  //     },
+  //     {
+  //       name: "Asphalt",
+  //       hex: "#5F6062"
+  //     },
+  //     {
+  //       name: "Athletic Heather",
+  //       hex: "#9A9A9B"
+  //     },
+  //     {
+  //       name: "Brown",
+  //       hex: "#5B4F4B"
+  //     },
+  //     {
+  //       name: "Burnt Orange",
+  //       hex: "#D46F34"
+  //     },
+  //     {
+  //       name: "Cardinal",
+  //       hex: "#7D252D"
+  //     },
+  //     {
+  //       name: "Coral",
+  //       hex: "#F85561"
+  //     }
+  //   ]
+  // }),
+  // new Shirt({
+  //   id: 2,
+  //   price: 4,
+  //   tier: "bottom",
+  //   name: "Classic Short Sleeve",
+  //   frontImageUrl: "public/assets/G2000-095-SM.png",
+  //   description:
+  //     "Classic tee that'll never go out of style. Great shirt at a great price.",
+  //   availableSizes: ["XS", "S", "M", "L", "XL", "2XL"],
+  //   availableColors: [
+  //     {
+  //       name: "Black",
+  //       hex: "#000000"
+  //     },
+  //     {
+  //       name: "Vintage Black",
+  //       hex: "#000000"
+  //     },
+  //     {
+  //       name: "White",
+  //       hex: "#ffffff"
+  //     },
+  //     {
+  //       name: "Aqua",
+  //       hex: "#50B3CF"
+  //     },
+  //     {
+  //       name: "Army",
+  //       hex: "#4D493B"
+  //     },
+  //     {
+  //       name: "Ash",
+  //       hex: "#F3F4F6"
+  //     },
+  //     {
+  //       name: "Asphalt",
+  //       hex: "#5F6062"
+  //     },
+  //     {
+  //       name: "Athletic Heather",
+  //       hex: "#9A9A9B"
+  //     },
+  //     {
+  //       name: "Brown",
+  //       hex: "#5B4F4B"
+  //     },
+  //     {
+  //       name: "Burnt Orange",
+  //       hex: "#D46F34"
+  //     },
+  //     {
+  //       name: "Cardinal",
+  //       hex: "#7D252D"
+  //     },
+  //     {
+  //       name: "Coral",
+  //       hex: "#F85561"
+  //     }
+  //   ]
+  // })
 ];

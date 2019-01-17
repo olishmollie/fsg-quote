@@ -47,10 +47,10 @@ class QuoteView extends Component {
               },
               ondelete: () => {
                 // re render quote-view
-                // let parent = this.node.parentElement;
-                // Component.mount(this.render(), parent);
-                // this.estimatedCostLabel.text =
-                //   "$" + this.quote.estimatedCost().toFixed(2);
+                let parent = this.node.parentElement;
+                Component.mount(this, parent);
+                this.estimatedCostLabel.text =
+                  "$" + this.quote.estimatedCost().toFixed(2);
                 this.update();
               },
               onerror: () => {

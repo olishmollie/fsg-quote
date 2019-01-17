@@ -7,7 +7,8 @@ class CustomizeView extends Component {
     this.isNewProduct = this.props.productId ? false : true;
     this.product = this.isNewProduct
       ? new Product({
-          shirt: APP.shirts[this.props.shirtId],
+          shirt: this.props.shirts[this.props.shirtId],
+          color: this.props.shirts[this.props.shirtId].defaultColor,
           quantity: 50,
           frontColorCount: 1,
           backColorCount: 1
@@ -44,20 +45,14 @@ class CustomizeView extends Component {
       height: 300,
       onload: () => {
         this.noErrors();
+      },
+      didChangeColor: color => {
+        this.colorLabel.text = color.name;
       }
     });
 
     this.colorLabel = new Label({
-      text: "Black"
-    });
-
-    this.colorPicker = new ColorPicker({
-      color: { name: "black", hex: "#111" },
-      colors: this.product.shirt.availableColors,
-      onchange: color => {
-        this.product.color = color;
-        this.colorLabel.text = color.name;
-      }
+      text: this.product.color.name
     });
 
     this.pricingModal = new Modal();
@@ -115,7 +110,6 @@ class CustomizeView extends Component {
     return jsml.div(
       {},
       jsml.component({}, this.imageViewer),
-      jsml.component({}, this.colorPicker),
       jsml.h1({
         innerText: this.product.shirt.name
       }),

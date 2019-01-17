@@ -51,6 +51,21 @@ class ImageViewer extends Component {
       },
       jsml.text("Clear")
     );
+
+    this.colorPicker = new ColorPicker({
+      color: this.props.product.color,
+      colors: this.props.product.shirt.availableColors,
+      onchange: color => {
+        this.props.product.color = color;
+        this.backgroundImage.src = util.frontImageUrl(color);
+        this.props.didChangeColor(color);
+      }
+    });
+
+    // hide the color picker if product has mockup
+    if (this.props.product.hasMockup()) {
+      this.colorPicker.node.style.display = "none";
+    }
   }
 
   initialMockup() {
@@ -84,13 +99,16 @@ class ImageViewer extends Component {
 
     // replace the edit button with the clear button
     this.node.replaceChild(this.clearButton, this.editButton);
+
+    // show color picker
+    this.colorPicker.node.style.display = "block";
   }
 
   initialBackground() {
     if (this.props.product.frontMockup) {
-      return this.props.product.shirt.frontImageUrl;
+      return util.frontImageUrl(this.props.product.color);
     }
-    return this.props.product.shirt.backImageUrl;
+    return util.backImageUrl(this.props.product.color);
   }
 
   initialImage() {
@@ -148,7 +166,7 @@ class ImageViewer extends Component {
         {
           src: this.props.product.hasMockup()
             ? this.initialMockup()
-            : this.props.product.shirt.frontImageUrl,
+            : util.frontImageUrl(this.props.product.color),
           width: this.props.width,
           height: this.props.height
         },
@@ -159,7 +177,8 @@ class ImageViewer extends Component {
         this.props.product.hasMockup(),
         jsml.element({}, this.editButton),
         jsml.element({}, this.clearButton)
-      )
+      ),
+      jsml.component({}, this.colorPicker)
     );
   }
 }

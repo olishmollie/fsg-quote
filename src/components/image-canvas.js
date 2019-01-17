@@ -88,31 +88,26 @@ class ImageCanvas extends Component {
       y: y,
       width: width,
       height: height,
-      resizeFromCenter: false,
-      mouseover: function() {
-        $("canvas")
-          .setLayer("image", {
-            handlePlacement: "both",
-            handle: {
-              type: "rectangle",
-              fillStyle: "#fff",
-              strokeStyle: "#111",
-              strokeWidth: 1,
-              width: 10,
-              height: 10,
-              cornerRadius: 3
-            }
-          })
-          .drawLayers();
-      },
-      mouseout: function() {
-        $("canvas")
-          .setLayer("image", {
-            handle: null
-          })
-          .drawLayers();
-      }
+      resizeFromCenter: false
     });
+
+    // use timeout to avoid handles bug
+    setTimeout(function() {
+      $("canvas")
+        .setLayer("image", {
+          handlePlacement: "both",
+          handle: {
+            type: "rectangle",
+            fillStyle: "#fff",
+            strokeStyle: "#111",
+            strokeWidth: 1,
+            width: 10,
+            height: 10,
+            cornerRadius: 3
+          }
+        })
+        .drawLayers();
+    }, 10);
 
     $("canvas").drawLayers();
   }
